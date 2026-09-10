@@ -19,6 +19,7 @@ function Notifications() {
   const navigate = useNavigate()
   const [notifications, setNotifications] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     async function loadNotifications() {
@@ -32,6 +33,7 @@ function Notifications() {
 
       if (error) {
         console.error('Erreur chargement notifications :', error)
+        setError(error.message || 'Erreur de chargement')
         setLoading(false)
         return
       }
@@ -70,6 +72,8 @@ function Notifications() {
 
         {loading ? (
           <p>Chargement...</p>
+        ) : error ? (
+          <p>Impossible de charger vos notifications. Réessayez plus tard.</p>
         ) : notifications.length === 0 ? (
           <p>Vous n'avez aucune notification pour l'instant.</p>
         ) : (
