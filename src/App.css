@@ -1552,3 +1552,19 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+
+/* ==========================================================
+   LISTING DETAILS — BOUTON FAVORI
+   ========================================================== */
+
+.favorite-button.is-favorited {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  color: #92400e;
+}
+
+.favorite-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

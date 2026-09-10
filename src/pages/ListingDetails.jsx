@@ -61,6 +61,51 @@ function ListingDetails({ listings = [] }) {
   const [galleryImages, setGalleryImages] = useState([])
   const [activeImage, setActiveImage] = useState('')
   const [sellerProfile, setSellerProfile] = useState(null)
+  const [favorited, setFavorited] = useState(false)
+  const [pending, setPending] = useState(false)
+
+  useEffect(() => {
+    async function loadFavoriteState() {
+      if (!user || !id) {
+        setFavorited(false)
+        return
+      }
+      const { data } = await supabase
+        .from('listing_favorites')
+        .select('id')
+        .eq('listing_id', id)
+        .eq('user_id', user.id)
+        .maybeSingle()
+      setFavorited(!!data)
+    }
+    loadFavoriteState()
+  }, [id, user])
+
+  async function handleToggleFavorite() {
+    if (!user) {
+      navigate('/connexion')
+      return
+    }
+    if (pending || !id) return
+
+    setPending(true)
+
+    if (favorited) {
+      const { error } = await supabase
+        .from('listing_favorites')
+        .delete()
+        .eq('listing_id', id)
+        .eq('user_id', user.id)
+      if (!error) setFavorited(false)
+    } else {
+      const { error } = await supabase
+        .from('listing_favorites')
+        .insert([{ listing_id: id, user_id: user.id }])
+      if (!error) setFavorited(true)
+    }
+
+    setPending(false)
+  }
 
   useEffect(() => {
     async function loadImages() {
@@ -216,8 +261,12 @@ function ListingDetails({ listings = [] }) {
                 💬 Contacter le vendeur
               </button>
 
-              <button className="favorite-button">
-                ❤️ Ajouter aux favoris
+              <button
+                className={`favorite-button ${favorited ? 'is-favorited' : ''}`}
+                onClick={handleToggleFavorite}
+                disabled={pending}
+              >
+                {favorited ? '🔖 Retirer des favoris' : '🔖 Ajouter aux favoris'}
               </button>
             </div>
           </div>
