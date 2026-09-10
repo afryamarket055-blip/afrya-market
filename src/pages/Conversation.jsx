@@ -19,6 +19,7 @@ function Conversation() {
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [sending, setSending] = useState(false)
   const [otherProfile, setOtherProfile] = useState(null)
   const [listingInfo, setListingInfo] = useState(null)
@@ -35,6 +36,8 @@ function Conversation() {
 
       if (error) {
         console.error('Erreur chargement conversation :', error)
+        setError(error.message || 'Erreur de chargement')
+        setLoading(false)
         return
       }
 
@@ -55,6 +58,8 @@ function Conversation() {
 
       if (profileError) {
         console.error('Erreur chargement profil :', profileError)
+        setError(profileError.message || 'Erreur de chargement')
+        setLoading(false)
         return
       }
 
@@ -76,6 +81,7 @@ function Conversation() {
 
       if (error) {
         console.error('Erreur chargement messages :', error)
+        setError(error.message || 'Erreur de chargement')
         setLoading(false)
         return
       }
@@ -147,6 +153,17 @@ function Conversation() {
 
     setMessages((previous) => [...previous, data])
     setNewMessage('')
+  }
+
+  if (error) {
+    return (
+      <div className="app">
+        <Nav />
+        <main style={{ padding: '80px 20px', textAlign: 'center' }}>
+          <p>Impossible de charger la conversation. Réessayez plus tard.</p>
+        </main>
+      </div>
+    )
   }
 
   if (loading) {
