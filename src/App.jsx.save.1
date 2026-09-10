@@ -1,0 +1,438 @@
+import { 
+useEffect, useState } from 'react'
+import { supabase } from './lib/supabase'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import './App.css'
+import ListingCard from './ListingCard'
+import ListingDetails from './pages/ListingDetails'
+import CreateListing from './pages/CreateListing'
+
+const initialListings = [
+  {
+    id: 'iphone-13',
+    title: 'iPhone 13 128 Go',
+    price: '350 000',
+    location: 'Cotonou, Littoral',
+    condition: 'Très bon état',
+    category: 'Téléphones',
+    image:
+      'https://images.unsplash.com/photo-1592286927505-1def25115558?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'hp-elitebook',
+    title: 'HP EliteBook',
+    price: '180 000',
+    location: 'Abomey-Calavi',
+    condition: 'Bon état',
+    category: 'Informatique',
+    image:
+      'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'refrigerateur-samsung',
+    title: 'Réfrigérateur Samsung',
+    price: '250 000',
+    location: 'Porto-Novo',
+    condition: 'Très bon état',
+    category: 'Électroménager',
+    image:
+      'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'canape-moderne',
+    title: 'Canapé moderne',
+    price: '120 000',
+    location: 'Cotonou',
+    condition: 'Bon état',
+    category: 'Maison',
+    image:
+      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80',
+  },
+]
+
+function Home({ listings }) {
+  return (
+    <div className="app">
+      <header className="header">
+        <div className="logo">
+          AFRYA <span>MARKET</span>
+        </div>
+
+        <nav className="nav">
+          <Link to="/">Accueil</Link>
+          <Link to="/categories">Catégories</Link>
+          <Link to="/annonces">Annonces</Link>
+          <Link to="/messages">Messages</Link>
+        </nav>
+
+        <Link to="/vendre" className="sell-button">
+          + Vendre un article
+        </Link>
+      </header>
+
+      <main>
+        <section className="hero">
+          <div className="hero-content">
+            <span className="hero-badge">
+              🇧🇯 Le marché numérique africain
+            </span>
+
+            <h1>
+              Achetez. Vendez.
+              <br />
+              <span>Trouvez.</span>
+            </h1>
+
+            <p>
+              Découvrez des produits d'occasion près de chez vous
+              et donnez une seconde vie aux objets.
+            </p>
+
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="Que recherchez-vous ?"
+              />
+
+              <input
+                type="text"
+                placeholder="📍 Cotonou"
+              />
+
+              <button>
+                Rechercher
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section className="categories">
+          <div className="section-heading">
+            <div>
+              <span>EXPLORER</span>
+              <h2>Catégories populaires</h2>
+            </div>
+          </div>
+
+          <div className="category-grid">
+            <div className="category-card">
+              <div className="category-icon">📱</div>
+              <h3>Téléphones</h3>
+              <p>Smartphones & accessoires</p>
+            </div>
+
+            <div className="category-card">
+              <div className="category-icon">💻</div>
+              <h3>Informatique</h3>
+              <p>PC, laptops & accessoires</p>
+            </div>
+
+            <div className="category-card">
+              <div className="category-icon">📺</div>
+              <h3>Électroménager</h3>
+              <p>TV, frigos & appareils</p>
+            </div>
+
+            <div className="category-card">
+              <div className="category-icon">👕</div>
+              <h3>Mode</h3>
+              <p>Vêtements & chaussures</p>
+            </div>
+
+            <div className="category-card">
+              <div className="category-icon">🛋️</div>
+              <h3>Maison</h3>
+              <p>Meubles & décoration</p>
+            </div>
+
+            <div className="category-card">
+              <div className="category-icon">🏍️</div>
+              <h3>Véhicules</h3>
+              <p>Motos, voitures & pièces</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="listings">
+          <div className="section-heading">
+            <div>
+              <span>RÉCEMMENT AJOUTÉS</span>
+              <h2>Les dernières annonces</h2>
+            </div>
+
+            <Link to="/annonces">
+              Voir tout →
+            </Link>
+          </div>
+
+          <div className="listing-grid">
+            {listings.map((listing) => (
+              <Link
+                key={listing.id}
+                to={`/annonce/${listing.id}`}
+                className="listing-link"
+              >
+                <ListingCard
+                  title={listing.title}
+                  price={listing.price}
+                  location={listing.location}
+                  condition={listing.condition}
+                  category={listing.category}
+                  image={listing.image}
+                />
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer">
+        <div className="logo">
+          AFRYA <span>MARKET</span>
+        </div>
+
+        <p>
+          Le marché numérique africain.
+        </p>
+      </footer>
+    </div>
+  )
+}
+
+function SimplePage({ title }) {
+  return (
+    <div className="app">
+      <header className="header">
+        <div className="logo">
+          AFRYA <span>MARKET</span>
+        </div>
+
+        <nav className="nav">
+          <Link to="/">Accueil</Link>
+          <Link to="/categories">Catégories</Link>
+          <Link to="/annonces">Annonces</Link>
+          <Link to="/messages">Messages</Link>
+        </nav>
+
+        <Link to="/vendre" className="sell-button">
+          + Vendre un article
+        </Link>
+      </header>
+
+      <main
+        style={{
+          padding: '80px 20px',
+          textAlign: 'center',
+        }}
+      >
+        <h1>{title}</h1>
+
+        <p>
+          Cette page sera construite à l'étape suivante.
+        </p>
+
+        <Link to="/">
+          ← Retour à l'accueil
+        </Link>
+      </main>
+    </div>
+  )
+}
+
+  function handleGetLocation() {
+    if (!navigator.geolocation) {
+      setLocationMessage(
+        'La géolocalisation n’est pas disponible sur cet appareil.'
+      )
+      return
+    }
+
+    setLocationMessage('Recherche de votre localisation...')
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+
+        setUserLocation({ latitude, longitude })
+
+        setLocationMessage(
+          `📍 Localisation détectée : ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
+        )
+      },
+      () => {
+        setLocationMessage(
+          'Localisation refusée ou indisponible. Vous pouvez continuer sans elle.'
+        )
+      }
+    )
+  }
+  const [search, setSearch] = useState('')
+
+  const filteredListings = listings.filter((listing) => {
+    const searchText = search.toLowerCase()
+
+    return (
+      listing.title?.toLowerCase().includes(searchText) ||
+      listing.location?.toLowerCase().includes(searchText) ||
+      listing.category?.toLowerCase().includes(searchText)
+    )
+  })
+
+  return (
+    <div className="app">
+      <header className="header">
+        <div className="logo">
+          AFRYA <span>MARKET</span>
+        </div>
+
+        <nav className="nav">
+          <Link to="/">Accueil</Link>
+          <Link to="/categories">Catégories</Link>
+          <Link to="/annonces">Annonces</Link>
+          <Link to="/messages">Messages</Link>
+        </nav>
+
+        <Link to="/vendre" className="sell-button">
+          + Vendre un article
+        </Link>
+      </header>
+
+      <main>
+        <section className="listings">
+          <div className="section-heading">
+            <div>
+              <span>AFRYA MARKET</span>
+              <h2>Toutes les annonces</h2>
+            </div>
+
+            <Link to="/vendre">
+              + Vendre un article
+            </Link>
+          </div>
+
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Rechercher une annonce..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </div>
+
+          <div className="location-tools">
+            <button type="button" onClick={handleGetLocation}>
+              📍 Utiliser ma localisation
+            </button>
+
+            {locationMessage && <p>{locationMessage}</p>}
+          </div>          
+<div className="listing-grid">
+            {filteredListings.map((listing) => (
+              <Link
+                key={listing.id}
+                to={`/annonce/${listing.id}`}
+                className="listing-link"
+              >
+                <ListingCard
+                  title={listing.title}
+                  price={listing.price}
+                  location={listing.location}
+                  condition={listing.condition}
+                  category={listing.category}
+                  image={listing.image}
+                />
+              </Link>
+            ))}
+          </div>
+
+          {filteredListings.length === 0 && (
+            <p>Aucune annonce ne correspond à votre recherche.</p>
+          )}
+        </section>
+      </main>
+    </div>
+  )
+}
+
+function AppContent() {
+  const [listings, setListings] = useState(initialListings)
+  
+useEffect(() => {
+    async function loadListings() {
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Erreur Supabase :', error)
+        return
+      }
+
+      setListings(data)
+    }
+
+    loadListings()
+  }, [])
+  function handleCreateListing(newListing) {
+    setListings((previousListings) => [
+      newListing,
+      ...previousListings,
+    ])
+  }
+
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={<Home listings={listings} />}
+      />
+
+      <Route
+        path="/annonce/:id"
+        element={
+          <ListingDetails listings={listings} />
+        }
+      />
+<Route
+  path="/annonces"
+  element={
+    <AllListings listings={listings} />
+  }
+/>
+
+      <Route
+        path="/categories"
+        element={
+          <SimplePage title="Catégories" />
+        }
+      />
+
+      <Route
+        path="/messages"
+        element={
+          <SimplePage title="Messages" />
+        }
+      />
+
+      <Route
+        path="/vendre"
+        element={
+          <CreateListing
+            onCreateListing={handleCreateListing}
+          />
+        }
+      />
+    </Routes>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  )
+}
+
+export default App

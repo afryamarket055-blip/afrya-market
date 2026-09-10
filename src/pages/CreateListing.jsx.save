@@ -1,0 +1,432 @@
+import { useAuth } from '../context/AuthContext'
+import { useState } from 'react'
+import { supabase } from '../lib/supabase'
+import { Link, useNavigate } from 'react-router-dom'
+import Nav from '../components/Nav'
+function CreateListing({ onCreateListing }) {
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    title: '',
+    category: '',
+    price: '',
+    location: '',
+    condition: '',
+    description: '',
+  })
+
+  const [images, setImages] = useState([])
+  const [message, setMessage] = useState('')
+
+  function handleChange(event) {
+    const { name, value } = event.target
+
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }))
+  }
+
+  function handleImages(event) {
+    const selectedFiles = Array.from(event.target.files)
+
+    const previews = selectedFiles.map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }))
+
+    setImages(previews)
+  }
+async function handleSubmit(event) {
+  event.preventDefault()
+
+  let imageUrl =
+    'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=800&q=80'
+
+  if (images.length > 0) {
+    const imageFile = images[0].file
+
+    const safeFileName = imageFile.name.replace(
+      /[^a-zA-Z0-9.-]/g,
+      '-'
+    )
+
+    const filePath = `${Date.now()}-${safeFileName}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('listing-images')
+      .upload(filePath, imageFile)
+
+    if (uploadError) {
+      console.error(
+        'Erreur upload image :',
+        uploadError
+      )
+
+      setMessage(
+        "Erreur lors de l'envoi de la photo."
+      )
+
+      return
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('listing-images')
+      .getPublicUrl(filePath)
+
+    imageUrl = publicUrlData.publicUrl
+  }
+
+  const { data, error } = await supabase
+    .from('listings')
+    .insert([
+      {
+        title: formData.title,
+        price: Number(formData.price),
+        location: formData.location,
+        condition: formData.condition,
+        category: formData.category,
+        image: imageUrl,
+        description: formData.description,
+      },
+    ])
+    .select()
+    .single()
+
+  if (error) {
+    console.error(
+      "Erreur lors de la publication :",
+      error
+    )
+
+    setMessage(
+      "Erreur lors de la publication de l'annonce."
+    )
+
+    return
+  }
+
+  onCreateListing({
+    ...data,
+    price: Number(data.price).toLocaleString('fr-FR'),
+  })
+
+  setMessage(
+    'Votre annonce a été publiée avec succès !'
+  )
+
+  setTimeout(() => {
+    navigate('/')
+  }, 1000)
+}
+  return (
+    <div className="app">
+           <Nav />
+
+      <main className="create-listing-page">
+        <div className="create-listing-header">
+          <Link to="/" className="back-link">
+            ← Retour aux annonces
+          </Link>
+
+          <span className="page-badge">
+            AFRYA MARKET
+          </span>
+
+          <h1>
+            Vendez votre article
+          </h1>
+
+          <p>
+            Publiez votre annonce et trouvez rapidement un acheteur.
+          </p>
+        </div>
+
+        <form
+          className="listing-form"
+          onSubmit={handleSubmit}
+        >
+          <section className="form-section">
+            <div className="form-section-title">
+              <span>01</span>
+
+              <div>
+                <h2>Informations de l'article</h2>
+                <p>
+                  Présentez clairement ce que vous souhaitez vendre.
+                </p>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="title">
+                Titre de l'annonce
+              </label>
+
+              <input
+                id="title"
+                name="title"
+                type="text"
+                placeholder="Ex : iPhone 13 128 Go"
+                value={formData.title}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="category">
+                  Catégorie
+                </label>
+
+                <select
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">
+                    Choisir une catégorie
+                  </option>
+
+                  <option value="Téléphones">
+                    📱 Téléphones
+                  </option>
+
+                  <option value="Informatique">
+                    💻 Informatique
+                  </option>
+
+                  <option value="Électroménager">
+                    📺 Électroménager
+                  </option>
+
+                  <option value="Mode">
+                    👕 Mode
+                  </option>
+
+                  <option value="Maison">
+                    🛋️ Maison
+                  </option>
+
+                  <option value="Véhicules">
+                    🏍️ Véhicules
+                  </option>
+
+                  <option value="Autres">
+                    📦 Autres
+                  </option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="condition">
+                  État de l'article
+                </label>
+
+                <select
+                  id="condition"
+                  name="condition"
+                  value={formData.condition}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">
+                    Choisir l'état
+                  </option>
+
+                  <option value="Neuf">
+                    Neuf
+                  </option>
+
+                  <option value="Comme neuf">
+                    Comme neuf
+                  </option>
+
+                  <option value="Très bon état">
+                    Très bon état
+                  </option>
+
+                  <option value="Bon état">
+                    Bon état
+                  </option>
+
+                  <option value="État correct">
+                    État correct
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="price">
+                  Prix
+                </label>
+
+                <div className="price-input">
+                  <input
+                    id="price"
+                    name="price"
+                    type="number"
+                    min="0"
+                    placeholder="350000"
+                    value={formData.price}
+                    onChange={handleChange}
+                    required
+                  />
+
+                  <span>FCFA</span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="location">
+                  Localisation
+                </label>
+
+                <input
+                  id="location"
+                  name="location"
+                  type="text"
+                  placeholder="Ex : Cotonou, Littoral"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="description">
+                Description
+              </label>
+
+              <textarea
+                id="description"
+                name="description"
+                rows="6"
+                placeholder="Décrivez votre article : état, caractéristiques, accessoires inclus, raison de la vente..."
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </section>
+
+          <section className="form-section">
+            <div className="form-section-title">
+              <span>02</span>
+
+              <div>
+                <h2>Photos de l'article</h2>
+                <p>
+                  Ajoutez des photos claires pour attirer les acheteurs.
+                </p>
+              </div>
+            </div>
+
+            <div className="image-upload">
+              <label
+                htmlFor="images"
+                className="upload-box"
+              >
+                <div className="upload-icon">
+                  📷
+                </div>
+
+                <strong>
+                  Ajouter des photos
+                </strong>
+
+                <span>
+                  Cliquez ici pour sélectionner vos images
+                </span>
+
+                <small>
+                  PNG, JPG ou WEBP
+                </small>
+              </label>
+
+              <input
+                id="images"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                multiple
+                onChange={handleImages}
+              />
+            </div>
+
+            {images.length > 0 && (
+              <div className="image-preview-grid">
+                {images.map((image, index) => (
+                  <div
+                    className="image-preview"
+                    key={`${image.url}-${index}`}
+                  >
+                    <img
+                      src={image.url}
+                      alt={`Aperçu ${index + 1}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section className="form-section seller-preview">
+            <div className="form-section-title">
+              <span>03</span>
+
+              <div>
+                <h2>Publication</h2>
+                <p>
+                  Vérifiez les informations avant de publier.
+                </p>
+              </div>
+            </div>
+
+            <div className="publish-info">
+              <div>
+                <strong>
+                  Votre annonce sera visible par les acheteurs.
+                </strong>
+
+                <p>
+                  Votre annonce sera ajoutée immédiatement au marché.
+                </p>
+              </div>
+            </div>
+
+            {message && (
+              <div className="form-success">
+                ✓ {message}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="publish-button"
+            >
+              Publier l'annonce →
+            </button>
+          </section>
+        </form>
+      </main>
+
+      <footer className="footer">
+        <div className="logo">
+          AFRYA <span>MARKET</span>
+        </div>
+
+        <p>
+          Le marché numérique africain.
+        </p>
+      </footer>
+    </div>
+  )
+}
+
+export default CreateListing
