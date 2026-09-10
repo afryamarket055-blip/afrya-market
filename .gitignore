@@ -31,3 +31,9 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Fichiers de sauvegarde Nano/éditeur (ne pas versionner)
+*.save
+*.save.*
+*.bak
+*~
