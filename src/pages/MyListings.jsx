@@ -9,6 +9,7 @@ function MyListings() {
   const { user } = useAuth()
   const [listings, setListings] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     async function loadMyListings() {
@@ -22,6 +23,7 @@ function MyListings() {
 
       if (error) {
         console.error('Erreur chargement mes annonces :', error)
+        setError(error.message || 'Erreur de chargement')
         setLoading(false)
         return
       }
@@ -94,6 +96,10 @@ function MyListings() {
           {loading ? (
             <div className="loading-state">
               <p>Chargement...</p>
+            </div>
+          ) : error ? (
+            <div className="empty-state">
+              <p>Impossible de charger vos annonces. Réessayez plus tard.</p>
             </div>
           ) : listings.length === 0 ? (
             <div className="empty-state">
