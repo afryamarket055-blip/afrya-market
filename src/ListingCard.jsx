@@ -1,4 +1,75 @@
-function ListingCard({ title, price, location, condition, category, image, status }) {
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from './context/AuthContext'
+import { supabase } from './lib/supabase'
+
+function ListingCard({ id, title, price, location, condition, category, image, status }) {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [liked, setLiked] = useState(false)
+  const [likesCount, setLikesCount] = useState(0)
+  const [pending, setPending] = useState(false)
+
+  useEffect(() => {
+    async function loadLikeState() {
+      if (!id) return
+
+      const { count } = await supabase
+        .from('listing_likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('listing_id', id)
+      setLikesCount(count || 0)
+
+      if (user) {
+        const { data } = await supabase
+          .from('listing_likes')
+          .select('id')
+          .eq('listing_id', id)
+          .eq('user_id', user.id)
+          .maybeSingle()
+        setLiked(!!data)
+      } else {
+        setLiked(false)
+      }
+    }
+    loadLikeState()
+  }, [id, user])
+
+  async function handleToggleLike(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (!user) {
+      navigate('/connexion')
+      return
+    }
+    if (pending || !id) return
+
+    setPending(true)
+
+    if (liked) {
+      const { error } = await supabase
+        .from('listing_likes')
+        .delete()
+        .eq('listing_id', id)
+        .eq('user_id', user.id)
+      if (!error) {
+        setLiked(false)
+        setLikesCount((c) => Math.max(0, c - 1))
+      }
+    } else {
+      const { error } = await supabase
+        .from('listing_likes')
+        .insert([{ listing_id: id, user_id: user.id }])
+      if (!error) {
+        setLiked(true)
+        setLikesCount((c) => c + 1)
+      }
+    }
+
+    setPending(false)
+  }
+
   return (
     <article className="listing-card card">
       <div className="listing-image">
@@ -8,12 +79,16 @@ function ListingCard({ title, price, location, condition, category, image, statu
         )}
         <button
           type="button"
-          className="listing-fav-btn"
-          aria-label="Ajouter aux favoris"
-          onClick={(event) => event.preventDefault()}
+          className={`listing-fav-btn ${liked ? 'is-liked' : ''}`}
+          aria-label={liked ? 'Retirer le like' : 'Ajouter un like'}
+          onClick={handleToggleLike}
+          disabled={pending}
         >
-          ❤️
+          {liked ? '❤' : '🤍'}
         </button>
+        {likesCount > 0 && (
+          <span className="listing-like-count">{likesCount}</span>
+        )}
       </div>
       <div className="listing-content">
         <span className="listing-category">{category}</span>

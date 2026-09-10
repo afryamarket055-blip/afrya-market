@@ -115,6 +115,7 @@ function MyListings() {
                 <div key={listing.id} className="my-listing-item">
                   <Link to={`/annonce/${listing.id}`} className="listing-link">
                     <ListingCard
+                      id={listing.id}
                       title={listing.title}
                       price={listing.price}
                       location={listing.location}

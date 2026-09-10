@@ -1527,3 +1527,28 @@
     text-align: center;
   }
 }
+
+/* ==========================================================
+   LISTING CARD — BOUTON LIKE
+   ========================================================== */
+
+.listing-fav-btn.is-liked {
+  color: #ef4444;
+}
+
+.listing-fav-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.listing-like-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}

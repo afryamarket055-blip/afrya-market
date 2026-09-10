@@ -140,6 +140,7 @@ function Home({ listings, loading, error }) {
                   className="listing-link"
                 >
                   <ListingCard
+                    id={listing.id}
                     title={listing.title}
                     price={listing.price}
                     location={listing.location}
@@ -367,6 +368,7 @@ function AllListings({ listings, loading, error }) {
                   className="listing-link"
                 >
                   <ListingCard
+                    id={listing.id}
                     title={listing.title}
                     price={listing.price}
                     location={listing.location}
