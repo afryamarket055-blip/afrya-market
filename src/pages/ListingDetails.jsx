@@ -4,55 +4,6 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import Nav from '../components/Nav'
-const initialListings = {
-  'iphone-13': {
-    title: 'iPhone 13 128 Go',
-    price: '350 000',
-    location: 'Cotonou, Littoral',
-    condition: 'Très bon état',
-    category: 'Téléphones',
-    image:
-      'https://images.unsplash.com/photo-1592286927505-1def25115558?auto=format&fit=crop&w=1200&q=80',
-    description:
-      "iPhone 13 128 Go en très bon état. Fonctionne parfaitement et est prêt à l'emploi.",
-  },
-
-  'hp-elitebook': {
-    title: 'HP EliteBook',
-    price: '180 000',
-    location: 'Abomey-Calavi',
-    condition: 'Bon état',
-    category: 'Informatique',
-    image:
-      'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80',
-    description:
-      'HP EliteBook en bon état. Ordinateur fiable, rapide et idéal pour le travail, les études et la bureautique.',
-  },
-
-  'refrigerateur-samsung': {
-    title: 'Réfrigérateur Samsung',
-    price: '250 000',
-    location: 'Porto-Novo',
-    condition: 'Très bon état',
-    category: 'Électroménager',
-    image:
-      'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?auto=format&fit=crop&w=1200&q=80',
-    description:
-      'Réfrigérateur Samsung en très bon état. Fonctionne correctement et offre un bon espace de conservation.',
-  },
-
-  'canape-moderne': {
-    title: 'Canapé moderne',
-    price: '120 000',
-    location: 'Cotonou',
-    condition: 'Bon état',
-    category: 'Maison',
-    image:
-      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80',
-    description:
-      'Canapé moderne en bon état. Confortable et idéal pour aménager un salon.',
-  },
-}
 
 function ListingDetails({ listings = [] }) {
   const { id } = useParams()
@@ -137,8 +88,7 @@ function ListingDetails({ listings = [] }) {
     (listing) => listing.id === id
   )
 
-  const listing =
-    dynamicListing || initialListings[id]
+  const listing = dynamicListing
 
   useEffect(() => {
     async function loadSellerProfile() {
