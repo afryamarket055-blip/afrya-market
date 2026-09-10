@@ -18,6 +18,7 @@ import PublicProfile from './pages/PublicProfile'
 import Notifications from './pages/Notifications'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
+import ProtectedRoute from './components/ProtectedRoute'
 const initialListings = [
   {
     id: 'iphone-13',
@@ -477,48 +478,80 @@ useEffect(() => {
 
       <Route
         path="/messages"
-        element={<Messages />}
+        element={
+          <ProtectedRoute>
+            <Messages />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/vendre"
         element={
-          <CreateListing
-            onCreateListing={handleCreateListing}
-          />
+          <ProtectedRoute>
+            <CreateListing onCreateListing={handleCreateListing} />
+          </ProtectedRoute>
         }
       />
+
       <Route
         path="/connexion"
         element={<Login />}
       />
+
       <Route
         path="/inscription"
         element={<Register />}
       />
+
       <Route
         path="/profil"
-        element={<Profile />}
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
       />
+
       <Route
         path="/mes-annonces"
-        element={<MyListings />}
+        element={
+          <ProtectedRoute>
+            <MyListings />
+          </ProtectedRoute>
+        }
       />
+
       <Route
         path="/modifier/:id"
-        element={<EditListing />}
+        element={
+          <ProtectedRoute>
+            <EditListing />
+          </ProtectedRoute>
+        }
       />
+
       <Route
         path="/conversation/:id"
-        element={<Conversation />}
+        element={
+          <ProtectedRoute>
+            <Conversation />
+          </ProtectedRoute>
+        }
       />
+
       <Route
         path="/vendeur/:id"
         element={<PublicProfile />}
       />
+
       <Route
         path="/notifications"
-        element={<Notifications />}
+        element={
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   )
