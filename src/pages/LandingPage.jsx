@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom'
+import Nav from '../components/Nav'
 
 function LandingPage() {
   return (
     <div className="app">
-      <header className="header">
-        <div className="logo">
-          AFRYA <span>MARKET</span>
-        </div>
-      </header>
+      <Nav />
       <main>
         <section
           className="hero"

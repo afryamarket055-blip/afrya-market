@@ -295,22 +295,7 @@ function AllListings({ listings, loading, error }) {
 
   return (
     <div className="app">
-      <header className="header">
-        <div className="logo">
-          AFRYA <span>MARKET</span>
-        </div>
-
-        <nav className="nav">
-          <Link to="/">Accueil</Link>
-          <Link to="/categories">Catégories</Link>
-          <Link to="/annonces">Annonces</Link>
-          <Link to="/messages">Messages</Link>
-        </nav>
-
-        <Link to="/vendre" className="sell-button">
-          + Vendre un article
-        </Link>
-      </header>
+      <Nav />
 
       <main>
         <section className="listings">
