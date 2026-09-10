@@ -83,6 +83,7 @@ function Nav() {
               </Link>
               <Link to="/profil" onClick={closeMenu}>Mon profil</Link>
               <Link to="/mes-annonces" onClick={closeMenu}>Mes annonces</Link>
+              <Link to="/favoris" onClick={closeMenu}>Mes favoris</Link>
               <button
                 type="button"
                 className="btn btn-secondary nav-signout"
