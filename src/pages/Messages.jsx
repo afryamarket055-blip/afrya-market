@@ -8,6 +8,7 @@ function Messages() {
   const { user } = useAuth()
   const [conversations, setConversations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     async function loadConversations() {
@@ -21,6 +22,7 @@ function Messages() {
 
       if (error) {
         console.error('Erreur chargement conversations :', error)
+        setError(error.message || 'Erreur de chargement')
         setLoading(false)
         return
       }
@@ -69,6 +71,8 @@ function Messages() {
 
         {loading ? (
           <p>Chargement...</p>
+        ) : error ? (
+          <p>Impossible de charger vos conversations. Réessayez plus tard.</p>
         ) : conversations.length === 0 ? (
           <p>Vous n'avez aucune conversation pour l'instant.</p>
         ) : (
