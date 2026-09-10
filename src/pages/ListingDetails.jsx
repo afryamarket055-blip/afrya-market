@@ -95,7 +95,7 @@ function ListingDetails({ listings = [] }) {
       if (!listing?.user_id) return
       const { data, error } = await supabase
         .from('profiles')
-        .select('full_name, phone')
+        .select('full_name')
         .eq('id', listing.user_id)
         .single()
       if (error) {
@@ -201,9 +201,6 @@ function ListingDetails({ listings = [] }) {
                   {sellerProfile?.full_name || 'Vendeur AFRYA MARKET'}
                 </Link>
               </p>
-              {sellerProfile?.phone && (
-                <p>📞 {sellerProfile.phone}</p>
-              )}
               <p>
                 📍 {listing.location}
               </p>

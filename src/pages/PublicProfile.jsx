@@ -12,7 +12,7 @@ function PublicProfile() {
     async function loadProfile() {
       const { data, error } = await supabase
         .from('profiles')
-        .select('full_name, avatar_url, phone')
+        .select('full_name, avatar_url')
         .eq('id', id)
         .single()
 
@@ -83,9 +83,6 @@ function PublicProfile() {
 
         <h1>{profile?.full_name || 'Vendeur AFRYA MARKET'}</h1>
 
-        {profile?.phone && (
-          <p style={{ color: '#6b7280' }}>📞 {profile.phone}</p>
-        )}
       </main>
     </div>
   )
