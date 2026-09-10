@@ -4,6 +4,9 @@ import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
 import ListingCard from '../ListingCard'
+import Button from '../components/Button'
+import EmptyState from '../components/EmptyState'
+import LoadingState from '../components/LoadingState'
 
 function Favorites() {
   const { user } = useAuth()
@@ -52,21 +55,21 @@ function Favorites() {
           </div>
 
           {loading ? (
-            <div className="loading-state">
-              <p>Chargement...</p>
-            </div>
+            <LoadingState />
           ) : error ? (
             <div className="empty-state">
               <p>Impossible de charger vos favoris. Réessayez plus tard.</p>
             </div>
           ) : listings.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-icon">🔖</div>
-              <p>Vous n'avez encore enregistré aucune annonce.</p>
-              <Link to="/annonces" className="btn btn-primary" style={{ marginTop: '12px' }}>
-                Parcourir les annonces
-              </Link>
-            </div>
+            <EmptyState
+              icon="🔖"
+              message="Vous n'avez encore enregistré aucune annonce."
+              action={
+                <Link to="/annonces" className="btn btn-primary">
+                  Parcourir les annonces
+                </Link>
+              }
+            />
           ) : (
             <div className="listing-grid">
               {listings.map((listing) => (
