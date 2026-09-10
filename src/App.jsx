@@ -20,7 +20,7 @@ import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
 import ProtectedRoute from './components/ProtectedRoute'
 
-function Home({ listings }) {
+function Home({ listings, loading, error }) {
   return (
     <div className="app">
             <Nav />
@@ -119,25 +119,39 @@ function Home({ listings }) {
             </Link>
           </div>
 
-          <div className="listing-grid">
-            {listings.map((listing) => (
-              <Link
-                key={listing.id}
-                to={`/annonce/${listing.id}`}
-                className="listing-link"
-              >
-                <ListingCard
-                  title={listing.title}
-                  price={listing.price}
-                  location={listing.location}
-                  condition={listing.condition}
-                  category={listing.category}
-                  image={listing.image}
-                  status={listing.status}
-                />
-              </Link>
-            ))}
-          </div>
+          {loading ? (
+            <div className="loading-state">
+              <p>Chargement des annonces...</p>
+            </div>
+          ) : error ? (
+            <div className="empty-state">
+              <p>Impossible de charger les annonces. Réessayez plus tard.</p>
+            </div>
+          ) : listings.length === 0 ? (
+            <div className="empty-state">
+              <p>Aucune annonce pour l'instant.</p>
+            </div>
+          ) : (
+            <div className="listing-grid">
+              {listings.map((listing) => (
+                <Link
+                  key={listing.id}
+                  to={`/annonce/${listing.id}`}
+                  className="listing-link"
+                >
+                  <ListingCard
+                    title={listing.title}
+                    price={listing.price}
+                    location={listing.location}
+                    condition={listing.condition}
+                    category={listing.category}
+                    image={listing.image}
+                    status={listing.status}
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 
@@ -361,7 +375,7 @@ function AllListings({ listings }) {
   )
 }
 
-function HomeRouter({ listings }) {
+function HomeRouter({ listings, loading, error }) {
   const { user } = useAuth()
   const [showLanding, setShowLanding] = useState(
     !user && !localStorage.getItem('afrya_visited')
@@ -377,14 +391,18 @@ function HomeRouter({ listings }) {
     return <LandingPage />
   }
 
-  return <Home listings={listings} />
+  return <Home listings={listings} loading={loading} error={error} />
 }
 
 function AppContent() {
   const [listings, setListings] = useState([])
-    const { user, signOut } = useAuth()
-useEffect(() => {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const { user, signOut } = useAuth()
+
+  useEffect(() => {
     async function loadListings() {
+      setLoading(true)
       const { data, error } = await supabase
         .from('listings')
         .select('*')
@@ -392,10 +410,13 @@ useEffect(() => {
 
       if (error) {
         console.error('Erreur Supabase :', error)
+        setError(error.message || 'Erreur de chargement')
+        setLoading(false)
         return
       }
 
-      setListings(data)
+      setListings(data || [])
+      setLoading(false)
     }
 
     loadListings()
@@ -411,7 +432,7 @@ useEffect(() => {
     <Routes>
       <Route
         path="/"
-        element={<HomeRouter listings={listings} />}
+        element={<HomeRouter listings={listings} loading={loading} error={error} />}
       />
 
       <Route
