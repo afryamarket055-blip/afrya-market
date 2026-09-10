@@ -1,16 +1,50 @@
-# React + Vite
+# AFRYA MARKET
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Marketplace numérique africaine — achat et vente entre particuliers
+et professionnels. Marché initial : 🇧🇯 Bénin.
 
-Currently, two official plugins are available:
+## Stack
+- React 19 + Vite 8
+- React Router 7
+- Supabase (Auth, Database, Storage, Realtime)
+- CSS pur
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Installation
+npm install
+cp .env.example .env.local
+# Éditer .env.local, remplir les valeurs
+npm run dev
 
-## React Compiler
+URL : http://localhost:5173/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Variables d'environnement
+Fichier `.env.local` (jamais versionné) :
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_PUBLISHABLE_KEY
 
-## Expanding the ESLint configuration
+Où les trouver : Supabase → Settings → API
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Scripts
+- npm run dev       → serveur de développement
+- npm run build     → build de production
+- npm run preview   → prévisualiser le build
+- npm run lint      → ESLint
+
+## Base de données
+- RLS activée sur toutes les tables publiques
+- Triggers : handle_new_user, handle_new_message, rls_auto_enable
+- Storage : bucket listing-images
+
+## Migrations
+Voir supabase/migrations/. Pour appliquer : copier dans
+Supabase → SQL Editor → Run.
+
+## Roadmap
+- ✅ Phase 0 — Stabilisation
+- 🔜 Phase 1 — UI/UX
+- 🔜 Phase 2 — Profil + Paramètres
+- 🔜 Phase 3 — Likes, Favoris, Vues
+- 🔜 Phase 4 à 10 — Analytics, Confiance, Algo, Business
+
+## Organisation
+Projet AFRYA ONE — © 2026
