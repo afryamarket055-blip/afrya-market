@@ -228,7 +228,7 @@ function SimplePage({ title }) {
   )
 }
 
-function AllListings({ listings }) {
+function AllListings({ listings, loading, error }) {
   const [userLocation, setUserLocation] = useState(null)
   const [locationMessage, setLocationMessage] = useState("")
   const [userCity, setUserCity] = useState(null)
@@ -346,28 +346,38 @@ function AllListings({ listings }) {
               </button>
             )}
           </div>          
-<div className="listing-grid">
-            {filteredListings.map((listing) => (
-              <Link
-                key={listing.id}
-                to={`/annonce/${listing.id}`}
-                className="listing-link"
-              >
-                <ListingCard
-                  title={listing.title}
-                  price={listing.price}
-                  location={listing.location}
-                  condition={listing.condition}
-                  category={listing.category}
-                  image={listing.image}
-                  status={listing.status}
-                />
-              </Link>
-            ))}
-          </div>
-
-          {filteredListings.length === 0 && (
-            <p>Aucune annonce ne correspond à votre recherche.</p>
+{loading ? (
+            <div className="loading-state">
+              <p>Chargement des annonces...</p>
+            </div>
+          ) : error ? (
+            <div className="empty-state">
+              <p>Impossible de charger les annonces. Réessayez plus tard.</p>
+            </div>
+          ) : filteredListings.length === 0 ? (
+            <div className="empty-state">
+              <p>Aucune annonce ne correspond à votre recherche.</p>
+            </div>
+          ) : (
+            <div className="listing-grid">
+              {filteredListings.map((listing) => (
+                <Link
+                  key={listing.id}
+                  to={`/annonce/${listing.id}`}
+                  className="listing-link"
+                >
+                  <ListingCard
+                    title={listing.title}
+                    price={listing.price}
+                    location={listing.location}
+                    condition={listing.condition}
+                    category={listing.category}
+                    image={listing.image}
+                    status={listing.status}
+                  />
+                </Link>
+              ))}
+            </div>
           )}
         </section>
       </main>
@@ -444,7 +454,7 @@ function AppContent() {
 <Route
   path="/annonces"
   element={
-    <AllListings listings={listings} />
+    <AllListings listings={listings} loading={loading} error={error} />
   }
 />
 
