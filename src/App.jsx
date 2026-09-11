@@ -224,6 +224,14 @@ function AllListings({ listings, loading, error }) {
   const [locationMessage, setLocationMessage] = useState("")
   const [userCity, setUserCity] = useState(null)
   const [showNearby, setShowNearby] = useState(false)
+  const [searchParams] = useSearchParams()
+  const [search, setSearch] = useState(searchParams.get('q') || '')
+  const [searchCategory, setSearchCategory] = useState(searchParams.get('category') || '')
+
+  useEffect(() => {
+    setSearch(searchParams.get('q') || '')
+    setSearchCategory(searchParams.get('category') || '')
+  }, [searchParams])
 
   async function handleGetLocation() {
     if (!navigator.geolocation) {
@@ -264,14 +272,12 @@ function AllListings({ listings, loading, error }) {
       }
     )
   }
-  const [searchParams] = useSearchParams()
-  const [search, setSearch] = useState(searchParams.get('q') || '')
-  const [searchCategory, setSearchCategory] = useState(searchParams.get('category') || '')
 
-  useEffect(() => {
-    setSearch(searchParams.get('q') || '')
-    setSearchCategory(searchParams.get('category') || '')
-  }, [searchParams])
+  function resetSearch() {
+    setSearch('')
+    setSearchCategory('')
+    setShowNearby(false)
+  }
 
   const filteredListings = listings.filter((listing) => {
     if (searchCategory && listing.category !== searchCategory) {
@@ -284,7 +290,6 @@ function AllListings({ listings, loading, error }) {
       }
     }
     const searchText = search.toLowerCase()
-
     return (
       listing.title?.toLowerCase().includes(searchText) ||
       listing.location?.toLowerCase().includes(searchText) ||
@@ -292,73 +297,138 @@ function AllListings({ listings, loading, error }) {
     )
   })
 
+  const hasActiveFilter = search || searchCategory || showNearby
+
   return (
     <div className="app">
       <Nav />
 
       <main>
         <section className="listings">
-          <div className="section-heading">
+          <div className="all-listings-header">
             <div>
-              <span>AFRYA MARKET</span>
-              <h2>Toutes les annonces</h2>
+              <h1>Toutes les annonces</h1>
+              <p className="all-listings-count">
+                {loading
+                  ? 'Chargement...'
+                  : filteredListings.length + ' annonce' + (filteredListings.length > 1 ? 's' : '') + ' trouvee' + (filteredListings.length > 1 ? 's' : '')}
+              </p>
             </div>
-
-            <Link to="/vendre">
+            <Link to="/vendre" className="btn btn-primary">
               + Vendre un article
             </Link>
           </div>
 
-          {searchCategory && (
-            <div className="filter-chip">
-              Catégorie : <strong>{searchCategory}</strong>
-              <button type="button" onClick={() => setSearchCategory('')}>
-                ✕
-              </button>
+          <div className="all-listings-toolbar">
+            <div className="all-listings-search">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Rechercher une annonce..."
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+              {search && (
+                <button
+                  type="button"
+                  className="search-clear"
+                  onClick={() => setSearch('')}
+                  aria-label="Effacer la recherche"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="toolbar-btn"
+              onClick={handleGetLocation}
+            >
+              📍 {userCity ? userCity : 'Localisation'}
+            </button>
+
+            <button type="button" className="toolbar-btn" disabled>
+              ⚙ Filtrer
+            </button>
+
+            <button type="button" className="toolbar-btn" disabled>
+              ↕ Trier
+            </button>
+          </div>
+
+          {(searchCategory || showNearby || locationMessage) && (
+            <div className="all-listings-chips">
+              {searchCategory && (
+                <div className="filter-chip">
+                  Categorie : <strong>{searchCategory}</strong>
+                  <button
+                    type="button"
+                    onClick={() => setSearchCategory('')}
+                    aria-label="Retirer le filtre categorie"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              {showNearby && userCity && (
+                <div className="filter-chip">
+                  📍 Pres de <strong>{userCity}</strong>
+                  <button
+                    type="button"
+                    onClick={() => setShowNearby(false)}
+                    aria-label="Retirer le filtre localisation"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              {locationMessage && (
+                <p className="location-message">{locationMessage}</p>
+              )}
             </div>
           )}
 
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder="Rechercher une annonce..."
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
-          </div>
-
-          <div className="location-tools">
-            <button type="button" onClick={handleGetLocation}>
-              📍 Utiliser ma localisation
+          {userCity && !showNearby && (
+            <button
+              type="button"
+              className="nearby-toggle"
+              onClick={() => setShowNearby(true)}
+            >
+              📍 Voir les annonces pres de {userCity}
             </button>
+          )}
 
-            {locationMessage && <p>{locationMessage}</p>}
-            {userCity && (
-              <button onClick={() => setShowNearby(!showNearby)}>
-                {showNearby
-                  ? 'Voir toutes les annonces'
-                  : `Annonces proches de ${userCity}`}
-              </button>
-            )}
-          </div>          
-{loading ? (
+          {loading ? (
             <div className="loading-state">
               <p>Chargement des annonces...</p>
             </div>
           ) : error ? (
             <div className="empty-state">
-              <p>Impossible de charger les annonces. Réessayez plus tard.</p>
+              <div className="empty-icon">⚠</div>
+              <p>Impossible de charger les annonces. Reessayez plus tard.</p>
             </div>
           ) : filteredListings.length === 0 ? (
             <div className="empty-state">
-              <p>Aucune annonce ne correspond à votre recherche.</p>
+              <div className="empty-icon">🔍</div>
+              <p>Aucune annonce ne correspond a votre recherche.</p>
+              {hasActiveFilter && (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  style={{ marginTop: '12px' }}
+                  onClick={resetSearch}
+                >
+                  Reinitialiser les filtres
+                </button>
+              )}
             </div>
           ) : (
             <div className="listing-grid">
               {filteredListings.map((listing) => (
                 <Link
                   key={listing.id}
-                  to={`/annonce/${listing.id}`}
+                  to={'/annonce/' + listing.id}
                   className="listing-link"
                 >
                   <ListingCard
