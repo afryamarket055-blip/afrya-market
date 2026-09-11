@@ -3831,3 +3831,97 @@
     width: 100%;
   }
 }
+
+
+/* ==========================================================
+   MODAL - Adaptation mobile (bottom sheet)
+   ========================================================== */
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    width: 100%;
+    max-height: 90vh;
+    padding: var(--space-lg) var(--space-md);
+    padding-bottom: calc(var(--space-lg) + 64px); /* espace bottom nav */
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    margin: 0;
+  }
+
+  .modal-close {
+    top: var(--space-sm);
+    right: var(--space-sm);
+  }
+
+  .modal-actions {
+    position: sticky;
+    bottom: 0;
+    background: var(--color-bg);
+    padding-top: var(--space-md);
+    margin-top: var(--space-md);
+    margin-bottom: -8px;
+  }
+
+  .modal-actions .btn {
+    flex: 1;
+  }
+
+  .stars-input button {
+    font-size: 28px;
+  }
+}
+
+
+/* ==========================================================
+   MODAL COMPACT MOBILE (affinage)
+   ========================================================== */
+
+@media (max-width: 600px) {
+  .modal-content {
+    max-height: 85vh;
+    padding: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .modal-content h2 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .modal-subtitle {
+    font-size: 13px;
+    margin-bottom: var(--space-md);
+  }
+
+  .modal-content .form-group {
+    margin-bottom: var(--space-sm);
+  }
+
+  .modal-content .form-group label {
+    font-size: 12px;
+  }
+
+  .modal-content textarea {
+    rows: 3;
+    min-height: 70px;
+    font-size: 14px;
+  }
+
+  .modal-actions {
+    position: static;
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .modal-actions .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}

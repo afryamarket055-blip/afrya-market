@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
+import ReportModal from '../components/ReportModal'
 
 function formatMemberSince(dateString) {
   if (!dateString) return null
@@ -66,6 +67,7 @@ function PublicProfile() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
+  const [reportModalOpen, setReportModalOpen] = useState(false)
 
   // Load profile + listings
   useEffect(() => {
@@ -411,12 +413,24 @@ function PublicProfile() {
 
         {!isOwnProfile && (
           <div className="public-profile-report">
-            <button type="button" className="report-link" disabled>
+            <button
+              type="button"
+              className="report-link"
+              onClick={() => setReportModalOpen(true)}
+            >
               ⚠ Signaler ce profil
             </button>
           </div>
         )}
       </main>
+
+      {reportModalOpen && (
+        <ReportModal
+          targetType="profile"
+          targetId={id}
+          onClose={() => setReportModalOpen(false)}
+        />
+      )}
 
       {modalOpen && (
         <div className="modal-overlay" onClick={closeModal}>

@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
 import ListingCard from '../ListingCard'
+import ReportModal from '../components/ReportModal'
 
 function formatMemberSince(dateString) {
   if (!dateString) return null
@@ -25,6 +26,7 @@ function ListingDetails({ listings = [] }) {
   const [favorited, setFavorited] = useState(false)
   const [viewsCount, setViewsCount] = useState(0)
   const [pending, setPending] = useState(false)
+  const [reportModalOpen, setReportModalOpen] = useState(false)
 
   const dynamicListing = listings.find((listing) => listing.id === id)
   const listing = dynamicListing
@@ -381,7 +383,11 @@ function ListingDetails({ listings = [] }) {
               </div>
             </div>
 
-            <button type="button" className="report-link" disabled>
+            <button
+              type="button"
+              className="report-link"
+              onClick={() => setReportModalOpen(true)}
+            >
               ⚠ Signaler cette annonce
             </button>
           </div>
@@ -416,6 +422,13 @@ function ListingDetails({ listings = [] }) {
               ))}
             </div>
           </section>
+        )}
+        {reportModalOpen && (
+          <ReportModal
+            targetType="listing"
+            targetId={listing.id}
+            onClose={() => setReportModalOpen(false)}
+          />
         )}
       </main>
     </div>
