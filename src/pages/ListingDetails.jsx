@@ -146,6 +146,42 @@ function ListingDetails({ listings = [] }) {
     navigate(`/conversation/${created.id}`)
   }
 
+  // ----- View tracking (1 vue / 24h / annonce, cote client) -----
+  useEffect(() => {
+    if (!listing?.id) return
+
+    // Skip si le vendeur regarde sa propre annonce
+    if (user && listing.user_id === user.id) return
+
+    const storageKey = 'afrya_viewed_' + listing.id
+    const lastViewed = localStorage.getItem(storageKey)
+    const now = Date.now()
+    const DAY_MS = 24 * 60 * 60 * 1000
+
+    if (lastViewed && now - Number(lastViewed) < DAY_MS) {
+      return
+    }
+
+    // Marquer TOUT DE SUITE pour bloquer les appels en double (StrictMode, re-renders)
+    localStorage.setItem(storageKey, String(now))
+
+    async function recordView() {
+      const payload = { listing_id: listing.id }
+      if (user?.id) payload.viewer_id = user.id
+
+      const { error } = await supabase
+        .from('listing_views')
+        .insert([payload])
+
+      // 23505 = duplicate key (deja vu aujourd'hui) -> silencieux
+      if (error && error.code !== '23505') {
+        console.debug('Vue non enregistree :', error.message)
+      }
+    }
+
+    recordView()
+  }, [listing, user])
+
   async function handleToggleFavorite() {
     if (!user) {
       navigate('/connexion')
