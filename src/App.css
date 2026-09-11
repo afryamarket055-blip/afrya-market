@@ -980,7 +980,7 @@
   }
 }
 /* ==========================================================
-   HEADER / NAVIGATION
+   HEADER / NAVIGATION (v2)
    ========================================================== */
 
 .site-header {
@@ -1009,6 +1009,7 @@
   text-decoration: none;
   white-space: nowrap;
 }
+
 .site-header .logo span {
   color: var(--color-primary);
 }
@@ -1020,6 +1021,7 @@
   flex: 1;
   justify-content: center;
 }
+
 .site-nav a,
 .site-nav button {
   color: var(--color-text-muted);
@@ -1030,33 +1032,132 @@
   background: none;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
 }
-.site-nav a:hover {
+
+.site-nav a:hover,
+.site-nav button:hover {
   color: var(--color-primary);
 }
 
-.nav-bell {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-.nav-badge {
-  position: absolute;
-  top: -8px;
-  right: -14px;
-  background: var(--color-danger);
-  color: white;
-  border-radius: var(--radius-full);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 6px;
-  line-height: 1.4;
+.site-nav-secondary {
+  display: none;
 }
 
 .site-header-actions {
   display: flex;
   align-items: center;
   gap: var(--space-md);
+}
+
+.header-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: background var(--transition-fast);
+}
+
+.header-icon-btn:hover {
+  background: var(--color-bg-subtle);
+}
+
+.nav-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: var(--color-danger);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  line-height: 1.3;
+  min-width: 16px;
+  text-align: center;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.user-menu-trigger:hover {
+  background: var(--color-bg-subtle);
+}
+
+.user-menu-chevron {
+  font-size: 10px;
+  color: var(--color-text-muted);
+}
+
+.user-menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  padding: var(--space-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.user-menu-panel a,
+.user-menu-panel button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  color: var(--color-text);
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.user-menu-panel a:hover,
+.user-menu-panel button:hover {
+  background: var(--color-bg-subtle);
+}
+
+.user-menu-sep {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-xs) 0;
+}
+
+.user-menu-signout {
+  color: var(--color-danger) !important;
 }
 
 .menu-toggle {
@@ -1068,9 +1169,10 @@
   height: 40px;
   font-size: 18px;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Mobile */
 @media (max-width: 860px) {
   .site-nav {
     display: none;
@@ -1085,20 +1187,34 @@
     padding: var(--space-md) var(--space-lg);
     gap: var(--space-md);
     box-shadow: var(--shadow-md);
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
   }
+
   .site-nav.is-open {
     display: flex;
   }
+
+  .site-nav .site-nav-secondary {
+    display: block;
+  }
+
   .site-header-actions .sell-button {
     display: none;
   }
+
+  .site-header-actions .header-icon-btn,
+  .site-header-actions .user-menu {
+    display: none;
+  }
+
   .menu-toggle {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
   }
+
   .nav-signout {
     width: 100%;
+    text-align: center;
   }
 }
 
