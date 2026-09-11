@@ -2095,3 +2095,59 @@
 .filter-chip button:hover {
   color: var(--color-primary-dark);
 }
+
+
+/* ==========================================================
+   BOTTOM NAVIGATION (mobile uniquement)
+   ========================================================== */
+
+.bottom-nav {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    z-index: 60;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .bottom-nav-item.is-active {
+    color: var(--color-primary);
+  }
+
+  .bottom-nav-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .bottom-nav-label {
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  /* Espace en bas pour ne pas cacher le contenu */
+  .app {
+    padding-bottom: 60px;
+  }
+}

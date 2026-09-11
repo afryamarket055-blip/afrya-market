@@ -20,6 +20,7 @@ import Favorites from './pages/Favorites'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
 import ProtectedRoute from './components/ProtectedRoute'
+import BottomNav from './components/BottomNav'
 
 function Home({ listings, loading, error }) {
   const navigate = useNavigate()
@@ -555,6 +556,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppContent />
+        <BottomNav />
       </AuthProvider>
     </BrowserRouter>
   )
