@@ -23,6 +23,7 @@ function ListingDetails({ listings = [] }) {
   const [sellerProfile, setSellerProfile] = useState(null)
   const [similarListings, setSimilarListings] = useState([])
   const [favorited, setFavorited] = useState(false)
+  const [viewsCount, setViewsCount] = useState(0)
   const [pending, setPending] = useState(false)
 
   const dynamicListing = listings.find((listing) => listing.id === id)
@@ -145,6 +146,19 @@ function ListingDetails({ listings = [] }) {
     }
     navigate(`/conversation/${created.id}`)
   }
+
+  // ----- Views count (affichage) -----
+  useEffect(() => {
+    async function loadViewsCount() {
+      if (!listing?.id) return
+      const { count } = await supabase
+        .from('listing_views')
+        .select('*', { count: 'exact', head: true })
+        .eq('listing_id', listing.id)
+      setViewsCount(count || 0)
+    }
+    loadViewsCount()
+  }, [listing])
 
   // ----- View tracking (1 vue / 24h / annonce, cote client) -----
   useEffect(() => {
@@ -303,6 +317,9 @@ function ListingDetails({ listings = [] }) {
             <div className="details-meta">
               <p className="details-location">📍 {listing.location}</p>
               <span className="condition">{listing.condition}</span>
+              {viewsCount > 0 && (
+                <span className="details-views">👁 {viewsCount} vue{viewsCount > 1 ? 's' : ''}</span>
+              )}
             </div>
 
             <div className="details-actions">

@@ -8,6 +8,7 @@ function ListingCard({ id, title, price, location, condition, category, image, s
   const navigate = useNavigate()
   const [liked, setLiked] = useState(false)
   const [likesCount, setLikesCount] = useState(0)
+  const [viewsCount, setViewsCount] = useState(0)
   const [pending, setPending] = useState(false)
 
   useEffect(() => {
@@ -34,6 +35,18 @@ function ListingCard({ id, title, price, location, condition, category, image, s
     }
     loadLikeState()
   }, [id, user])
+
+    useEffect(() => {
+      async function loadViewsCount() {
+        if (!id) return
+        const { count } = await supabase
+          .from('listing_views')
+          .select('*', { count: 'exact', head: true })
+          .eq('listing_id', id)
+        setViewsCount(count || 0)
+      }
+      loadViewsCount()
+    }, [id])
 
   async function handleToggleLike(event) {
     event.preventDefault()
@@ -86,8 +99,11 @@ function ListingCard({ id, title, price, location, condition, category, image, s
         >
           {liked ? '❤' : '🤍'}
         </button>
-        {likesCount > 0 && (
-          <span className="listing-like-count">{likesCount}</span>
+        {viewsCount > 0 && (
+            <span className="listing-view-count">👁 {viewsCount}</span>
+          )}
+          {likesCount > 0 && (
+          <span className="listing-like-count">❤ {likesCount}</span>
         )}
       </div>
       <div className="listing-content">

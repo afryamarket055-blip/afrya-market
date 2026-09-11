@@ -10,6 +10,12 @@ function MyListings() {
   const [listings, setListings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [stats, setStats] = useState({
+    views: 0,
+    likes: 0,
+    favorites: 0,
+    contacts: 0,
+  })
 
   useEffect(() => {
     async function loadMyListings() {
@@ -34,6 +40,45 @@ function MyListings() {
 
     loadMyListings()
   }, [user])
+
+  useEffect(() => {
+    async function loadStats() {
+      if (!user || listings.length === 0) {
+        setStats({ views: 0, likes: 0, favorites: 0, contacts: 0 })
+        return
+      }
+
+      const ids = listings.map((l) => l.id)
+
+      const [viewsRes, likesRes, favoritesRes, contactsRes] = await Promise.all([
+        supabase
+          .from('listing_views')
+          .select('*', { count: 'exact', head: true })
+          .in('listing_id', ids),
+        supabase
+          .from('listing_likes')
+          .select('*', { count: 'exact', head: true })
+          .in('listing_id', ids),
+        supabase
+          .from('listing_favorites')
+          .select('*', { count: 'exact', head: true })
+          .in('listing_id', ids),
+        supabase
+          .from('conversations')
+          .select('*', { count: 'exact', head: true })
+          .eq('seller_id', user.id),
+      ])
+
+      setStats({
+        views: viewsRes.count || 0,
+        likes: likesRes.count || 0,
+        favorites: favoritesRes.count || 0,
+        contacts: contactsRes.count || 0,
+      })
+    }
+
+    loadStats()
+  }, [user, listings])
 
   async function handleDelete(listingId) {
     const confirmed = window.confirm(
@@ -93,7 +138,34 @@ function MyListings() {
             </Link>
           </div>
 
-          {loading ? (
+            {!loading && !error && listings.length > 0 && (
+              <section className="stats-dashboard">
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <div className="stat-icon">👁</div>
+                    <div className="stat-value">{stats.views}</div>
+                    <div className="stat-label">Vues</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon">❤</div>
+                    <div className="stat-value">{stats.likes}</div>
+                    <div className="stat-label">Likes</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon">🔖</div>
+                    <div className="stat-value">{stats.favorites}</div>
+                    <div className="stat-label">Favoris</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-icon">💬</div>
+                    <div className="stat-value">{stats.contacts}</div>
+                    <div className="stat-label">Contacts</div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {loading ? (
             <div className="loading-state">
               <p>Chargement...</p>
             </div>
