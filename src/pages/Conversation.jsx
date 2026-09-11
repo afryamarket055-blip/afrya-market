@@ -12,6 +12,26 @@ function formatTime(dateString) {
   })
 }
 
+function formatDayLabel(dateString) {
+  const date = new Date(dateString)
+  const today = new Date()
+  const yesterday = new Date()
+  yesterday.setDate(today.getDate() - 1)
+
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  const t = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  const y = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate())
+
+  if (d.getTime() === t.getTime()) return "Aujourd'hui"
+  if (d.getTime() === y.getTime()) return 'Hier'
+
+  return date.toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+  })
+}
+
 function Conversation() {
   const { id } = useParams()
   const { user } = useAuth()
@@ -43,17 +63,17 @@ function Conversation() {
 
       setListingInfo(conversation.listings)
 
-      const otherUserId =
+      const otherId =
         conversation.buyer_id === user?.id
           ? conversation.seller_id
           : conversation.buyer_id
 
-      setOtherUserId(otherUserId)
+      setOtherUserId(otherId)
 
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('full_name, avatar_url')
-        .eq('id', otherUserId)
+        .eq('id', otherId)
         .single()
 
       if (profileError) {
@@ -86,7 +106,7 @@ function Conversation() {
         return
       }
 
-      setMessages(data)
+      setMessages(data || [])
       setLoading(false)
     }
 
@@ -95,14 +115,14 @@ function Conversation() {
 
   useEffect(() => {
     const channel = supabase
-      .channel(`conversation-${id}`)
+      .channel('conversation-' + id)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
           table: 'messages',
-          filter: `conversation_id=eq.${id}`,
+          filter: 'conversation_id=eq.' + id,
         },
         (payload) => {
           setMessages((previous) => {
@@ -127,7 +147,7 @@ function Conversation() {
 
   async function handleSend(event) {
     event.preventDefault()
-    if (!newMessage.trim()) return
+    if (!newMessage.trim() || sending) return
 
     setSending(true)
 
@@ -159,8 +179,14 @@ function Conversation() {
     return (
       <div className="app">
         <Nav />
-        <main style={{ padding: '80px 20px', textAlign: 'center' }}>
-          <p>Impossible de charger la conversation. Réessayez plus tard.</p>
+        <main className="conversation-page">
+          <div className="empty-state">
+            <div className="empty-icon">⚠</div>
+            <p>Impossible de charger la conversation.</p>
+            <Link to="/messages" className="btn btn-secondary" style={{ marginTop: '12px' }}>
+              Retour aux messages
+            </Link>
+          </div>
         </main>
       </div>
     )
@@ -170,40 +196,33 @@ function Conversation() {
     return (
       <div className="app">
         <Nav />
-        <main style={{ padding: '80px 20px', textAlign: 'center' }}>
-          <p>Chargement de la conversation...</p>
+        <main className="conversation-page">
+          <div className="loading-state">
+            <p>Chargement de la conversation...</p>
+          </div>
         </main>
       </div>
     )
   }
 
+  // Regrouper les messages par jour
+  const grouped = []
+  let currentDay = null
+  for (const message of messages) {
+    const day = new Date(message.created_at).toDateString()
+    if (day !== currentDay) {
+      grouped.push({ type: 'day', label: formatDayLabel(message.created_at), key: 'day-' + day })
+      currentDay = day
+    }
+    grouped.push({ type: 'msg', message })
+  }
+
   return (
-    <div className="app">
+    <div className="app conversation-v2">
       <Nav />
-      <main
-        style={{
-          padding: '20px',
-          maxWidth: '650px',
-          margin: '0 auto',
-          display: 'flex',
-          flexDirection: 'column',
-          height: '85vh',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            paddingBottom: '14px',
-            borderBottom: '1px solid #e5e7eb',
-            marginBottom: '14px',
-          }}
-        >
-          <Link
-            to="/messages"
-            style={{ fontSize: '20px', textDecoration: 'none', color: 'inherit' }}
-          >
+      <main className="conversation-page">
+        <header className="conversation-header">
+          <Link to="/messages" className="conversation-back" aria-label="Retour">
             ←
           </Link>
 
@@ -211,39 +230,27 @@ function Conversation() {
             <img
               src={otherProfile.avatar_url}
               alt={otherProfile.full_name || 'Utilisateur'}
-              style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-              }}
+              className="conversation-avatar"
             />
           ) : (
-            <div
-              style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                background: '#e5e7eb',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '18px',
-              }}
-            >
+            <div className="conversation-avatar conversation-avatar-placeholder">
               👤
             </div>
           )}
 
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <strong>
-              <Link to={`/vendeur/${otherUserId}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                {otherProfile?.full_name || 'Utilisateur AFRYA MARKET'}
-              </Link>
+          <div className="conversation-header-info">
+            <strong className="conversation-header-name">
+              {otherUserId ? (
+                <Link to={'/vendeur/' + otherUserId}>
+                  {otherProfile?.full_name || 'Utilisateur AFRYA MARKET'}
+                </Link>
+              ) : (
+                otherProfile?.full_name || 'Utilisateur AFRYA MARKET'
+              )}
             </strong>
             {listingInfo?.title && (
-              <span style={{ fontSize: '13px', color: '#6b7280' }}>
-                À propos de : {listingInfo.title}
+              <span className="conversation-header-sub">
+                A propos de : {listingInfo.title}
               </span>
             )}
           </div>
@@ -252,68 +259,36 @@ function Conversation() {
             <img
               src={listingInfo.image}
               alt={listingInfo.title}
-              style={{
-                width: '40px',
-                height: '40px',
-                objectFit: 'cover',
-                borderRadius: '6px',
-                marginLeft: 'auto',
-              }}
+              className="conversation-header-listing"
             />
           )}
-        </div>
+        </header>
 
-        <div
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-            padding: '4px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-          }}
-        >
+        <div className="conversation-messages">
           {messages.length === 0 ? (
-            <p style={{ textAlign: 'center', color: '#6b7280' }}>
-              Aucun message pour l'instant. Dites bonjour !
-            </p>
+            <div className="conversation-empty">
+              <p>Aucun message pour l'instant. Dites bonjour !</p>
+            </div>
           ) : (
-            messages.map((message) => {
+            grouped.map((item) => {
+              if (item.type === 'day') {
+                return (
+                  <div key={item.key} className="conversation-day">
+                    <span>{item.label}</span>
+                  </div>
+                )
+              }
+              const message = item.message
               const isMine = message.sender_id === user.id
               return (
                 <div
                   key={message.id}
-                  style={{
-                    alignSelf: isMine ? 'flex-end' : 'flex-start',
-                    maxWidth: '70%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: isMine ? 'flex-end' : 'flex-start',
-                  }}
+                  className={'bubble-row ' + (isMine ? 'is-mine' : 'is-other')}
                 >
-                  <div
-                    style={{
-                      background: isMine ? '#1d4ed8' : '#f3f4f6',
-                      color: isMine ? 'white' : 'black',
-                      padding: '10px 16px',
-                      borderRadius: isMine
-                        ? '16px 16px 4px 16px'
-                        : '16px 16px 16px 4px',
-                      wordBreak: 'break-word',
-                    }}
-                  >
+                  <div className={'bubble ' + (isMine ? 'bubble-mine' : 'bubble-other')}>
                     {message.content}
                   </div>
-                  <span
-                    style={{
-                      fontSize: '11px',
-                      color: '#9ca3af',
-                      marginTop: '2px',
-                      padding: '0 4px',
-                    }}
-                  >
-                    {formatTime(message.created_at)}
-                  </span>
+                  <span className="bubble-time">{formatTime(message.created_at)}</span>
                 </div>
               )
             })
@@ -321,36 +296,21 @@ function Conversation() {
           <div ref={bottomRef} />
         </div>
 
-        <form
-          onSubmit={handleSend}
-          style={{
-            display: 'flex',
-            gap: '10px',
-            paddingTop: '14px',
-            borderTop: '1px solid #e5e7eb',
-          }}
-        >
+        <form className="conversation-form" onSubmit={handleSend}>
           <input
             type="text"
             value={newMessage}
             onChange={(event) => setNewMessage(event.target.value)}
-            placeholder="Écrivez un message..."
-            style={{
-              flex: 1,
-              padding: '10px 14px',
-              borderRadius: '20px',
-              border: '1px solid #d1d5db',
-            }}
+            placeholder="Ecrivez un message..."
+            className="conversation-input"
           />
           <button
             type="submit"
-            disabled={sending}
-            style={{
-              borderRadius: '20px',
-              padding: '10px 20px',
-            }}
+            className="conversation-send"
+            disabled={sending || !newMessage.trim()}
+            aria-label="Envoyer"
           >
-            Envoyer
+            ➤
           </button>
         </form>
       </main>
