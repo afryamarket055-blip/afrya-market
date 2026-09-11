@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from './lib/supabase'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import './App.css'
 import ListingCard from './ListingCard'
 import ListingDetails from './pages/ListingDetails'
@@ -22,46 +22,61 @@ import Nav from './components/Nav'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function Home({ listings, loading, error }) {
+  const navigate = useNavigate()
+  const [searchText, setSearchText] = useState('')
+  const [searchLocation, setSearchLocation] = useState('')
+
+  function handleSearch(event) {
+    event.preventDefault()
+    const params = new URLSearchParams()
+    if (searchText.trim()) params.set('q', searchText.trim())
+    if (searchLocation.trim()) params.set('loc', searchLocation.trim())
+    const qs = params.toString()
+    navigate('/annonces' + (qs ? '?' + qs : ''))
+  }
+
+  const CATEGORIES = [
+    { icon: '📱', name: 'Téléphones', desc: 'Smartphones & accessoires' },
+    { icon: '💻', name: 'Informatique', desc: 'PC, laptops & accessoires' },
+    { icon: '📺', name: 'Électroménager', desc: 'TV, frigos & appareils' },
+    { icon: '👕', name: 'Mode', desc: 'Vêtements & chaussures' },
+    { icon: '🛋', name: 'Maison', desc: 'Meubles & décoration' },
+    { icon: '🏍', name: 'Véhicules', desc: 'Motos, voitures & pièces' },
+  ]
+
   return (
     <div className="app">
-            <Nav />
+      <Nav />
       <main>
-        <section className="hero">
-          <div className="hero-content">
-            <span className="hero-badge">
-              🇧🇯 Le marché numérique africain
-            </span>
-
-            <h1>
-              Achetez. Vendez.
-              <br />
-              <span>Trouvez.</span>
-            </h1>
-
-            <p>
-              Découvrez des produits d'occasion près de chez vous
-              et donnez une seconde vie aux objets.
+        <section className="home-hero">
+          <div className="home-hero-inner">
+            <span className="home-hero-greeting">Bonjour 👋</span>
+            <h1>Que cherchez-vous aujourd'hui ?</h1>
+            <p className="home-hero-subtitle">
+              Des milliers d'annonces près de chez vous.
             </p>
 
-            <div className="search-box">
+            <form className="home-search" onSubmit={handleSearch}>
               <input
                 type="text"
                 placeholder="Que recherchez-vous ?"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
               />
-
               <input
                 type="text"
-                placeholder="📍 Cotonou"
+                placeholder="📍 Où ?"
+                value={searchLocation}
+                onChange={(e) => setSearchLocation(e.target.value)}
               />
-
-              <button>
+              <button type="submit" className="btn btn-primary">
                 Rechercher
               </button>
-            </div>
+            </form>
           </div>
         </section>
 
-        <section className="categories">
+        <section className="home-section">
           <div className="section-heading">
             <div>
               <span>EXPLORER</span>
@@ -70,54 +85,27 @@ function Home({ listings, loading, error }) {
           </div>
 
           <div className="category-grid">
-            <div className="category-card">
-              <div className="category-icon">📱</div>
-              <h3>Téléphones</h3>
-              <p>Smartphones & accessoires</p>
-            </div>
-
-            <div className="category-card">
-              <div className="category-icon">💻</div>
-              <h3>Informatique</h3>
-              <p>PC, laptops & accessoires</p>
-            </div>
-
-            <div className="category-card">
-              <div className="category-icon">📺</div>
-              <h3>Électroménager</h3>
-              <p>TV, frigos & appareils</p>
-            </div>
-
-            <div className="category-card">
-              <div className="category-icon">👕</div>
-              <h3>Mode</h3>
-              <p>Vêtements & chaussures</p>
-            </div>
-
-            <div className="category-card">
-              <div className="category-icon">🛋️</div>
-              <h3>Maison</h3>
-              <p>Meubles & décoration</p>
-            </div>
-
-            <div className="category-card">
-              <div className="category-icon">🏍️</div>
-              <h3>Véhicules</h3>
-              <p>Motos, voitures & pièces</p>
-            </div>
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.name}
+                to={'/annonces?category=' + encodeURIComponent(cat.name)}
+                className="category-card"
+              >
+                <div className="category-icon">{cat.icon}</div>
+                <h3>{cat.name}</h3>
+                <p>{cat.desc}</p>
+              </Link>
+            ))}
           </div>
         </section>
 
-        <section className="listings">
+        <section className="home-section">
           <div className="section-heading">
             <div>
               <span>RÉCEMMENT AJOUTÉS</span>
               <h2>Les dernières annonces</h2>
             </div>
-
-            <Link to="/annonces">
-              Voir tout →
-            </Link>
+            <Link to="/annonces">Voir tout →</Link>
           </div>
 
           {loading ? (
@@ -137,7 +125,7 @@ function Home({ listings, loading, error }) {
               {listings.map((listing) => (
                 <Link
                   key={listing.id}
-                  to={`/annonce/${listing.id}`}
+                  to={'/annonce/' + listing.id}
                   className="listing-link"
                 >
                   <ListingCard
@@ -275,9 +263,19 @@ function AllListings({ listings, loading, error }) {
       }
     )
   }
-  const [search, setSearch] = useState('')
+  const [searchParams] = useSearchParams()
+  const [search, setSearch] = useState(searchParams.get('q') || '')
+  const [searchCategory, setSearchCategory] = useState(searchParams.get('category') || '')
+
+  useEffect(() => {
+    setSearch(searchParams.get('q') || '')
+    setSearchCategory(searchParams.get('category') || '')
+  }, [searchParams])
 
   const filteredListings = listings.filter((listing) => {
+    if (searchCategory && listing.category !== searchCategory) {
+      return false
+    }
     if (showNearby && userCity) {
       const listingLocation = (listing.location || '').toLowerCase()
       if (!listingLocation.includes(userCity.toLowerCase())) {
@@ -309,6 +307,15 @@ function AllListings({ listings, loading, error }) {
               + Vendre un article
             </Link>
           </div>
+
+          {searchCategory && (
+            <div className="filter-chip">
+              Catégorie : <strong>{searchCategory}</strong>
+              <button type="button" onClick={() => setSearchCategory('')}>
+                ✕
+              </button>
+            </div>
+          )}
 
           <div className="search-box">
             <input

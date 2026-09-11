@@ -1848,3 +1848,134 @@
     font-size: 24px;
   }
 }
+
+
+/* ==========================================================
+   HOME
+   ========================================================== */
+
+.home-hero {
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.home-hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.home-hero-greeting {
+  display: inline-block;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: 15px;
+}
+
+.home-hero h1 {
+  margin: 0 0 var(--space-sm);
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.home-hero-subtitle {
+  margin: 0 0 var(--space-xl);
+  color: var(--color-text-muted);
+  font-size: 17px;
+}
+
+.home-search {
+  display: flex;
+  gap: var(--space-sm);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.home-search input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 var(--space-md);
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.home-search input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.home-search button {
+  min-width: 130px;
+  height: 48px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.home-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+@media (max-width: 700px) {
+  .home-hero {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .home-search {
+    flex-direction: column;
+  }
+
+  .home-search input,
+  .home-search button {
+    width: 100%;
+  }
+
+  .home-section {
+    padding: var(--space-xl) var(--space-md);
+  }
+}
+
+/* Chip de filtre actif (page annonces) */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px 12px;
+  margin-bottom: var(--space-md);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.filter-chip button {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.filter-chip button:hover {
+  color: var(--color-primary-dark);
+}
