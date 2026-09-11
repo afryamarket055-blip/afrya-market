@@ -3105,3 +3105,104 @@
     padding: 0 var(--space-md);
   }
 }
+
+
+/* ==========================================================
+   PROFILE v2
+   ========================================================== */
+
+.profile-v2 .profile-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+
+.profile-v2 .profile-page h1 {
+  margin: 0 0 var(--space-xs);
+  font-size: 28px;
+  color: var(--color-text);
+}
+
+.profile-subtitle {
+  margin: 0 0 var(--space-lg);
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.profile-v2 .profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.profile-section:first-of-type {
+  padding-top: 0;
+  border-top: none;
+}
+
+.profile-section h2 {
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-faint);
+  font-weight: 700;
+}
+
+.form-hint {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-text-faint);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.profile-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.profile-checkbox input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.form-error {
+  margin: 0;
+  padding: 10px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .profile-v2 .profile-page {
+    padding: var(--space-lg) var(--space-md) var(--space-2xl);
+  }
+
+  .profile-v2 .profile-page h1 {
+    font-size: 22px;
+  }
+
+  .profile-v2 .profile-form {
+    padding: var(--space-md);
+  }
+}
