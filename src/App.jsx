@@ -17,6 +17,7 @@ import Messages from './pages/Messages'
 import PublicProfile from './pages/PublicProfile'
 import Notifications from './pages/Notifications'
 import Favorites from './pages/Favorites'
+import Settings from './pages/Settings'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -614,6 +615,15 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <Favorites />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/parametres"
+        element={
+          <ProtectedRoute>
+            <Settings />
           </ProtectedRoute>
         }
       />

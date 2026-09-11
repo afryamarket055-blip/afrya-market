@@ -151,6 +151,7 @@ function Nav() {
                     <Link to="/profil" onClick={closeMenu}>Mon profil</Link>
                     <Link to="/mes-annonces" onClick={closeMenu}>Mes annonces</Link>
                     <Link to="/favoris" onClick={closeMenu}>Mes favoris</Link>
+                    <Link to="/parametres" onClick={closeMenu}>Parametres</Link>
                     <div className="user-menu-sep" />
                     <button
                       type="button"
