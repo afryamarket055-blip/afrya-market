@@ -4,6 +4,27 @@ import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
 
+function formatRelativeDate(dateString) {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now - date
+  const diffMin = Math.floor(diffMs / 60000)
+  const diffH = Math.floor(diffMs / 3600000)
+  const diffD = Math.floor(diffMs / 86400000)
+
+  if (diffMin < 1) return "a l'instant"
+  if (diffMin < 60) return 'il y a ' + diffMin + ' min'
+  if (diffH < 24) return 'il y a ' + diffH + 'h'
+  if (diffD === 1) return 'hier'
+  if (diffD < 7) return 'il y a ' + diffD + ' jours'
+
+  return date.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: 'short',
+  })
+}
+
 function Messages() {
   const { user } = useAuth()
   const [conversations, setConversations] = useState([])
@@ -64,99 +85,89 @@ function Messages() {
   }, [user])
 
   return (
-    <div className="app">
+    <div className="app messages-v2">
       <Nav />
-      <main style={{ padding: '40px 20px', maxWidth: '650px', margin: '0 auto' }}>
-        <h1>Messages</h1>
+      <main className="messages-page">
+        <header className="messages-header">
+          <h1>Messages</h1>
+          {!loading && !error && conversations.length > 0 && (
+            <p className="messages-count">
+              {conversations.length} conversation{conversations.length > 1 ? 's' : ''}
+            </p>
+          )}
+        </header>
 
         {loading ? (
-          <p>Chargement...</p>
+          <div className="loading-state">
+            <p>Chargement...</p>
+          </div>
         ) : error ? (
-          <p>Impossible de charger vos conversations. Réessayez plus tard.</p>
+          <div className="empty-state">
+            <div className="empty-icon">⚠</div>
+            <p>Impossible de charger vos conversations.</p>
+          </div>
         ) : conversations.length === 0 ? (
-          <p>Vous n'avez aucune conversation pour l'instant.</p>
+          <div className="empty-state">
+            <div className="empty-icon">💬</div>
+            <p>Vous n'avez aucune conversation pour l'instant.</p>
+            <Link
+              to="/annonces"
+              className="btn btn-primary"
+              style={{ marginTop: '12px' }}
+            >
+              Parcourir les annonces
+            </Link>
+          </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {conversations.map((conversation) => (
-              <Link
-                key={conversation.id}
-                to={`/conversation/${conversation.id}`}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '14px',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '10px',
-                  padding: '12px 16px',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                }}
-              >
-                {conversation.otherProfile?.avatar_url ? (
-                  <img
-                    src={conversation.otherProfile.avatar_url}
-                    alt={conversation.otherProfile.full_name}
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      flexShrink: 0,
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                      borderRadius: '50%',
-                      background: '#e5e7eb',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '20px',
-                      flexShrink: 0,
-                    }}
-                  >
-                    👤
+          <div className="conversations-list">
+            {conversations.map((conversation) => {
+              const name =
+                conversation.otherProfile?.full_name ||
+                'Utilisateur AFRYA MARKET'
+              const preview =
+                conversation.lastMessage?.content ||
+                'A propos de : ' +
+                  (conversation.listings?.title || 'une annonce')
+              const date = formatRelativeDate(conversation.lastMessage?.created_at)
+
+              return (
+                <Link
+                  key={conversation.id}
+                  to={'/conversation/' + conversation.id}
+                  className="conversation-card"
+                >
+                  {conversation.otherProfile?.avatar_url ? (
+                    <img
+                      src={conversation.otherProfile.avatar_url}
+                      alt={name}
+                      className="conversation-avatar"
+                    />
+                  ) : (
+                    <div className="conversation-avatar conversation-avatar-placeholder">
+                      👤
+                    </div>
+                  )}
+
+                  <div className="conversation-body">
+                    <div className="conversation-top">
+                      <strong className="conversation-name">{name}</strong>
+                      {date && (
+                        <span className="conversation-date">{date}</span>
+                      )}
+                    </div>
+                    <p className="conversation-preview">{preview}</p>
                   </div>
-                )}
 
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <strong>
-                    {conversation.otherProfile?.full_name ||
-                      'Utilisateur AFRYA MARKET'}
-                  </strong>
-                  <p
-                    style={{
-                      margin: '2px 0 0',
-                      fontSize: '13px',
-                      color: '#6b7280',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    {conversation.lastMessage?.content ||
-                      `À propos de : ${conversation.listings?.title || 'une annonce'}`}
-                  </p>
-                </div>
-
-                {conversation.listings?.image && (
-                  <img
-                    src={conversation.listings.image}
-                    alt={conversation.listings.title}
-                    style={{
-                      width: '44px',
-                      height: '44px',
-                      objectFit: 'cover',
-                      borderRadius: '6px',
-                      flexShrink: 0,
-                    }}
-                  />
-                )}
-              </Link>
-            ))}
+                  {conversation.listings?.image && (
+                    <img
+                      src={conversation.listings.image}
+                      alt={conversation.listings.title}
+                      className="conversation-listing-thumb"
+                    />
+                  )}
+                </Link>
+              )
+            })}
           </div>
         )}
       </main>

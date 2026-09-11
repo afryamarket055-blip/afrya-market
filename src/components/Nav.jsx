@@ -147,6 +147,7 @@ function Nav() {
 
                 {userMenuOpen && (
                   <div className="user-menu-panel">
+                    <Link to="/messages" onClick={closeMenu}>Messages</Link>
                     <Link to="/profil" onClick={closeMenu}>Mon profil</Link>
                     <Link to="/mes-annonces" onClick={closeMenu}>Mes annonces</Link>
                     <Link to="/favoris" onClick={closeMenu}>Mes favoris</Link>
