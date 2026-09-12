@@ -18,6 +18,8 @@ import PublicProfile from './pages/PublicProfile'
 import Notifications from './pages/Notifications'
 import Favorites from './pages/Favorites'
 import Settings from './pages/Settings'
+import AdminReports from './pages/AdminReports'
+import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -625,6 +627,15 @@ function AppContent() {
           <ProtectedRoute>
             <Settings />
           </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/signalements"
+        element={
+          <AdminRoute>
+            <AdminReports />
+          </AdminRoute>
         }
       />
     </Routes>

@@ -9,6 +9,7 @@ function Nav() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const userMenuRef = useRef(null)
 
   async function handleSignOut() {
@@ -17,6 +18,22 @@ function Nav() {
     setUserMenuOpen(false)
     navigate('/')
   }
+
+  useEffect(() => {
+    async function loadAdminStatus() {
+      if (!user) {
+        setIsAdmin(false)
+        return
+      }
+      const { data } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+      setIsAdmin(!!data?.is_admin)
+    }
+    loadAdminStatus()
+  }, [user])
 
   useEffect(() => {
     if (!user) return
@@ -152,6 +169,12 @@ function Nav() {
                     <Link to="/mes-annonces" onClick={closeMenu}>Mes annonces</Link>
                     <Link to="/favoris" onClick={closeMenu}>Mes favoris</Link>
                     <Link to="/parametres" onClick={closeMenu}>Parametres</Link>
+
+                    {isAdmin && (
+                      <Link to="/admin/signalements" onClick={closeMenu}>
+                        Admin - Signalements
+                      </Link>
+                    )}
                     <div className="user-menu-sep" />
                     <button
                       type="button"
