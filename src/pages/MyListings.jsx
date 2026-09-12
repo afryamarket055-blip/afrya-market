@@ -16,6 +16,13 @@ function MyListings() {
     favorites: 0,
     contacts: 0,
   })
+  const [cityStats, setCityStats] = useState({
+    items: [],
+    otherCount: 0,
+    otherPercent: 0,
+    nullCount: 0,
+    total: 0,
+  })
 
   useEffect(() => {
     async function loadMyListings() {
@@ -78,6 +85,62 @@ function MyListings() {
     }
 
     loadStats()
+  }, [user, listings])
+
+  useEffect(() => {
+    async function loadCityStats() {
+      if (!user || listings.length === 0) {
+        setCityStats({ items: [], otherCount: 0, otherPercent: 0, nullCount: 0, total: 0 })
+        return
+      }
+
+      const ids = listings.map((l) => l.id)
+
+      const { data, error } = await supabase
+        .from('listing_views')
+        .select('viewer_city')
+        .in('listing_id', ids)
+
+      if (error) {
+        console.error('Erreur chargement villes :', error)
+        return
+      }
+
+      const cityCount = {}
+      let nullCount = 0
+
+      for (const v of data || []) {
+        if (!v.viewer_city) {
+          nullCount++
+        } else {
+          cityCount[v.viewer_city] = (cityCount[v.viewer_city] || 0) + 1
+        }
+      }
+
+      const total = (data || []).length
+      const sorted = Object.entries(cityCount)
+        .map(([city, count]) => ({ city, count }))
+        .sort((a, b) => b.count - a.count)
+
+      const top5 = sorted.slice(0, 5)
+      const restCount = sorted.slice(5).reduce((sum, c) => sum + c.count, 0)
+
+      const items = top5.map((c) => ({
+        city: c.city,
+        count: c.count,
+        percent: total > 0 ? Math.round((c.count / total) * 100) : 0,
+      }))
+
+      setCityStats({
+        items,
+        otherCount: restCount,
+        otherPercent: total > 0 ? Math.round((restCount / total) * 100) : 0,
+        nullCount,
+        total,
+      })
+    }
+
+    loadCityStats()
   }, [user, listings])
 
   async function handleDelete(listingId) {
@@ -161,6 +224,46 @@ function MyListings() {
                     <div className="stat-value">{stats.contacts}</div>
                     <div className="stat-label">Contacts</div>
                   </div>
+                </div>
+              </section>
+            )}
+
+            {!loading && !error && listings.length > 0 && cityStats.total > 0 && (
+              <section className="city-stats">
+                <h2>Origine des vues</h2>
+                <div className="city-stats-list">
+                  {cityStats.items.map((item) => (
+                    <div key={item.city} className="city-stat-row">
+                      <span className="city-stat-name">{item.city}</span>
+                      <div className="city-stat-bar">
+                        <div
+                          className="city-stat-bar-fill"
+                          style={{ width: item.percent + '%' }}
+                        />
+                      </div>
+                      <span className="city-stat-percent">{item.percent}%</span>
+                      <span className="city-stat-count">({item.count})</span>
+                    </div>
+                  ))}
+                  {cityStats.otherCount > 0 && (
+                    <div className="city-stat-row">
+                      <span className="city-stat-name">Autres</span>
+                      <div className="city-stat-bar">
+                        <div
+                          className="city-stat-bar-fill"
+                          style={{ width: cityStats.otherPercent + '%' }}
+                        />
+                      </div>
+                      <span className="city-stat-percent">{cityStats.otherPercent}%</span>
+                      <span className="city-stat-count">({cityStats.otherCount})</span>
+                    </div>
+                  )}
+                  {cityStats.nullCount > 0 && (
+                    <div className="city-stat-row city-stat-row-muted">
+                      <span className="city-stat-name">Non renseignee</span>
+                      <span className="city-stat-count">({cityStats.nullCount})</span>
+                    </div>
+                  )}
                 </div>
               </section>
             )}

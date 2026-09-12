@@ -4467,3 +4467,100 @@
     flex-basis: 100%;
   }
 }
+
+
+/* ==========================================================
+   CITY STATS (Origine des vues)
+   ========================================================== */
+
+.city-stats {
+  margin-bottom: var(--space-xl);
+}
+
+.city-stats h2 {
+  margin: 0 0 var(--space-md);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-faint);
+  font-weight: 700;
+}
+
+.city-stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.city-stat-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 40px 50px;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+}
+
+.city-stat-name {
+  color: var(--color-text);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.city-stat-bar {
+  height: 8px;
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.city-stat-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+  min-width: 2px;
+}
+
+.city-stat-percent {
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 13px;
+  text-align: right;
+}
+
+.city-stat-count {
+  color: var(--color-text-faint);
+  font-size: 12px;
+  text-align: right;
+}
+
+.city-stat-row-muted {
+  grid-template-columns: 100px 1fr;
+}
+
+.city-stat-row-muted .city-stat-count {
+  grid-column: 2;
+  text-align: left;
+}
+
+.city-stat-row-muted .city-stat-name {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+@media (max-width: 500px) {
+  .city-stat-row {
+    grid-template-columns: 80px 1fr 34px 42px;
+    font-size: 12px;
+  }
+
+  .city-stat-row-muted {
+    grid-template-columns: 80px 1fr;
+  }
+}
