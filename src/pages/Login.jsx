@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import Nav from '../components/Nav'
+
 function Login() {
   const { signIn } = useAuth()
   const navigate = useNavigate()
@@ -21,7 +21,7 @@ function Login() {
     setLoading(false)
 
     if (error) {
-      setError("Email ou mot de passe incorrect.")
+      setError('Email ou mot de passe incorrect.')
       return
     }
 
@@ -29,49 +29,88 @@ function Login() {
   }
 
   return (
-    <div className="app">
-           <Nav />
-      <main
-        style={{
-          padding: '80px 20px',
-          maxWidth: '400px',
-          margin: '0 auto',
-        }}
-      >
-        <h1>Connexion</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Mot de passe</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </div>
-          {error && (
-            <p style={{ color: 'red' }}>{error}</p>
-          )}
-          <button type="submit" disabled={loading}>
-            {loading ? 'Connexion...' : 'Se connecter'}
-          </button>
-        </form>
-        <p style={{ marginTop: '20px' }}>
-          Pas encore de compte ?{' '}
-          <Link to="/inscription">S'inscrire</Link>
+    <div className="auth-page">
+      <aside className="auth-left">
+        <Link to="/" className="auth-logo">
+          AFRYA <span>MARKET</span>
+        </Link>
+
+        <div className="auth-left-content">
+          <h2>
+            Achetez. Vendez.
+            <br />
+            <span>Trouvez.</span>
+          </h2>
+          <p>
+            Rejoignez des milliers d acheteurs et de vendeurs partout au
+            Benin. Simple, rapide, en confiance.
+          </p>
+        </div>
+
+        <p className="auth-copyright">
+          © {new Date().getFullYear()} AFRYA MARKET
         </p>
-      </main>
+      </aside>
+
+      <section className="auth-right">
+        <div className="auth-card">
+          <Link to="/" className="auth-mobile-logo">
+            AFRYA <span>MARKET</span>
+          </Link>
+
+          <h1>Connexion</h1>
+          <p className="auth-subtitle">Content de vous revoir.</p>
+
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="votre@email.com"
+                required
+                autoComplete="email"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Mot de passe</label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Votre mot de passe"
+                required
+                autoComplete="current-password"
+              />
+            </div>
+
+            {error && <p className="form-error">{error}</p>}
+
+            <button
+              type="submit"
+              className="btn btn-primary auth-submit"
+              disabled={loading}
+            >
+              {loading ? 'Connexion...' : 'Se connecter'}
+            </button>
+          </form>
+
+          <p className="auth-footer">
+            Pas encore de compte ?{' '}
+            <Link to="/inscription">S inscrire</Link>
+          </p>
+
+          <p className="auth-footer-small">
+            <a href="#" onClick={(e) => e.preventDefault()}>
+              Mot de passe oublie ?
+            </a>
+          </p>
+        </div>
+      </section>
     </div>
   )
 }

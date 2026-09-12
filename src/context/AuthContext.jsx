@@ -24,10 +24,11 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
-  async function signUp(email, password) {
+  async function signUp(email, password, fullName) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: fullName ? { data: { full_name: fullName } } : undefined,
     })
     return { data, error }
   }
