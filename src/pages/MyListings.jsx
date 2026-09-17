@@ -298,7 +298,8 @@ function MyListings() {
                       category={listing.category}
                       image={listing.image}
                       status={listing.status}
-                    />
+                    boostedUntil={listing.boosted_until}
+                  />
                   </Link>
 
                   <div className="my-listing-status">

@@ -87,6 +87,7 @@ function Favorites() {
                     category={listing.category}
                     image={listing.image}
                     status={listing.status}
+                    boostedUntil={listing.boosted_until}
                   />
                 </Link>
               ))}

@@ -246,6 +246,9 @@ function ListingDetails({ listings = [] }) {
     )
   }
 
+  const isBoosted =
+    listing.boosted_until && new Date(listing.boosted_until) > new Date()
+
   const mainImage =
     galleryImages.length > 0
       ? galleryImages[activeIndex]?.image_url
@@ -285,9 +288,11 @@ function ListingDetails({ listings = [] }) {
                   </span>
                 </>
               )}
-              {listing.status === 'vendu' && (
+              {listing.status === 'vendu' ? (
                 <span className="badge badge-sold details-badge">VENDU</span>
-              )}
+              ) : isBoosted ? (
+                <span className="badge badge-boosted details-badge">BOOSTE</span>
+              ) : null}
             </div>
 
             {galleryImages.length > 1 && (
@@ -426,6 +431,7 @@ function ListingDetails({ listings = [] }) {
                     category={item.category}
                     image={item.image}
                     status={item.status}
+                    boostedUntil={item.boosted_until}
                   />
                 </Link>
               ))}

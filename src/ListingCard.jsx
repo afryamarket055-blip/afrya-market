@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { supabase } from './lib/supabase'
 
-function ListingCard({ id, title, price, location, condition, category, image, status }) {
+function ListingCard({ id, title, price, location, condition, category, image, status, boostedUntil }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [liked, setLiked] = useState(false)
   const [likesCount, setLikesCount] = useState(0)
   const [viewsCount, setViewsCount] = useState(0)
   const [pending, setPending] = useState(false)
+
+  const isBoosted = boostedUntil && new Date(boostedUntil) > new Date()
 
   useEffect(() => {
     async function loadLikeState() {
@@ -87,9 +89,11 @@ function ListingCard({ id, title, price, location, condition, category, image, s
     <article className="listing-card card">
       <div className="listing-image">
         <img src={image} alt={title} loading="lazy" />
-        {status === 'vendu' && (
+        {status === 'vendu' ? (
           <span className="badge badge-sold listing-badge">VENDU</span>
-        )}
+        ) : isBoosted ? (
+          <span className="badge badge-boosted listing-badge">BOOSTE</span>
+        ) : null}
         <button
           type="button"
           className={`listing-fav-btn ${liked ? 'is-liked' : ''}`}

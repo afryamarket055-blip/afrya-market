@@ -142,6 +142,7 @@ function Home({ listings, loading, error }) {
                     category={listing.category}
                     image={listing.image}
                     status={listing.status}
+                    boostedUntil={listing.boosted_until}
                   />
                 </Link>
               ))}
@@ -444,6 +445,7 @@ function AllListings({ listings, loading, error }) {
                     category={listing.category}
                     image={listing.image}
                     status={listing.status}
+                    boostedUntil={listing.boosted_until}
                   />
                 </Link>
               ))}
@@ -486,6 +488,7 @@ function AppContent() {
       const { data, error } = await supabase
         .from('listings')
         .select('*')
+        .order('boosted_until', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
 
       if (error) {
