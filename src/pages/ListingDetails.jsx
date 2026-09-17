@@ -325,13 +325,22 @@ function ListingDetails({ listings = [] }) {
             </div>
 
             <div className="details-actions">
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => handleContactSeller(listing.user_id, listing.id)}
-              >
-                💬 Contacter le vendeur
-              </button>
+              {user && listing.user_id === user.id ? (
+                <Link
+                  to={'/booster/' + listing.id}
+                  className="btn btn-primary btn-lg"
+                >
+                  Booster cette annonce
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-primary btn-lg"
+                  onClick={() => handleContactSeller(listing.user_id, listing.id)}
+                >
+                  💬 Contacter le vendeur
+                </button>
+              )}
 
               <button
                 type="button"

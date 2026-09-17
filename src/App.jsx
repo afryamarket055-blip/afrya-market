@@ -19,6 +19,7 @@ import Notifications from './pages/Notifications'
 import Favorites from './pages/Favorites'
 import Settings from './pages/Settings'
 import AdminReports from './pages/AdminReports'
+import Booster from './pages/Booster'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -626,6 +627,15 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <Settings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/booster/:listingId"
+        element={
+          <ProtectedRoute>
+            <Booster />
           </ProtectedRoute>
         }
       />

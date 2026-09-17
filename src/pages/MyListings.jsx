@@ -313,6 +313,9 @@ function MyListings() {
                     <Link to={`/modifier/${listing.id}`} className="btn btn-secondary">
                       Modifier
                     </Link>
+                      <Link to={`/booster/${listing.id}`} className="btn btn-secondary">
+                        Booster
+                      </Link>
                     <button
                       type="button"
                       className="btn btn-secondary"
