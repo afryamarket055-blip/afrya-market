@@ -4890,3 +4890,34 @@
     flex-direction: column;
   }
 }
+
+
+/* ==========================================================
+   ADMIN BOOSTS — badges supplementaires
+   ========================================================== */
+
+.admin-badge-active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.admin-badge-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.admin-badge-expired {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+}
+
+.admin-code {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--color-text);
+}
