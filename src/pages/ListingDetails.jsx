@@ -77,7 +77,7 @@ function ListingDetails({ listings = [] }) {
       if (!listing?.user_id) return
       const { data, error } = await supabase
         .from('profiles')
-        .select('full_name, avatar_url, created_at')
+        .select('full_name, avatar_url, created_at, is_pro, is_verified, shop_name')
         .eq('id', listing.user_id)
         .single()
       if (error) {
@@ -383,8 +383,16 @@ function ListingDetails({ listings = [] }) {
                 )}
                 <div className="seller-info">
                   <Link to={`/vendeur/${listing.user_id}`} className="seller-name">
-                    {sellerProfile?.full_name || 'Vendeur AFRYA MARKET'}
+                    {sellerProfile?.shop_name || sellerProfile?.full_name || 'Vendeur AFRYA MARKET'}
                   </Link>
+                  {sellerProfile?.is_pro && (
+                    <div className="seller-badges">
+                      <span className="badge badge-pro">PRO</span>
+                      {sellerProfile.is_verified && (
+                        <span className="badge badge-verified">✓ Vérifié</span>
+                      )}
+                    </div>
+                  )}
                   {sellerProfile?.created_at && (
                     <span className="seller-since">
                       Membre depuis {formatMemberSince(sellerProfile.created_at)}

@@ -314,7 +314,17 @@ function PublicProfile() {
             <div className="public-profile-avatar public-profile-avatar-placeholder">👤</div>
           )}
 
-          <h1>{name}</h1>
+          <div className="public-profile-name-row">
+            <h1>{profile.shop_name || name}</h1>
+            {profile.is_pro && (
+              <div className="public-profile-badges">
+                <span className="badge badge-pro">PRO</span>
+                {profile.is_verified && (
+                  <span className="badge badge-verified">✓ Vérifié</span>
+                )}
+              </div>
+            )}
+          </div>
 
           {location && <p className="public-profile-location">📍 {location}</p>}
 

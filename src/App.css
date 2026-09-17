@@ -5011,3 +5011,52 @@
   padding: 6px 14px;
   font-size: 13px;
 }
+
+
+/* ==========================================================
+   BADGES PRO / VERIFIE
+   ========================================================== */
+
+.badge-pro {
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-verified {
+  display: inline-block;
+  padding: 2px 10px;
+  background: #16a34a;
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.seller-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.public-profile-name-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.public-profile-badges {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
