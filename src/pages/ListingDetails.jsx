@@ -399,7 +399,7 @@ function ListingDetails({ listings = [] }) {
                     </span>
                   )}
                 </div>
-                <Link to={`/vendeur/${listing.user_id}`} className="seller-link">
+                <Link to={sellerProfile?.is_pro ? `/boutique/${listing.user_id}` : `/vendeur/${listing.user_id}`} className="seller-link">
                   Voir profil →
                 </Link>
               </div>

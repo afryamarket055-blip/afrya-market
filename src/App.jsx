@@ -609,6 +609,11 @@ function AppContent() {
       />
 
       <Route
+        path="/boutique/:id"
+        element={<PublicProfile />}
+      />
+
+      <Route
         path="/notifications"
         element={
           <ProtectedRoute>

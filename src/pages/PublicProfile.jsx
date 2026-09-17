@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
@@ -52,6 +52,8 @@ function Stars({ value }) {
 function PublicProfile() {
   const { id } = useParams()
   const { user } = useAuth()
+  const navigate = useNavigate()
+  const routerLocation = useLocation()
 
   const [profile, setProfile] = useState(null)
   const [listingsCount, setListingsCount] = useState(0)
@@ -60,6 +62,7 @@ function PublicProfile() {
   const [canReview, setCanReview] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isShopMode, setIsShopMode] = useState(false)
 
   const [modalOpen, setModalOpen] = useState(false)
   const [ratingInput, setRatingInput] = useState(5)
@@ -99,6 +102,18 @@ function PublicProfile() {
 
     loadProfile()
   }, [id])
+
+  // Redirection auto /vendeur <-> /boutique selon is_pro
+  useEffect(() => {
+    if (!profile) return
+    const isOnShopUrl = routerLocation.pathname.startsWith('/boutique/')
+    if (profile.is_pro && !isOnShopUrl) {
+      navigate('/boutique/' + id, { replace: true })
+    } else if (!profile.is_pro && isOnShopUrl) {
+      navigate('/vendeur/' + id, { replace: true })
+    }
+    setIsShopMode(!!profile.is_pro)
+  }, [profile, routerLocation.pathname, id, navigate])
 
   // Load reviews + my review + canReview
   useEffect(() => {
@@ -307,8 +322,20 @@ function PublicProfile() {
     <div className="app public-profile-v2">
       <Nav />
       <main className="public-profile-page">
-        <header className="public-profile-header">
-          {profile.avatar_url ? (
+        {isShopMode && (
+          <div className="shop-banner">
+            {profile.shop_banner ? (
+              <img src={profile.shop_banner} alt="" className="shop-banner-img" />
+            ) : (
+              <div className="shop-banner-placeholder" />
+            )}
+          </div>
+        )}
+
+        <header className={isShopMode ? 'public-profile-header shop-header' : 'public-profile-header'}>
+          {isShopMode && profile.shop_logo ? (
+            <img src={profile.shop_logo} alt={name} className="public-profile-avatar shop-logo" />
+          ) : profile.avatar_url ? (
             <img src={profile.avatar_url} alt={name} className="public-profile-avatar" />
           ) : (
             <div className="public-profile-avatar public-profile-avatar-placeholder">👤</div>
