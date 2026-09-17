@@ -123,8 +123,9 @@
   color: var(--color-warning);
 }
 .badge-boosted {
-  background: #f3e8ff;
-  color: #7e22ce;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
 }
 
 /* ---------- États vides / chargement ---------- */
