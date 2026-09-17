@@ -9,6 +9,7 @@ const ICONS = {
   like: '❤',
   favorite: '🔖',
   review: '⭐',
+  boost_activated: '🚀',
   system: '🔔',
 }
 

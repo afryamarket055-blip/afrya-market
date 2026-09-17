@@ -171,9 +171,14 @@ function Nav() {
                     <Link to="/parametres" onClick={closeMenu}>Parametres</Link>
 
                     {isAdmin && (
-                      <Link to="/admin/signalements" onClick={closeMenu}>
-                        Admin - Signalements
-                      </Link>
+                      <>
+                        <Link to="/admin/signalements" onClick={closeMenu}>
+                          Admin - Signalements
+                        </Link>
+                        <Link to="/admin/boosts" onClick={closeMenu}>
+                          Admin - Boosts
+                        </Link>
+                      </>
                     )}
                     <div className="user-menu-sep" />
                     <button

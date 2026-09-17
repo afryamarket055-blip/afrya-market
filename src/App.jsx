@@ -19,6 +19,7 @@ import Notifications from './pages/Notifications'
 import Favorites from './pages/Favorites'
 import Settings from './pages/Settings'
 import AdminReports from './pages/AdminReports'
+import AdminBoosts from './pages/AdminBoosts'
 import Booster from './pages/Booster'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
@@ -648,6 +649,15 @@ function AppContent() {
         element={
           <AdminRoute>
             <AdminReports />
+          </AdminRoute>
+        }
+      />
+
+      <Route
+        path="/admin/boosts"
+        element={
+          <AdminRoute>
+            <AdminBoosts />
           </AdminRoute>
         }
       />
