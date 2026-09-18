@@ -5186,3 +5186,240 @@
   flex-direction: column;
   gap: 2px;
 }
+
+
+/* ==========================================================
+   ORDER MODAL + ORDER DETAILS
+   ========================================================== */
+
+.order-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.order-radio {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  align-items: flex-start;
+}
+
+.order-radio:hover {
+  border-color: var(--color-primary);
+}
+
+.order-radio input[type='radio'] {
+  margin-top: 4px;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.order-radio input[type='radio']:checked ~ div strong {
+  color: var(--color-primary);
+}
+
+.order-radio strong {
+  display: block;
+  font-size: 14px;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.order-radio p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.details-actions {
+  flex-wrap: wrap;
+}
+
+.details-actions .btn-lg {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* --- Order Details page --- */
+
+.order-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+}
+
+.order-header {
+  margin-bottom: var(--space-lg);
+}
+
+.order-header h1 {
+  margin: 0 0 var(--space-xs);
+  font-size: 26px;
+  color: var(--color-text);
+}
+
+.order-ref {
+  margin: 0;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--color-text-faint);
+}
+
+.order-status-badge {
+  margin-bottom: var(--space-lg);
+}
+
+.order-status {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.order-status-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.order-status-completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.order-status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.order-listing-card {
+  margin-bottom: var(--space-lg);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.order-listing-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  text-decoration: none;
+  color: inherit;
+}
+
+.order-listing-img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.order-listing-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.order-listing-info strong {
+  display: block;
+  color: var(--color-text);
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.order-listing-info p {
+  margin: 0;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.order-info-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.order-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+  align-items: baseline;
+}
+
+.order-info-row:last-child {
+  border-bottom: none;
+}
+
+.order-info-row span {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.order-info-row strong {
+  color: var(--color-text);
+  text-align: right;
+  font-weight: 600;
+}
+
+.order-note {
+  font-weight: 400 !important;
+  font-style: italic;
+  color: var(--color-text-muted) !important;
+  max-width: 60%;
+}
+
+.order-todo {
+  padding: var(--space-md);
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.order-todo p {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .order-page {
+    padding: var(--space-lg) var(--space-md) var(--space-2xl);
+  }
+
+  .details-actions .btn-lg {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .order-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .order-info-row strong {
+    text-align: left;
+  }
+
+  .order-note {
+    max-width: 100%;
+  }
+}

@@ -22,6 +22,7 @@ import AdminReports from './pages/AdminReports'
 import AdminBoosts from './pages/AdminBoosts'
 import AdminShops from './pages/AdminShops'
 import Booster from './pages/Booster'
+import OrderDetails from './pages/OrderDetails'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -646,6 +647,15 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <Booster />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/commande/:id"
+        element={
+          <ProtectedRoute>
+            <OrderDetails />
           </ProtectedRoute>
         }
       />

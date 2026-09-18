@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
 import ListingCard from '../ListingCard'
 import ReportModal from '../components/ReportModal'
+import OrderModal from '../components/OrderModal'
 
 function formatMemberSince(dateString) {
   if (!dateString) return null
@@ -27,6 +28,8 @@ function ListingDetails({ listings = [] }) {
   const [viewsCount, setViewsCount] = useState(0)
   const [pending, setPending] = useState(false)
   const [reportModalOpen, setReportModalOpen] = useState(false)
+  const [orderModalOpen, setOrderModalOpen] = useState(false)
+  const [existingOrder, setExistingOrder] = useState(null)
 
   const dynamicListing = listings.find((listing) => listing.id === id)
   const listing = dynamicListing
@@ -161,6 +164,39 @@ function ListingDetails({ listings = [] }) {
     }
     loadViewsCount()
   }, [listing])
+
+  // ----- Check existing active order -----
+  useEffect(() => {
+    async function checkExistingOrder() {
+      if (!user || !listing?.id) {
+        setExistingOrder(null)
+        return
+      }
+      if (listing.user_id === user.id) {
+        setExistingOrder(null)
+        return
+      }
+
+      const { data } = await supabase
+        .from('orders')
+        .select('id, status')
+        .eq('buyer_id', user.id)
+        .eq('listing_id', listing.id)
+        .not('status', 'in', '(cancelled,completed)')
+        .maybeSingle()
+
+      setExistingOrder(data || null)
+    }
+    checkExistingOrder()
+  }, [user, listing])
+
+  function handleOpenOrderModal() {
+    if (!user) {
+      navigate('/connexion')
+      return
+    }
+    setOrderModalOpen(true)
+  }
 
   // ----- View tracking (1 vue / 24h / annonce, cote client) -----
   useEffect(() => {
@@ -337,13 +373,38 @@ function ListingDetails({ listings = [] }) {
                 >
                   Booster cette annonce
                 </Link>
+              ) : listing.status === 'vendu' ? (
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-lg"
+                  disabled
+                >
+                  Article deja vendu
+                </button>
+              ) : existingOrder ? (
+                <Link
+                  to={'/commande/' + existingOrder.id}
+                  className="btn btn-primary btn-lg"
+                >
+                  Voir ma commande
+                </Link>
               ) : (
                 <button
                   type="button"
                   className="btn btn-primary btn-lg"
+                  onClick={handleOpenOrderModal}
+                >
+                  Commander
+                </button>
+              )}
+
+              {(!user || listing.user_id !== user.id) && listing.status !== 'vendu' && (
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-lg"
                   onClick={() => handleContactSeller(listing.user_id, listing.id)}
                 >
-                  💬 Contacter le vendeur
+                  💬 Contacter
                 </button>
               )}
 
@@ -446,6 +507,13 @@ function ListingDetails({ listings = [] }) {
             </div>
           </section>
         )}
+        {orderModalOpen && (
+          <OrderModal
+            listing={listing}
+            onClose={() => setOrderModalOpen(false)}
+          />
+        )}
+
         {reportModalOpen && (
           <ReportModal
             targetType="listing"
