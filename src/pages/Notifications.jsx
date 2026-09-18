@@ -11,6 +11,7 @@ const ICONS = {
   review: '⭐',
   boost_activated: '🚀',
   shop_verified: '🏪',
+  order_update: '📦',
   system: '🔔',
 }
 
