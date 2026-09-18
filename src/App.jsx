@@ -23,6 +23,7 @@ import AdminBoosts from './pages/AdminBoosts'
 import AdminShops from './pages/AdminShops'
 import Booster from './pages/Booster'
 import OrderDetails from './pages/OrderDetails'
+import MyOrders from './pages/MyOrders'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -656,6 +657,15 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <OrderDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/mes-commandes"
+        element={
+          <ProtectedRoute>
+            <MyOrders />
           </ProtectedRoute>
         }
       />

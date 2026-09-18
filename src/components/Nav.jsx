@@ -167,6 +167,7 @@ function Nav() {
                     <Link to="/messages" onClick={closeMenu}>Messages</Link>
                     <Link to="/profil" onClick={closeMenu}>Mon profil</Link>
                     <Link to="/mes-annonces" onClick={closeMenu}>Mes annonces</Link>
+                    <Link to="/mes-commandes" onClick={closeMenu}>Mes commandes</Link>
                     <Link to="/favoris" onClick={closeMenu}>Mes favoris</Link>
                     <Link to="/parametres" onClick={closeMenu}>Parametres</Link>
 
