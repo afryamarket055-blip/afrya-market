@@ -70,7 +70,7 @@ function MyOrders() {
 
         const [listingsRes, profilesRes] = await Promise.all([
           supabase.from('listings').select('id, title, image').in('id', listingIds),
-          supabase.from('profiles').select('id, full_name, shop_name, is_pro').in('id', userIds),
+          supabase.from('profiles_public').select('id, full_name, shop_name, is_pro').in('id', userIds),
         ])
 
         const listingsMap = {}

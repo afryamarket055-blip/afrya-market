@@ -76,7 +76,7 @@ function PublicProfile() {
   useEffect(() => {
     async function loadProfile() {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('profiles_public')
         .select('*')
         .eq('id', id)
         .single()
@@ -134,7 +134,7 @@ function PublicProfile() {
       if (enriched.length > 0) {
         const reviewerIds = [...new Set(enriched.map((r) => r.reviewer_id))]
         const { data: profilesData } = await supabase
-          .from('profiles')
+          .from('profiles_public')
           .select('id, full_name, avatar_url')
           .in('id', reviewerIds)
 

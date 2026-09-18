@@ -78,8 +78,8 @@ function OrderDetails() {
 
       const [listingRes, buyerRes, sellerRes] = await Promise.all([
         supabase.from('listings').select('*').eq('id', data.listing_id).single(),
-        supabase.from('profiles').select('id, full_name, shop_name, is_pro').eq('id', data.buyer_id).single(),
-        supabase.from('profiles').select('id, full_name, shop_name, is_pro').eq('id', data.seller_id).single(),
+        supabase.from('profiles_public').select('id, full_name, shop_name, is_pro').eq('id', data.buyer_id).single(),
+        supabase.from('profiles_public').select('id, full_name, shop_name, is_pro').eq('id', data.seller_id).single(),
       ])
 
       setListing(listingRes.data)

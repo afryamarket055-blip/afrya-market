@@ -56,7 +56,7 @@ function Messages() {
               : conversation.buyer_id
 
           const { data: profile } = await supabase
-            .from('profiles')
+            .from('profiles_public')
             .select('full_name, avatar_url')
             .eq('id', otherUserId)
             .single()

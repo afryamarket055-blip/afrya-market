@@ -79,7 +79,7 @@ function ListingDetails({ listings = [] }) {
     async function loadSellerProfile() {
       if (!listing?.user_id) return
       const { data, error } = await supabase
-        .from('profiles')
+        .from('profiles_public')
         .select('full_name, avatar_url, created_at, is_pro, is_verified, shop_name')
         .eq('id', listing.user_id)
         .single()

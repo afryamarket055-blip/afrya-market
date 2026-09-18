@@ -71,7 +71,7 @@ function Conversation() {
       setOtherUserId(otherId)
 
       const { data: profile, error: profileError } = await supabase
-        .from('profiles')
+        .from('profiles_public')
         .select('full_name, avatar_url')
         .eq('id', otherId)
         .single()
