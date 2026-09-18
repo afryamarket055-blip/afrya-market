@@ -178,6 +178,9 @@ function Nav() {
                         <Link to="/admin/boosts" onClick={closeMenu}>
                           Admin - Boosts
                         </Link>
+                        <Link to="/admin/boutiques" onClick={closeMenu}>
+                          Admin - Boutiques
+                        </Link>
                       </>
                     )}
                     <div className="user-menu-sep" />

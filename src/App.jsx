@@ -20,6 +20,7 @@ import Favorites from './pages/Favorites'
 import Settings from './pages/Settings'
 import AdminReports from './pages/AdminReports'
 import AdminBoosts from './pages/AdminBoosts'
+import AdminShops from './pages/AdminShops'
 import Booster from './pages/Booster'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
@@ -663,6 +664,15 @@ function AppContent() {
         element={
           <AdminRoute>
             <AdminBoosts />
+          </AdminRoute>
+        }
+      />
+
+      <Route
+        path="/admin/boutiques"
+        element={
+          <AdminRoute>
+            <AdminShops />
           </AdminRoute>
         }
       />

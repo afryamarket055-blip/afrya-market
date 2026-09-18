@@ -5149,3 +5149,40 @@
   padding-left: var(--space-lg);
   padding-right: var(--space-lg);
 }
+
+
+/* ==========================================================
+   ADMIN SHOPS
+   ========================================================== */
+
+.admin-shop-content {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  align-items: flex-start;
+}
+
+.admin-shop-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+}
+
+.admin-shop-logo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-subtle);
+  font-size: 26px;
+}
+
+.admin-shop-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

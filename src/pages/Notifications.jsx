@@ -10,6 +10,7 @@ const ICONS = {
   favorite: '🔖',
   review: '⭐',
   boost_activated: '🚀',
+  shop_verified: '🏪',
   system: '🔔',
 }
 
