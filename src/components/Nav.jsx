@@ -10,6 +10,7 @@ function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [ordersCount, setOrdersCount] = useState(0)
   const userMenuRef = useRef(null)
 
   async function handleSignOut() {
@@ -18,6 +19,23 @@ function Nav() {
     setUserMenuOpen(false)
     navigate('/')
   }
+
+  useEffect(() => {
+    async function loadOrdersCount() {
+      if (!user) {
+        setOrdersCount(0)
+        return
+      }
+      const { count } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('seller_id', user.id)
+        .in('status', ['pending', 'paid', 'delivered'])
+
+      setOrdersCount(count || 0)
+    }
+    loadOrdersCount()
+  }, [user])
 
   useEffect(() => {
     async function loadAdminStatus() {
@@ -159,6 +177,9 @@ function Nav() {
                   aria-expanded={userMenuOpen}
                 >
                   👤 Mon compte
+                  {ordersCount > 0 && (
+                    <span className="nav-orders-badge">{ordersCount}</span>
+                  )}
                   <span className="user-menu-chevron">▾</span>
                 </button>
 

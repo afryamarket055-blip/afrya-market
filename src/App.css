@@ -5967,3 +5967,74 @@
     height: 56px;
   }
 }
+
+
+/* ==========================================================
+   VENDOR ALERT (commandes a traiter)
+   ========================================================== */
+
+.vendor-alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-md);
+}
+
+.vendor-alert-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.vendor-alert-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.vendor-alert-body strong {
+  display: block;
+  font-size: 15px;
+  color: #78350f;
+  margin-bottom: 2px;
+}
+
+.vendor-alert-body p {
+  margin: 0;
+  font-size: 13px;
+  color: #92400e;
+  line-height: 1.4;
+}
+
+.vendor-alert .btn {
+  flex-shrink: 0;
+}
+
+.nav-orders-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: #f59e0b;
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+@media (max-width: 600px) {
+  .vendor-alert {
+    flex-wrap: wrap;
+    padding: var(--space-md);
+  }
+
+  .vendor-alert .btn {
+    width: 100%;
+    margin-top: var(--space-sm);
+  }
+}

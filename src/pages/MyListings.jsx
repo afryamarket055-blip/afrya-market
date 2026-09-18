@@ -16,6 +16,7 @@ function MyListings() {
     favorites: 0,
     contacts: 0,
   })
+  const [pendingOrdersCount, setPendingOrdersCount] = useState(0)
   const [cityStats, setCityStats] = useState({
     items: [],
     otherCount: 0,
@@ -86,6 +87,21 @@ function MyListings() {
 
     loadStats()
   }, [user, listings])
+
+  useEffect(() => {
+    async function loadPendingOrders() {
+      if (!user) return
+
+      const { count } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('seller_id', user.id)
+        .in('status', ['pending', 'paid', 'delivered'])
+
+      setPendingOrdersCount(count || 0)
+    }
+    loadPendingOrders()
+  }, [user])
 
   useEffect(() => {
     async function loadCityStats() {
@@ -200,6 +216,24 @@ function MyListings() {
               + Vendre un article
             </Link>
           </div>
+
+            {!loading && !error && pendingOrdersCount > 0 && (
+              <div className="vendor-alert">
+                <div className="vendor-alert-icon">⚠️</div>
+                <div className="vendor-alert-body">
+                  <strong>
+                    {pendingOrdersCount} commande{pendingOrdersCount > 1 ? 's' : ''} à traiter
+                  </strong>
+                  <p>
+                    Certaines annonces ont des commandes en attente de votre
+                    validation.
+                  </p>
+                </div>
+                <Link to="/mes-commandes" className="btn btn-primary btn-sm">
+                  Voir mes commandes
+                </Link>
+              </div>
+            )}
 
             {!loading && !error && listings.length > 0 && (
               <section className="stats-dashboard">
