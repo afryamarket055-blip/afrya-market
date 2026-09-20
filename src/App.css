@@ -6180,3 +6180,50 @@ img {
     min-height: 48px;
   }
 }
+
+
+/* ==========================================================
+   FORCE COMMANDER BUTTON (details-actions)
+   ========================================================== */
+
+.details-actions .btn,
+.details-actions .btn.btn-primary,
+.details-actions .btn.btn-secondary,
+.details-actions .btn.btn-lg {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 9999px !important;
+  aspect-ratio: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 48px !important;
+  max-height: 56px !important;
+  padding: 12px 24px !important;
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+}
+
+.details-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-sm) !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+@media (min-width: 700px) {
+  .details-actions {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+  }
+
+  .details-actions .btn {
+    width: auto !important;
+    flex: 1 1 auto !important;
+  }
+}
