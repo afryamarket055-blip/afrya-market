@@ -37,3 +37,6 @@ dist-ssr
 *.save.*
 *.bak
 *~
+
+# Playwright audit screenshots (generated locally)
+audit-screenshots/
