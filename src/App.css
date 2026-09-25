@@ -7622,3 +7622,115 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ==========================================================
+   LEGAL PAGES (Terms + Privacy)
+   ========================================================== */
+
+.legal-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.legal-hero {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.legal-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: var(--space-md);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.legal-hero h1 {
+  margin: 0 0 var(--space-sm);
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.legal-meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-faint);
+  font-style: italic;
+}
+
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.legal-section h2 {
+  margin: 0 0 var(--space-md);
+  font-size: 20px;
+  color: var(--color-text);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.legal-section p {
+  margin: 0 0 var(--space-sm);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.legal-section p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-footer {
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg);
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.legal-footer p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.legal-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.legal-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .legal-page {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .legal-hero h1 {
+    font-size: 26px;
+  }
+
+  .legal-section h2 {
+    font-size: 17px;
+  }
+
+  .legal-section p {
+    font-size: 14px;
+  }
+}

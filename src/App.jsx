@@ -30,6 +30,8 @@ import Help from './pages/Help'
 import Security from './pages/Security'
 import Contact from './pages/Contact'
 import Report from './pages/Report'
+import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -200,8 +202,8 @@ function Home({ listings, loading, error }) {
         <div className="site-footer-bottom">
           <span>© {new Date().getFullYear()} AFRYA MARKET</span>
           <div>
-            <a href="#">Conditions</a>
-            <a href="#">Confidentialité</a>
+            <Link to="/conditions">Conditions</Link>
+            <Link to="/confidentialite">Confidentialité</Link>
           </div>
         </div>
       </footer>
@@ -704,6 +706,16 @@ function AppContent() {
       <Route
         path="/signaler"
         element={<Report />}
+      />
+
+      <Route
+        path="/conditions"
+        element={<Terms />}
+      />
+
+      <Route
+        path="/confidentialite"
+        element={<Privacy />}
       />
 
       <Route
