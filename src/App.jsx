@@ -26,6 +26,7 @@ import OrderDetails from './pages/OrderDetails'
 import MyOrders from './pages/MyOrders'
 import About from './pages/About'
 import HowItWorks from './pages/HowItWorks'
+import Help from './pages/Help'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -187,7 +188,7 @@ function Home({ listings, loading, error }) {
 
           <div className="footer-col">
             <h4>Aide</h4>
-            <a href="#">Centre d'aide</a>
+            <Link to="/aide">Centre d'aide</Link>
             <a href="#">Contact</a>
             <a href="#">Signaler un problème</a>
           </div>
@@ -680,6 +681,11 @@ function AppContent() {
       <Route
         path="/comment-ca-marche"
         element={<HowItWorks />}
+      />
+
+      <Route
+        path="/aide"
+        element={<Help />}
       />
 
       <Route
