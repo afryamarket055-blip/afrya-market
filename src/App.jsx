@@ -25,6 +25,7 @@ import Booster from './pages/Booster'
 import OrderDetails from './pages/OrderDetails'
 import MyOrders from './pages/MyOrders'
 import About from './pages/About'
+import HowItWorks from './pages/HowItWorks'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -166,7 +167,7 @@ function Home({ listings, loading, error }) {
           <div className="footer-col">
             <h4>AFRYA MARKET</h4>
             <Link to="/a-propos">À propos</Link>
-            <a href="#">Comment ça marche</a>
+            <Link to="/comment-ca-marche">Comment ça marche</Link>
             <a href="#">Sécurité</a>
           </div>
 
@@ -674,6 +675,11 @@ function AppContent() {
       <Route
         path="/a-propos"
         element={<About />}
+      />
+
+      <Route
+        path="/comment-ca-marche"
+        element={<HowItWorks />}
       />
 
       <Route
