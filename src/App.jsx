@@ -188,7 +188,7 @@ function Home({ listings, loading, error }) {
             <h4>Vendre</h4>
             <Link to="/vendre">Publier une annonce</Link>
             <Link to="/mes-annonces">Mes annonces</Link>
-            <a href="#">Vendre professionnellement</a>
+            <Link to="/parametres">Vendre professionnellement</Link>
           </div>
 
           <div className="footer-col">
