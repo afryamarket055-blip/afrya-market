@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import Profile from './pages/Profile'
 import MyListings from './pages/MyListings'
 import LandingPage from './pages/LandingPage'
@@ -582,6 +583,11 @@ function AppContent() {
       <Route
         path="/mot-de-passe-oublie"
         element={<ForgotPassword />}
+      />
+
+      <Route
+        path="/reinitialiser-mot-de-passe"
+        element={<ResetPassword />}
       />
 
       <Route
