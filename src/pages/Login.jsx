@@ -105,9 +105,7 @@ function Login() {
           </p>
 
           <p className="auth-footer-small">
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              Mot de passe oublie ?
-            </a>
+            <Link to="/mot-de-passe-oublie">Mot de passe oublie ?</Link>
           </p>
         </div>
       </section>

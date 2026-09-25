@@ -8,6 +8,7 @@ import CreateListing from './pages/CreateListing'
 import { AuthProvider } from './context/AuthContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
 import Profile from './pages/Profile'
 import MyListings from './pages/MyListings'
 import LandingPage from './pages/LandingPage'
@@ -576,6 +577,11 @@ function AppContent() {
       <Route
         path="/inscription"
         element={<Register />}
+      />
+
+      <Route
+        path="/mot-de-passe-oublie"
+        element={<ForgotPassword />}
       />
 
       <Route

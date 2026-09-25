@@ -7734,3 +7734,14 @@ img {
     font-size: 14px;
   }
 }
+
+
+/* ==========================================================
+   FORGOT PASSWORD — note de succes
+   ========================================================== */
+
+.auth-success-note {
+  color: var(--color-text-faint) !important;
+  font-size: 13px !important;
+  margin-bottom: var(--space-lg) !important;
+}
