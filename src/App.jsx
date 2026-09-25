@@ -29,6 +29,7 @@ import HowItWorks from './pages/HowItWorks'
 import Help from './pages/Help'
 import Security from './pages/Security'
 import Contact from './pages/Contact'
+import Report from './pages/Report'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -192,7 +193,7 @@ function Home({ listings, loading, error }) {
             <h4>Aide</h4>
             <Link to="/aide">Centre d'aide</Link>
             <Link to="/contact">Contact</Link>
-            <a href="#">Signaler un problème</a>
+            <Link to="/signaler">Signaler un problème</Link>
           </div>
         </div>
 
@@ -698,6 +699,11 @@ function AppContent() {
       <Route
         path="/contact"
         element={<Contact />}
+      />
+
+      <Route
+        path="/signaler"
+        element={<Report />}
       />
 
       <Route
