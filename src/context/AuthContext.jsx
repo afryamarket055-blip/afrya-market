@@ -46,12 +46,33 @@ export function AuthProvider({ children }) {
     return { error }
   }
 
+  async function resetPassword(email) {
+    const redirectTo =
+      typeof window !== 'undefined'
+        ? window.location.origin + '/reinitialiser-mot-de-passe'
+        : undefined
+
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    })
+    return { data, error }
+  }
+
+  async function updatePassword(newPassword) {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword,
+    })
+    return { data, error }
+  }
+
   const value = {
     user,
     loading,
     signUp,
     signIn,
     signOut,
+    resetPassword,
+    updatePassword,
   }
 
   return (
