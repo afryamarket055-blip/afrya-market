@@ -7079,3 +7079,247 @@ img {
     width: 100%;
   }
 }
+
+
+/* ==========================================================
+   SECURITY PAGE
+   ========================================================== */
+
+.security-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.security-hero {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.security-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: var(--space-md);
+  background: #ecfdf5;
+  color: #047857;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.security-hero h1 {
+  margin: 0 0 var(--space-sm);
+  font-size: 40px;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+}
+
+.security-subtitle {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.security-section {
+  margin-bottom: var(--space-2xl);
+}
+
+.security-section-alt {
+  background: var(--color-bg-subtle);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+}
+
+.security-section-title {
+  margin: 0 0 var(--space-lg);
+  font-size: 24px;
+  color: var(--color-text);
+}
+
+/* Engagements */
+.security-engagements {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.security-engagement {
+  padding: var(--space-lg);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.security-engagement:hover {
+  border-color: #16a34a;
+  transform: translateY(-2px);
+}
+
+.security-engagement-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: var(--space-sm);
+  border-radius: var(--radius-full);
+  background: #16a34a;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.security-engagement h3 {
+  margin: 0 0 var(--space-xs);
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.security-engagement p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* Tips */
+.security-tips {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.security-tip {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.security-tip-num {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.security-tip-body h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.security-tip-body p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+/* Alert */
+.security-alert {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.security-alert-icon {
+  font-size: 48px;
+  margin-bottom: var(--space-md);
+}
+
+.security-alert h2 {
+  margin: 0 0 var(--space-sm);
+  font-size: 22px;
+  color: #78350f;
+}
+
+.security-alert > p {
+  margin: 0 0 var(--space-lg);
+  font-size: 15px;
+  color: #92400e;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.security-alert-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* CTA */
+.security-cta {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  background: var(--color-primary);
+  border-radius: var(--radius-lg);
+  color: white;
+}
+
+.security-cta h2 {
+  margin: 0 0 var(--space-sm);
+  font-size: 26px;
+  color: white;
+}
+
+.security-cta p {
+  margin: 0 0 var(--space-lg);
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+.security-cta .btn-primary {
+  background: white;
+  color: var(--color-primary);
+}
+
+.security-cta .btn-primary:hover {
+  background: #f3f4f6;
+}
+
+@media (max-width: 700px) {
+  .security-page {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .security-hero h1 {
+    font-size: 28px;
+  }
+
+  .security-section-title {
+    font-size: 20px;
+  }
+
+  .security-engagements,
+  .security-tips {
+    grid-template-columns: 1fr;
+  }
+
+  .security-alert-actions {
+    flex-direction: column;
+  }
+
+  .security-alert-actions .btn {
+    width: 100%;
+  }
+}

@@ -27,6 +27,7 @@ import MyOrders from './pages/MyOrders'
 import About from './pages/About'
 import HowItWorks from './pages/HowItWorks'
 import Help from './pages/Help'
+import Security from './pages/Security'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -169,7 +170,7 @@ function Home({ listings, loading, error }) {
             <h4>AFRYA MARKET</h4>
             <Link to="/a-propos">À propos</Link>
             <Link to="/comment-ca-marche">Comment ça marche</Link>
-            <a href="#">Sécurité</a>
+            <Link to="/securite">Sécurité</Link>
           </div>
 
           <div className="footer-col">
@@ -686,6 +687,11 @@ function AppContent() {
       <Route
         path="/aide"
         element={<Help />}
+      />
+
+      <Route
+        path="/securite"
+        element={<Security />}
       />
 
       <Route
