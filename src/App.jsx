@@ -38,6 +38,7 @@ import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
 import ProtectedRoute from './components/ProtectedRoute'
+import ScrollToTop from './components/ScrollToTop'
 import BottomNav from './components/BottomNav'
 
 function Home({ listings, loading, error }) {
@@ -763,6 +764,7 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <AppContent />
         <BottomNav />
