@@ -34,6 +34,7 @@ import Contact from './pages/Contact'
 import Report from './pages/Report'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
+import JeRecherche from './pages/JeRecherche'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -570,6 +571,15 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <CreateListing onCreateListing={handleCreateListing} />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/je-recherche"
+        element={
+          <ProtectedRoute>
+            <JeRecherche />
           </ProtectedRoute>
         }
       />
