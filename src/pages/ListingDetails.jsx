@@ -6,6 +6,7 @@ import Nav from '../components/Nav'
 import ListingCard from '../ListingCard'
 import ReportModal from '../components/ReportModal'
 import OrderModal from '../components/OrderModal'
+import PageMeta from '../components/PageMeta'
 
 function formatMemberSince(dateString) {
   if (!dateString) return null
@@ -272,6 +273,7 @@ function ListingDetails({ listings = [] }) {
   if (!listing) {
     return (
       <div className="app">
+        <PageMeta title="Annonce introuvable — AFRYA MARKET" />
         <Nav />
         <main className="details-page">
           <h1>Annonce introuvable</h1>
@@ -292,6 +294,10 @@ function ListingDetails({ listings = [] }) {
 
   return (
     <div className="app details-v2">
+      <PageMeta
+        title={(listing.title || 'Annonce') + ' — AFRYA MARKET'}
+        description={listing.description ? String(listing.description).slice(0, 155) : 'Découvrez cette annonce sur AFRYA MARKET, la marketplace béninoise.'}
+      />
       <Nav />
 
       <main className="details-page">
