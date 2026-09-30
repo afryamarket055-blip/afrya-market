@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 
 const FEATURES = [
   { icon: '🚀', title: 'Gratuit', text: 'Publiez vos annonces en 30 secondes.' },
@@ -26,7 +27,12 @@ const CATEGORIES = [
 
 function LandingPage() {
   return (
-    <div className="app">
+    <>
+      <PageMeta
+        title="AFRYA MARKET — Achetez et vendez d'occasion au Bénin"
+        description="AFRYA MARKET, la marketplace béninoise pour acheter et vendre des produits d'occasion en toute confiance, partout au Bénin."
+      />
+      <div className="app">
       <Nav />
       <main>
         <section className="landing-hero">
@@ -155,6 +161,7 @@ function LandingPage() {
         </div>
       </footer>
     </div>
+    </>
   )
 }
 
