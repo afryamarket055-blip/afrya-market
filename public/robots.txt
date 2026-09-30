@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /messages
+Disallow: /conversation/
+Disallow: /profil
+Disallow: /mes-annonces
+Disallow: /modifier/
+Disallow: /notifications
+Disallow: /favoris
+Disallow: /parametres
+Disallow: /booster/
+Disallow: /commande/
+Disallow: /mes-commandes
+Disallow: /connexion
+Disallow: /inscription
+Disallow: /mot-de-passe-oublie
+Disallow: /reinitialiser-mot-de-passe
+Disallow: /signaler
