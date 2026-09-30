@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 
 const BUYER_STEPS = [
   {
@@ -83,6 +84,7 @@ const TRUST_ITEMS = [
 function HowItWorks() {
   return (
     <div className="app how-v2">
+      <PageMeta title="Comment ça marche — AFRYA MARKET" />
       <Nav />
       <main className="how-page">
         <header className="how-hero">

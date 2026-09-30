@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 
 const ENGAGEMENTS = [
   {
@@ -83,6 +84,7 @@ const SELLER_TIPS = [
 function Security() {
   return (
     <div className="app security-v2">
+      <PageMeta title="Sécurité — AFRYA MARKET" />
       <Nav />
       <main className="security-page">
         <header className="security-hero">

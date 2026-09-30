@@ -37,6 +37,7 @@ import Privacy from './pages/Privacy'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
+import PageMeta from './components/PageMeta'
 import ProtectedRoute from './components/ProtectedRoute'
 import ScrollToTop from './components/ScrollToTop'
 import BottomNav from './components/BottomNav'
@@ -217,6 +218,7 @@ function Home({ listings, loading, error }) {
 function SimplePage({ title }) {
   return (
     <div className="app">
+      <PageMeta title={title + ' — AFRYA MARKET'} />
            <Nav />
 
       <main
@@ -321,6 +323,7 @@ function AllListings({ listings, loading, error }) {
 
   return (
     <div className="app">
+      <PageMeta title="Annonces d'occasion au Bénin — AFRYA MARKET" />
       <Nav />
 
       <main>

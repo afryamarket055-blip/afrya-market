@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 
 const CATEGORIES = [
   { key: 'all', label: 'Tout', icon: '📋' },
@@ -110,6 +111,7 @@ function Help() {
 
   return (
     <div className="app help-v2">
+      <PageMeta title="Aide — AFRYA MARKET" />
       <Nav />
       <main className="help-page">
         <header className="help-hero">

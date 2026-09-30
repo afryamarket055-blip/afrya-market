@@ -1,4 +1,5 @@
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 
 const SECTIONS = [
   {
@@ -128,6 +129,7 @@ const SECTIONS = [
 function Terms() {
   return (
     <div className="app legal-v2">
+      <PageMeta title="Conditions — AFRYA MARKET" />
       <Nav />
       <main className="legal-page">
         <header className="legal-hero">

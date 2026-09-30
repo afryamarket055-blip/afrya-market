@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 
 function About() {
   return (
     <div className="app about-v2">
+      <PageMeta title="À propos — AFRYA MARKET" />
       <Nav />
       <main className="about-page">
         <header className="about-hero">

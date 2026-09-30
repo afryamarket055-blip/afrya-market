@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 
 const SUBJECTS = [
   'Question générale',
@@ -39,6 +40,7 @@ ${message}`
 
   return (
     <div className="app contact-v2">
+      <PageMeta title="Contact — AFRYA MARKET" />
       <Nav />
       <main className="contact-page">
         <header className="contact-hero">
