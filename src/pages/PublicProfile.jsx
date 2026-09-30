@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
 import ReportModal from '../components/ReportModal'
+import PageMeta from '../components/PageMeta'
 
 function formatMemberSince(dateString) {
   if (!dateString) return null
@@ -284,6 +285,7 @@ function PublicProfile() {
   if (loading) {
     return (
       <div className="app">
+        <PageMeta title="Chargement du profil — AFRYA MARKET" />
         <Nav />
         <main className="loading-state">
           <p>Chargement du profil...</p>
@@ -295,6 +297,7 @@ function PublicProfile() {
   if (error || !profile) {
     return (
       <div className="app">
+        <PageMeta title="Profil introuvable — AFRYA MARKET" />
         <Nav />
         <main className="public-profile-page">
           <div className="empty-state">
@@ -320,6 +323,7 @@ function PublicProfile() {
 
   return (
     <div className="app public-profile-v2">
+      <PageMeta title={(profile.shop_name || profile.full_name || 'Vendeur') + ' — AFRYA MARKET'} />
       <Nav />
       <main className="public-profile-page">
         {isShopMode && (
