@@ -12,6 +12,7 @@ const ICONS = {
   boost_activated: '🚀',
   shop_verified: '🏪',
   order_update: '📦',
+  demand_match: '🎯',
   system: '🔔',
 }
 
