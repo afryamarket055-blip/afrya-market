@@ -83,6 +83,63 @@ function DemandeDetails() {
     setDemand((previous) => ({ ...previous, status: newStatus }))
   }
 
+  async function handlePropose(listing) {
+    if (!user) {
+      navigate('/connexion')
+      return
+    }
+    if (user.id === demand.user_id) {
+      alert('Vous ne pouvez pas proposer votre propre demande.')
+      return
+    }
+
+    // Chercher conversation existante : acheteur = auteur de la demande, vendeur = moi
+    const { data: existing, error: searchError } = await supabase
+      .from('conversations')
+      .select('id')
+      .eq('listing_id', listing.id)
+      .eq('buyer_id', demand.user_id)
+      .eq('seller_id', user.id)
+      .maybeSingle()
+
+    if (searchError) {
+      console.error('Erreur recherche conversation :', searchError)
+      return
+    }
+    if (existing) {
+      navigate('/conversation/' + existing.id)
+      return
+    }
+
+    const { data: created, error: createError } = await supabase
+      .from('conversations')
+      .insert([{
+        listing_id: listing.id,
+        buyer_id: demand.user_id,
+        seller_id: user.id,
+      }])
+      .select()
+      .single()
+
+    if (createError) {
+      console.error('Erreur creation conversation :', createError)
+      alert("Impossible d'ouvrir la conversation.")
+      return
+    }
+
+    // Premier message automatique
+    await supabase.from('messages').insert([{
+      conversation_id: created.id,
+      sender_id: user.id,
+      content:
+        'Bonjour, je vous propose mon annonce "' + listing.title +
+        '" a ' + Number(listing.price).toLocaleString('fr-FR') + ' FCFA. ' +
+        'Vous pouvez la voir ici : /annonce/' + listing.id,
+    }])
+
+    navigate('/conversation/' + created.id)
+  }
+
   if (loading) {
     return (
       <div className="app">
@@ -247,36 +304,82 @@ function DemandeDetails() {
               gap: '16px',
             }}
           >
-            {matches.map((listing) => (
-              <Link
-                key={listing.id}
-                to={'/annonce/' + listing.id}
-                style={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  border: '1px solid #eee',
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                }}
-              >
-                <img
-                  src={listing.image}
-                  alt={listing.title}
-                  style={{ width: '100%', height: '140px', objectFit: 'cover' }}
-                />
-                <div style={{ padding: '10px' }}>
-                  <p style={{ margin: 0, fontWeight: 'bold', fontSize: '14px' }}>
-                    {listing.title}
-                  </p>
-                  <p style={{ margin: '4px 0 0', color: '#1a4dd1', fontWeight: 'bold' }}>
-                    {Number(listing.price).toLocaleString('fr-FR')} FCFA
-                  </p>
-                  <p style={{ margin: '4px 0 0', color: '#666', fontSize: '12px' }}>
-                    📍 {listing.location}
-                  </p>
+            {matches.map((listing) => {
+              const isMine = user && user.id === listing.user_id
+              return (
+                <div
+                  key={listing.id}
+                  style={{
+                    border: isMine ? '2px solid #1a4dd1' : '1px solid #eee',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Link
+                    to={'/annonce/' + listing.id}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                      flex: 1,
+                    }}
+                  >
+                    <img
+                      src={listing.image}
+                      alt={listing.title}
+                      style={{ width: '100%', height: '140px', objectFit: 'cover' }}
+                    />
+                    <div style={{ padding: '10px' }}>
+                      {isMine && (
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            fontSize: '10px',
+                            padding: '2px 8px',
+                            borderRadius: '10px',
+                            background: '#e7eaf5',
+                            color: '#2c3e9e',
+                            marginBottom: '6px',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          Votre annonce
+                        </span>
+                      )}
+                      <p style={{ margin: 0, fontWeight: 'bold', fontSize: '14px' }}>
+                        {listing.title}
+                      </p>
+                      <p style={{ margin: '4px 0 0', color: '#1a4dd1', fontWeight: 'bold' }}>
+                        {Number(listing.price).toLocaleString('fr-FR')} FCFA
+                      </p>
+                      <p style={{ margin: '4px 0 0', color: '#666', fontSize: '12px' }}>
+                        📍 {listing.location}
+                      </p>
+                    </div>
+                  </Link>
+                  {isMine && (
+                    <button
+                      type="button"
+                      onClick={() => handlePropose(listing)}
+                      style={{
+                        margin: '0 10px 10px',
+                        padding: '10px',
+                        background: '#1a4dd1',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        fontSize: '13px',
+                      }}
+                    >
+                      Proposer mon produit →
+                    </button>
+                  )}
                 </div>
-              </Link>
-            ))}
+              )
+            })}
           </div>
         )}
       </main>
