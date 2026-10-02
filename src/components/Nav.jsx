@@ -131,6 +131,7 @@ function Nav() {
           <Link to="/annonces" onClick={closeMenu}>Annonces</Link>
           <Link to="/categories" onClick={closeMenu}>Catégories</Link>
           <Link to="/je-recherche" onClick={closeMenu}>Je recherche</Link>
+          <Link to="/demandes" onClick={closeMenu}>Demandes</Link>
 
           {user && (
             <>
