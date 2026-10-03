@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
 import LoadingState from '../components/LoadingState'
+import SkeletonList from '../components/SkeletonList'
 import EmptyState from '../components/EmptyState'
 
 const CATEGORIES = [
@@ -134,7 +135,7 @@ function Demandes() {
         </div>
 
         {loading ? (
-          <LoadingState message="Chargement des demandes..." />
+          <SkeletonList count={6} />
         ) : error ? (
           <EmptyState icon="⚠" title="Erreur" message={error} />
         ) : demands.length === 0 ? (

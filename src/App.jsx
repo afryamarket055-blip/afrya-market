@@ -3,6 +3,7 @@ import { supabase } from './lib/supabase'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import './App.css'
 import ListingCard from './ListingCard'
+import SkeletonList from './components/SkeletonList'
 import ListingDetails from './pages/ListingDetails'
 import CreateListing from './pages/CreateListing'
 import { AuthProvider } from './context/AuthContext'
@@ -135,9 +136,7 @@ function Home({ listings, loading, error }) {
           </div>
 
           {loading ? (
-            <div className="loading-state">
-              <p>Chargement des annonces...</p>
-            </div>
+            <SkeletonList count={8} />
           ) : error ? (
             <div className="empty-state">
               <p>Impossible de charger les annonces. Réessayez plus tard.</p>
