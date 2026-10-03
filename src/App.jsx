@@ -47,7 +47,7 @@ import Nav from './components/Nav'
 import PageMeta from './components/PageMeta'
 import ProtectedRoute from './components/ProtectedRoute'
 import ScrollToTop from './components/ScrollToTop'
-import BottomNav from './components/BottomNav'
+import BottomNavWrapper from './components/BottomNavWrapper'
 
 function Home({ listings, loading, error }) {
   const navigate = useNavigate()
@@ -821,7 +821,7 @@ function App() {
       <ToastProvider>
         <AuthProvider>
           <AppContent />
-          <BottomNav />
+          <BottomNavWrapper />
         </AuthProvider>
       </ToastProvider>
     </BrowserRouter>
