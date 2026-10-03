@@ -200,20 +200,25 @@ function VendorListings() {
             }
           />
         ) : (
-          <div className="listings-grid">
+          <div className="listing-grid">
             {listings.map((l) => (
-              <ListingCard
+              <Link
                 key={l.id}
-                id={l.id}
-                title={l.title}
-                price={l.price}
-                location={l.location}
-                condition={l.condition}
-                category={l.category}
-                image={l.image}
-                status={l.status}
-                boostedUntil={l.boosted_until}
-              />
+                to={'/annonce/' + l.id}
+                className="listing-link"
+              >
+                <ListingCard
+                  id={l.id}
+                  title={l.title}
+                  price={l.price}
+                  location={l.location}
+                  condition={l.condition}
+                  category={l.category}
+                  image={l.image}
+                  status={l.status}
+                  boostedUntil={l.boosted_until}
+                />
+              </Link>
             ))}
           </div>
         )}
