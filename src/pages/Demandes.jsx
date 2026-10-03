@@ -17,6 +17,13 @@ const CATEGORIES = [
   'Autres',
 ]
 
+
+function isRecent(dateString) {
+  if (!dateString) return false
+  const hours = (Date.now() - new Date(dateString).getTime()) / 3600000
+  return hours < 48
+}
+
 function Demandes() {
   const { user } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -161,6 +168,11 @@ function Demandes() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <h3 style={{ margin: '0 0 6px', fontSize: '17px' }}>
+                        {isRecent(demand.created_at) && (
+                          <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '10px', background: '#fff4d6', color: '#8a6800', fontSize: '11px', fontWeight: 'bold', marginRight: '6px', verticalAlign: 'middle' }}>
+                            🆕 Nouveau
+                          </span>
+                        )}
                         {demand.title}
                         {isMine && (
                           <span style={{ marginLeft: '8px', fontSize: '11px', padding: '2px 8px', borderRadius: '10px', background: '#e7eaf5', color: '#2c3e9e' }}>

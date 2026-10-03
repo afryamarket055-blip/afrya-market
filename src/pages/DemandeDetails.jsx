@@ -6,6 +6,13 @@ import Nav from '../components/Nav'
 import LoadingState from '../components/LoadingState'
 import EmptyState from '../components/EmptyState'
 
+
+function isRecent(dateString) {
+  if (!dateString) return false
+  const hours = (Date.now() - new Date(dateString).getTime()) / 3600000
+  return hours < 48
+}
+
 function DemandeDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -212,6 +219,23 @@ function DemandeDetails() {
             {demand.status === 'expired' && '⏰ Expirée'}
             {demand.status === 'cancelled' && '❌ Annulée'}
           </span>
+          {isRecent(demand.created_at) && (
+            <span
+              style={{
+                display: 'inline-block',
+                padding: '4px 12px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                background: '#fff4d6',
+                color: '#8a6800',
+                marginLeft: '8px',
+                marginBottom: '12px',
+              }}
+            >
+              🆕 Nouveau
+            </span>
+          )}
 
           <h1 style={{ marginBottom: '8px' }}>{demand.title}</h1>
 
