@@ -1713,6 +1713,27 @@
   color: var(--color-text-muted);
 }
 
+.landing-hero-stats {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 16px auto 12px;
+  color: var(--color-text-muted);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.landing-hero-stats strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.landing-hero-stats-dot {
+  opacity: 0.4;
+}
+
 .landing-hero-subtitle {
   max-width: 600px;
   margin: 0 auto var(--space-xl);

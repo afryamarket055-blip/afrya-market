@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import PageMeta from '../components/PageMeta'
+import { supabase } from '../lib/supabase'
 
 const FEATURES = [
   { icon: '🚀', title: 'Gratuit', text: 'Publiez vos annonces en 30 secondes.' },
@@ -26,6 +28,28 @@ const CATEGORIES = [
 ]
 
 function LandingPage() {
+  const [counts, setCounts] = useState({ listings: null, demands: null })
+
+  useEffect(() => {
+    async function loadCounts() {
+      const [listingsRes, demandsRes] = await Promise.all([
+        supabase
+          .from('listings')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'disponible'),
+        supabase
+          .from('demands')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'active'),
+      ])
+      setCounts({
+        listings: listingsRes.count || 0,
+        demands: demandsRes.count || 0,
+      })
+    }
+    loadCounts()
+  }, [])
+
   return (
     <>
       <PageMeta
@@ -43,6 +67,17 @@ function LandingPage() {
               <br />
               <span>Trouvez.</span>
             </h1>
+            {counts.listings !== null && counts.demands !== null && (
+              <p className="landing-hero-stats">
+                <span>
+                  <strong>{counts.listings}</strong> annonce{counts.listings > 1 ? 's' : ''}
+                </span>
+                <span className="landing-hero-stats-dot">·</span>
+                <span>
+                  <strong>{counts.demands}</strong> demande{counts.demands > 1 ? 's' : ''} active{counts.demands > 1 ? 's' : ''}
+                </span>
+              </p>
+            )}
             <p className="landing-hero-subtitle">
               AFRYA MARKET connecte acheteurs et vendeurs partout au Bénin —
               simplement, rapidement et en toute confiance.
