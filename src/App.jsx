@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Link, useNavigate, useSearchParams } from
 import './App.css'
 import ListingCard from './ListingCard'
 import SkeletonList from './components/SkeletonList'
+import VendorListings from './pages/VendorListings'
 import ListingDetails from './pages/ListingDetails'
 import CreateListing from './pages/CreateListing'
 import { AuthProvider } from './context/AuthContext'
@@ -672,6 +673,11 @@ function AppContent() {
             <Conversation />
           </ProtectedRoute>
         }
+      />
+
+      <Route
+        path="/vendeur/:id/annonces"
+        element={<VendorListings />}
       />
 
       <Route

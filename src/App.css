@@ -8039,3 +8039,139 @@ img {
     height: 120px;
   }
 }
+
+/* ============================================================
+   VENDOR LISTINGS PAGE (catalogue vendeur)
+   ============================================================ */
+
+.vendor-listings-page {
+  padding: 80px 20px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.vendor-listings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.vendor-listings-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.vendor-listings-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.vendor-listings-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid var(--color-border);
+  font-size: 28px;
+}
+
+.vendor-listings-info h1 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.vendor-listings-location {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.vendor-listings-count {
+  margin: 4px 0 0;
+  color: var(--color-text-faint);
+  font-size: 13px;
+}
+
+.vendor-listings-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.vendor-listings-cats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  background: white;
+  color: var(--color-text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter-pill:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.filter-pill.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+}
+
+.vendor-listings-sort {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: white;
+  font-size: 13px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .vendor-listings-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .vendor-listings-header .btn {
+    width: 100%;
+  }
+  .vendor-listings-info h1 {
+    font-size: 18px;
+  }
+  .vendor-listings-avatar {
+    width: 52px;
+    height: 52px;
+  }
+  .vendor-listings-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .vendor-listings-sort {
+    width: 100%;
+  }
+}

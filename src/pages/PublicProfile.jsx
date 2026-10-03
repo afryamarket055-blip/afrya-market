@@ -489,7 +489,7 @@ function PublicProfile() {
         )}
 
         <div className="public-profile-actions">
-          <Link to="/annonces" className="btn btn-primary">
+          <Link to={'/vendeur/' + id + '/annonces'} className="btn btn-primary">
             Voir ses annonces
           </Link>
         </div>
