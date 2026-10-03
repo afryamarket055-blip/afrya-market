@@ -33,6 +33,8 @@ function Settings() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
+  const [blockedUsers, setBlockedUsers] = useState([])
+  const [blockedLoading, setBlockedLoading] = useState(true)
 
   useEffect(() => {
     async function loadProfile() {
@@ -191,6 +193,64 @@ function Settings() {
     }
   }
 
+  // Charger les utilisateurs bloques
+  useEffect(() => {
+    async function loadBlocked() {
+      if (!user) return
+      const { data, error } = await supabase
+        .from('blocks')
+        .select('id, blocked_id, created_at')
+        .eq('blocker_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Erreur chargement bloques :', error)
+        setBlockedLoading(false)
+        return
+      }
+
+      // Charger les infos des profils bloques
+      const ids = (data || []).map((b) => b.blocked_id)
+      if (ids.length === 0) {
+        setBlockedUsers([])
+        setBlockedLoading(false)
+        return
+      }
+
+      const { data: profiles } = await supabase
+        .from('profiles_public')
+        .select('id, full_name, shop_name, avatar_url')
+        .in('id', ids)
+
+      const profileMap = {}
+      ;(profiles || []).forEach((p) => { profileMap[p.id] = p })
+
+      const merged = (data || []).map((b) => ({
+        blockId: b.id,
+        userId: b.blocked_id,
+        createdAt: b.created_at,
+        profile: profileMap[b.blocked_id] || null,
+      }))
+
+      setBlockedUsers(merged)
+      setBlockedLoading(false)
+    }
+    loadBlocked()
+  }, [user])
+
+  async function handleUnblock(blockId, userId) {
+    if (!confirm('Debloquer cet utilisateur ?')) return
+    const { error } = await supabase
+      .from('blocks')
+      .delete()
+      .eq('id', blockId)
+    if (error) {
+      console.error('Erreur deblocage :', error)
+      return
+    }
+    setBlockedUsers((prev) => prev.filter((b) => b.blockId !== blockId))
+  }
+
   if (loading) {
     return (
       <div className="app">
@@ -237,6 +297,81 @@ function Settings() {
               </div>
               <span className="settings-arrow">→</span>
             </Link>
+          </div>
+        </section>
+
+        <section className="settings-section">
+          <h2>Utilisateurs bloques</h2>
+          <div className="settings-card">
+            {blockedLoading ? (
+              <div className="settings-row">
+                <p>Chargement...</p>
+              </div>
+            ) : blockedUsers.length === 0 ? (
+              <div className="settings-row">
+                <div>
+                  <strong>Aucun utilisateur bloque</strong>
+                  <p>Vous pouvez bloquer un vendeur depuis son profil public.</p>
+                </div>
+              </div>
+            ) : (
+              blockedUsers.map((b) => {
+                const name =
+                  (b.profile && (b.profile.shop_name || b.profile.full_name)) ||
+                  'Utilisateur'
+                return (
+                  <div key={b.blockId} className="settings-row">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 }}>
+                      {b.profile && b.profile.avatar_url ? (
+                        <img
+                          src={b.profile.avatar_url}
+                          alt=""
+                          style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            background: '#eee',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '18px',
+                          }}
+                        >
+                          👤
+                        </div>
+                      )}
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <strong
+                          style={{
+                            display: 'block',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {name}
+                        </strong>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#666' }}>
+                          Bloque le {new Date(b.createdAt).toLocaleDateString('fr-FR')}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleUnblock(b.blockId, b.userId)}
+                      className="btn btn-secondary btn-sm"
+                      style={{ padding: '6px 14px', fontSize: '13px', whiteSpace: 'nowrap' }}
+                    >
+                      Debloquer
+                    </button>
+                  </div>
+                )
+              })
+            )}
           </div>
         </section>
 

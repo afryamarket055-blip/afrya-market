@@ -42,6 +42,7 @@ function Conversation() {
   const [error, setError] = useState(null)
   const [sending, setSending] = useState(false)
   const [otherProfile, setOtherProfile] = useState(null)
+  const [isBlocked, setIsBlocked] = useState(false)
   const [listingInfo, setListingInfo] = useState(null)
   const [otherUserId, setOtherUserId] = useState(null)
   const bottomRef = useRef(null)
@@ -84,6 +85,18 @@ function Conversation() {
       }
 
       setOtherProfile(profile)
+
+      // Verifier s'il y a un blocage dans un sens ou dans l'autre
+      const { data: blockData } = await supabase
+        .from('blocks')
+        .select('id')
+        .or(
+          'and(blocker_id.eq.' + user.id + ',blocked_id.eq.' + otherId + '),' +
+          'and(blocker_id.eq.' + otherId + ',blocked_id.eq.' + user.id + ')'
+        )
+        .maybeSingle()
+
+      setIsBlocked(!!blockData)
     }
 
     if (user) {
@@ -148,6 +161,7 @@ function Conversation() {
   async function handleSend(event) {
     event.preventDefault()
     if (!newMessage.trim() || sending) return
+    if (isBlocked) return
 
     setSending(true)
 
@@ -296,7 +310,33 @@ function Conversation() {
           <div ref={bottomRef} />
         </div>
 
-        <form className="conversation-form" onSubmit={handleSend}>
+        {isBlocked && (
+          <div
+            style={{
+              padding: '20px',
+              background: '#f7f7f7',
+              border: '1px solid #eee',
+              borderRadius: '8px',
+              margin: '16px 0',
+              textAlign: 'center',
+              color: '#666',
+            }}
+          >
+            <p style={{ margin: 0, fontWeight: 'bold', fontSize: '15px' }}>
+              🚫 Conversation bloquee
+            </p>
+            <p style={{ margin: '8px 0 0', fontSize: '13px' }}>
+              Cette conversation est bloquee. Vous ne pouvez plus echanger de
+              messages avec cet utilisateur.
+            </p>
+          </div>
+        )}
+
+        <form
+          className="conversation-form"
+          onSubmit={handleSend}
+          style={{ display: isBlocked ? 'none' : undefined }}
+        >
           <input
             type="text"
             value={newMessage}

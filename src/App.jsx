@@ -502,6 +502,18 @@ function AppContent() {
   useEffect(() => {
     async function loadListings() {
       setLoading(true)
+
+      // 1. Charger les utilisateurs bloques si connecte
+      let blockedIds = []
+      if (user) {
+        const { data: blocked } = await supabase
+          .from('blocks')
+          .select('blocked_id')
+          .eq('blocker_id', user.id)
+        blockedIds = (blocked || []).map((b) => b.blocked_id)
+      }
+
+      // 2. Charger les annonces
       const { data, error } = await supabase
         .from('listings')
         .select('*')
@@ -515,12 +527,17 @@ function AppContent() {
         return
       }
 
-      setListings(data || [])
+      // 3. Filtrer les annonces des users bloques
+      const filtered = (data || []).filter(
+        (l) => !blockedIds.includes(l.user_id)
+      )
+
+      setListings(filtered)
       setLoading(false)
     }
 
     loadListings()
-  }, [])
+  }, [user])
   function handleCreateListing(newListing) {
     setListings((previousListings) => [
       newListing,

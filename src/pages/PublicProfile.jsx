@@ -72,6 +72,30 @@ function PublicProfile() {
   const [message, setMessage] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [reportModalOpen, setReportModalOpen] = useState(false)
+  const [isBlocked, setIsBlocked] = useState(false)
+  const [blockLoading, setBlockLoading] = useState(false)
+
+  // Check if current user has blocked this profile
+  useEffect(() => {
+    async function loadBlockStatus() {
+      if (!user || !id || user.id === id) {
+        setIsBlocked(false)
+        return
+      }
+      const { data, error } = await supabase
+        .from('blocks')
+        .select('id')
+        .eq('blocker_id', user.id)
+        .eq('blocked_id', id)
+        .maybeSingle()
+      if (error) {
+        console.error('Erreur chargement blocage :', error)
+        return
+      }
+      setIsBlocked(!!data)
+    }
+    loadBlockStatus()
+  }, [user, id])
 
   // Load profile + listings
   useEffect(() => {
@@ -312,6 +336,45 @@ function PublicProfile() {
     )
   }
 
+  async function handleToggleBlock() {
+    if (!user) {
+      navigate('/connexion')
+      return
+    }
+    if (user.id === id) return
+
+    const confirmMsg = isBlocked
+      ? 'Débloquer cet utilisateur ? Ses annonces réapparaîtront.'
+      : 'Bloquer cet utilisateur ? Ses annonces ne vous seront plus proposées.'
+    if (!confirm(confirmMsg)) return
+
+    setBlockLoading(true)
+
+    if (isBlocked) {
+      const { error } = await supabase
+        .from('blocks')
+        .delete()
+        .eq('blocker_id', user.id)
+        .eq('blocked_id', id)
+      setBlockLoading(false)
+      if (error) {
+        console.error('Erreur deblocage :', error)
+        return
+      }
+      setIsBlocked(false)
+    } else {
+      const { error } = await supabase
+        .from('blocks')
+        .insert([{ blocker_id: user.id, blocked_id: id }])
+      setBlockLoading(false)
+      if (error) {
+        console.error('Erreur blocage :', error)
+        return
+      }
+      setIsBlocked(true)
+    }
+  }
+
   const name = profile.full_name || 'Vendeur AFRYA MARKET'
   const location = [profile.city, profile.country].filter(Boolean).join(', ')
   const memberSince = formatMemberSince(profile.created_at)
@@ -454,6 +517,21 @@ function PublicProfile() {
 
         {!isOwnProfile && (
           <div className="public-profile-report">
+            <button
+              type="button"
+              className="report-link"
+              onClick={handleToggleBlock}
+              disabled={blockLoading || !user}
+              style={{
+                color: isBlocked ? '#0a7a3a' : '#9e2c2c',
+              }}
+            >
+              {blockLoading
+                ? 'Traitement...'
+                : isBlocked
+                  ? '✓ Débloquer cet utilisateur'
+                  : '🚫 Bloquer cet utilisateur'}
+            </button>
             <button
               type="button"
               className="report-link"
