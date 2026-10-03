@@ -1,12 +1,10 @@
 /**
  * Genere public/sitemap.xml dynamiquement a chaque build.
- * - Lit les variables d'environnement VITE_SUPABASE_*
- * - Recupere toutes les annonces, demandes, profils
- * - Ecrit public/sitemap.xml
- * - Ne casse JAMAIS le build : exit(0) en cas d'erreur ou d'absence d'env
+ * Utilise fetch natif sur l'API REST Supabase (pas de SDK)
+ * pour eviter les problemes de WebSocket sur Node 20.
+ * Ne casse JAMAIS le build : exit(0) en cas d'erreur.
  */
 
-import { createClient } from '@supabase/supabase-js'
 import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
@@ -22,8 +20,6 @@ if (!supabaseUrl || !supabaseKey) {
   console.warn('[sitemap] Sitemap non regenere (le fichier actuel est conserve).')
   process.exit(0)
 }
-
-const supabase = createClient(supabaseUrl, supabaseKey)
 
 const STATIC_PAGES = [
   { path: '/',                    freq: 'daily',   priority: '1.0' },
@@ -51,33 +47,57 @@ function fmtDate(d) {
   return new Date(d).toISOString()
 }
 
+async function fetchTable(table, query) {
+  const url = supabaseUrl + '/rest/v1/' + table + '?' + query
+  const res = await fetch(url, {
+    headers: {
+      'apikey': supabaseKey,
+      'Authorization': 'Bearer ' + supabaseKey,
+      'Accept': 'application/json',
+    },
+  })
+  if (!res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new Error(
+      'HTTP ' + res.status + ' sur ' + table + ' : ' + text.slice(0, 200)
+    )
+  }
+  return res.json()
+}
+
 async function main() {
   console.log('[sitemap] Generation en cours...')
 
-  const { data: listings, error: e1 } = await supabase
-    .from('listings')
-    .select('id, created_at')
-    .eq('status', 'disponible')
-    .order('created_at', { ascending: false })
-    .limit(5000)
+  let listings = []
+  let demands = []
+  let profiles = []
 
-  if (e1) console.error('[sitemap] Erreur listings :', e1.message)
+  try {
+    listings = await fetchTable(
+      'listings',
+      'select=id,created_at&status=eq.disponible&order=created_at.desc&limit=5000'
+    )
+  } catch (e) {
+    console.error('[sitemap] Erreur listings :', e.message)
+  }
 
-  const { data: demands, error: e2 } = await supabase
-    .from('demands')
-    .select('id, created_at')
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
-    .limit(5000)
+  try {
+    demands = await fetchTable(
+      'demands',
+      'select=id,created_at&status=eq.active&order=created_at.desc&limit=5000'
+    )
+  } catch (e) {
+    console.error('[sitemap] Erreur demands :', e.message)
+  }
 
-  if (e2) console.error('[sitemap] Erreur demands :', e2.message)
-
-  const { data: profiles, error: e3 } = await supabase
-    .from('profiles_public')
-    .select('id, created_at')
-    .limit(5000)
-
-  if (e3) console.error('[sitemap] Erreur profiles :', e3.message)
+  try {
+    profiles = await fetchTable(
+      'profiles_public',
+      'select=id,created_at&limit=5000'
+    )
+  } catch (e) {
+    console.error('[sitemap] Erreur profiles :', e.message)
+  }
 
   const urls = []
 
@@ -137,16 +157,10 @@ async function main() {
   writeFileSync(outPath, xml, 'utf8')
 
   console.log(
-    '[sitemap] OK : ' +
-      urls.length +
-      ' URLs ' +
-      '(' +
-      (listings || []).length +
-      ' annonces, ' +
-      (demands || []).length +
-      ' demandes, ' +
-      (profiles || []).length +
-      ' vendeurs)'
+    '[sitemap] OK : ' + urls.length + ' URLs ' +
+    '(' + (listings || []).length + ' annonces, ' +
+    (demands || []).length + ' demandes, ' +
+    (profiles || []).length + ' vendeurs)'
   )
 }
 
