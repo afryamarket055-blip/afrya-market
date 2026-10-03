@@ -67,7 +67,7 @@ function JeRecherche() {
 
     if (error) {
       console.error('Erreur creation demande :', error)
-      setErrorMsg("Erreur lors de la publication de la demande.")
+      setErrorMsg(error.message || "Erreur lors de la publication de la demande.")
       return
     }
 

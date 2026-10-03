@@ -123,7 +123,7 @@ function DemandeDetails() {
 
     if (createError) {
       console.error('Erreur creation conversation :', createError)
-      alert("Impossible d'ouvrir la conversation.")
+      alert(createError.message || "Impossible d'ouvrir la conversation.")
       return
     }
 
