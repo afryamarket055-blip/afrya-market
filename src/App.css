@@ -1742,6 +1742,21 @@
   line-height: 1.6;
 }
 
+.landing-hero-secondary-cta {
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.landing-hero-secondary-cta a {
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.landing-hero-secondary-cta a:hover {
+  color: var(--color-primary);
+}
+
 .landing-hero-actions {
   display: flex;
   gap: var(--space-md);

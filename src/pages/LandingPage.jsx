@@ -83,13 +83,16 @@ function LandingPage() {
               simplement, rapidement et en toute confiance.
             </p>
             <div className="landing-hero-actions">
-              <Link to="/inscription" className="btn btn-primary btn-lg">
-                Commencer maintenant
+              <Link to="/vendre" className="btn btn-primary btn-lg">
+                + Vendre un article
               </Link>
-              <Link to="/annonces" className="btn btn-secondary btn-lg">
-                Explorer les annonces
+              <Link to="/je-recherche" className="btn btn-secondary btn-lg">
+                🔍 Je recherche un article
               </Link>
             </div>
+            <p className="landing-hero-secondary-cta">
+              <Link to="/annonces">Ou parcourir les annonces existantes →</Link>
+            </p>
           </div>
         </section>
 
