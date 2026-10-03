@@ -480,18 +480,13 @@ function AllListings({ listings, loading, error }) {
 }
 
 function HomeRouter({ listings, loading, error }) {
-  const { user } = useAuth()
-  const [showLanding, setShowLanding] = useState(
-    !user && !localStorage.getItem('afrya_visited')
-  )
+  const { user, loading: authLoading } = useAuth()
 
-  useEffect(() => {
-    if (!user && !localStorage.getItem('afrya_visited')) {
-      localStorage.setItem('afrya_visited', 'true')
-    }
-  }, [user])
+  if (authLoading) {
+    return null
+  }
 
-  if (showLanding) {
+  if (!user) {
     return <LandingPage />
   }
 
