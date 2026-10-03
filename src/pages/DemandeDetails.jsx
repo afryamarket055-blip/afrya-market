@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
+import PageMeta from '../components/PageMeta'
 import LoadingState from '../components/LoadingState'
 import EmptyState from '../components/EmptyState'
 
@@ -190,6 +191,16 @@ function DemandeDetails() {
   return (
     <div className="app">
       <Nav />
+      <PageMeta
+        title={(demand.title || 'Demande') + ' a ' + (demand.city || '') + ' — AFRYA MARKET'}
+        description={
+          'Recherche : ' + (demand.title || '') + ' a ' + (demand.city || '') +
+          (demand.budget_max ? ' · Budget max : ' + Number(demand.budget_max).toLocaleString('fr-FR') + ' FCFA' : '') +
+          (demand.description ? ' · ' + String(demand.description).slice(0, 100) : '')
+        }
+        url={window.location.href}
+        type="article"
+      />
       <main style={{ padding: '80px 20px', maxWidth: '720px', margin: '0 auto' }}>
         <Link to="/demandes" style={{ marginBottom: '20px', display: 'inline-block' }}>
           ← Toutes les demandes

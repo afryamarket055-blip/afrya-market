@@ -1,11 +1,13 @@
 User-agent: *
 Allow: /
 
+# Pages privees / non indexables
 Disallow: /admin/
 Disallow: /messages
 Disallow: /conversation/
 Disallow: /profil
 Disallow: /mes-annonces
+Disallow: /mes-demandes
 Disallow: /modifier/
 Disallow: /notifications
 Disallow: /favoris
@@ -18,3 +20,6 @@ Disallow: /inscription
 Disallow: /mot-de-passe-oublie
 Disallow: /reinitialiser-mot-de-passe
 Disallow: /signaler
+
+# Sitemap
+Sitemap: https://afrya-market.onrender.com/sitemap.xml

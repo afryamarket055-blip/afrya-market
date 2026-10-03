@@ -297,6 +297,9 @@ function ListingDetails({ listings = [] }) {
       <PageMeta
         title={(listing.title || 'Annonce') + ' — AFRYA MARKET'}
         description={listing.description ? String(listing.description).slice(0, 155) : 'Découvrez cette annonce sur AFRYA MARKET, la marketplace béninoise.'}
+        image={mainImage}
+        url={window.location.href}
+        type="product"
       />
       <Nav />
 
