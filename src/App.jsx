@@ -812,10 +812,12 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <AuthProvider>
-        <AppContent />
-        <BottomNav />
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <AppContent />
+          <BottomNav />
+        </AuthProvider>
+      </ToastProvider>
     </BrowserRouter>
   )
 }
