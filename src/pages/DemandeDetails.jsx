@@ -140,6 +140,21 @@ function DemandeDetails() {
     navigate('/conversation/' + created.id)
   }
 
+  function handleShareWhatsApp() {
+    const baseUrl = window.location.origin
+    const url = baseUrl + '/demandes/' + demand.id
+    const text =
+      'Regarde cette recherche sur AFRYA MARKET :\n\n' +
+      '"' + demand.title + '" a ' + demand.city + '\n' +
+      'Categorie : ' + demand.category + '\n' +
+      (demand.budget_max
+        ? 'Budget max : ' + Number(demand.budget_max).toLocaleString('fr-FR') + ' FCFA\n'
+        : '') +
+      '\nVoir la demande : ' + url
+    const waUrl = 'https://wa.me/?text=' + encodeURIComponent(text)
+    window.open(waUrl, '_blank', 'noopener,noreferrer')
+  }
+
   if (loading) {
     return (
       <div className="app">
@@ -261,26 +276,46 @@ function DemandeDetails() {
             )}
           </div>
 
-          {isOwner && isActive && (
-            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => updateStatus('found')}
-                disabled={updating}
-              >
-                ✅ J'ai trouvé
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => updateStatus('cancelled')}
-                disabled={updating}
-              >
-                Annuler la demande
-              </button>
-            </div>
-          )}
+          <div style={{ display: 'flex', gap: '10px', marginTop: '20px', flexWrap: 'wrap' }}>
+            {isOwner && isActive && (
+              <>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => updateStatus('found')}
+                  disabled={updating}
+                >
+                  ✅ J'ai trouvé
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => updateStatus('cancelled')}
+                  disabled={updating}
+                >
+                  Annuler la demande
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={handleShareWhatsApp}
+              style={{
+                padding: '10px 18px',
+                background: '#25D366',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span style={{ fontSize: '18px' }}>📱</span> Partager sur WhatsApp
+            </button>
+          </div>
         </div>
 
         <hr style={{ margin: '40px 0', border: 'none', borderTop: '1px solid #eee' }} />
