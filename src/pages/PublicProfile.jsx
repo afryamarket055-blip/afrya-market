@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
 import ReportModal from '../components/ReportModal'
+import ConfirmDialog from '../components/ConfirmDialog'
 import PageMeta from '../components/PageMeta'
 
 function formatMemberSince(dateString) {
@@ -74,6 +75,7 @@ function PublicProfile() {
   const [reportModalOpen, setReportModalOpen] = useState(false)
   const [isBlocked, setIsBlocked] = useState(false)
   const [blockLoading, setBlockLoading] = useState(false)
+  const [confirmDialog, setConfirmDialog] = useState(null)
 
   // Check if current user has blocked this profile
   useEffect(() => {
@@ -287,8 +289,18 @@ function PublicProfile() {
 
   async function handleDeleteReview() {
     if (!myReview) return
-    const ok = window.confirm('Voulez-vous vraiment supprimer votre avis ?')
-    if (!ok) return
+    setConfirmDialog({
+      title: 'Supprimer votre avis ?',
+      message: 'Cette action est irreversible.',
+      confirmLabel: 'Supprimer',
+      danger: true,
+      onConfirm: () => doDeleteReview(),
+    })
+    return
+  }
+
+  async function doDeleteReview() {
+    setConfirmDialog(null)
 
     setSaving(true)
     const { error } = await supabase.from('reviews').delete().eq('id', myReview.id)
@@ -314,6 +326,13 @@ function PublicProfile() {
         <main className="loading-state">
           <p>Chargement du profil...</p>
         </main>
+
+      {confirmDialog && (
+        <ConfirmDialog
+          {...confirmDialog}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
       </div>
     )
   }
@@ -343,11 +362,19 @@ function PublicProfile() {
     }
     if (user.id === id) return
 
-    const confirmMsg = isBlocked
-      ? 'Débloquer cet utilisateur ? Ses annonces réapparaîtront.'
-      : 'Bloquer cet utilisateur ? Ses annonces ne vous seront plus proposées.'
-    if (!confirm(confirmMsg)) return
+    setConfirmDialog({
+      title: isBlocked ? 'Debloquer cet utilisateur ?' : 'Bloquer cet utilisateur ?',
+      message: isBlocked
+        ? 'Ses annonces reapparaitront dans vos resultats.'
+        : 'Ses annonces ne vous seront plus proposees. Vous pourrez le debloquer a tout moment.',
+      confirmLabel: isBlocked ? 'Debloquer' : 'Bloquer',
+      danger: !isBlocked,
+      onConfirm: () => doToggleBlock(),
+    })
+  }
 
+  async function doToggleBlock() {
+    setConfirmDialog(null)
     setBlockLoading(true)
 
     if (isBlocked) {

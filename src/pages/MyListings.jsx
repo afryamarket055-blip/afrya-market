@@ -4,12 +4,14 @@ import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import ConfirmDialog from '../components/ConfirmDialog'
 import ListingCard from '../ListingCard'
 
 function MyListings() {
   const { user } = useAuth()
   const toast = useToast()
   const [listings, setListings] = useState([])
+  const [confirmDialog, setConfirmDialog] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [stats, setStats] = useState({
@@ -161,11 +163,18 @@ function MyListings() {
     loadCityStats()
   }, [user, listings])
 
-  async function handleDelete(listingId) {
-    const confirmed = window.confirm(
-      'Voulez-vous vraiment supprimer cette annonce ?'
-    )
-    if (!confirmed) return
+  function handleDelete(listingId) {
+    setConfirmDialog({
+      title: 'Supprimer cette annonce ?',
+      message: 'Cette action est irreversible. Votre annonce sera definitivement supprimee.',
+      confirmLabel: 'Supprimer',
+      danger: true,
+      onConfirm: () => doDelete(listingId),
+    })
+  }
+
+  async function doDelete(listingId) {
+    setConfirmDialog(null)
 
     const { error } = await supabase
       .from('listings')
@@ -374,6 +383,13 @@ function MyListings() {
           )}
         </section>
       </main>
+
+      {confirmDialog && (
+        <ConfirmDialog
+          {...confirmDialog}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
+import ConfirmDialog from '../components/ConfirmDialog'
 import LoadingState from '../components/LoadingState'
 import EmptyState from '../components/EmptyState'
 
@@ -29,6 +30,7 @@ function MesDemandes() {
   const [error, setError] = useState(null)
   const [filter, setFilter] = useState('all')
   const [busyId, setBusyId] = useState(null)
+  const [confirmDialog, setConfirmDialog] = useState(null)
 
   useEffect(() => {
     async function load() {
@@ -68,7 +70,17 @@ function MesDemandes() {
   }
 
   async function handleDelete(id) {
-    if (!confirm('Supprimer definitivement cette demande ?')) return
+    setConfirmDialog({
+      title: 'Supprimer cette demande ?',
+      message: 'Cette action est irreversible.',
+      confirmLabel: 'Supprimer',
+      danger: true,
+      onConfirm: () => doDelete(id),
+    })
+  }
+
+  async function doDelete(id) {
+    setConfirmDialog(null)
     setBusyId(id)
     const { error } = await supabase.from('demands').delete().eq('id', id)
     setBusyId(null)
@@ -265,6 +277,13 @@ function MesDemandes() {
           </div>
         )}
       </main>
+
+      {confirmDialog && (
+        <ConfirmDialog
+          {...confirmDialog}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
     </div>
   )
 }

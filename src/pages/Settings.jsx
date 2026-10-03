@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import ConfirmDialog from '../components/ConfirmDialog'
 
 const SHOP_CATEGORIES = [
   'Electronique',
@@ -35,6 +36,7 @@ function Settings() {
   const [errorMsg, setErrorMsg] = useState('')
   const [blockedUsers, setBlockedUsers] = useState([])
   const [blockedLoading, setBlockedLoading] = useState(true)
+  const [confirmDialog, setConfirmDialog] = useState(null)
 
   useEffect(() => {
     async function loadProfile() {
@@ -239,7 +241,16 @@ function Settings() {
   }, [user])
 
   async function handleUnblock(blockId, userId) {
-    if (!confirm('Debloquer cet utilisateur ?')) return
+    setConfirmDialog({
+      title: 'Debloquer cet utilisateur ?',
+      message: 'Vous verrez a nouveau ses annonces et messages.',
+      confirmLabel: 'Debloquer',
+      onConfirm: () => doUnblock(blockId),
+    })
+  }
+
+  async function doUnblock(blockId) {
+    setConfirmDialog(null)
     const { error } = await supabase
       .from('blocks')
       .delete()
@@ -258,6 +269,13 @@ function Settings() {
         <main className="loading-state">
           <p>Chargement des parametres...</p>
         </main>
+
+      {confirmDialog && (
+        <ConfirmDialog
+          {...confirmDialog}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
       </div>
     )
   }
