@@ -139,6 +139,7 @@ function Nav() {
               <Link to="/notifications" onClick={closeMenu} className="site-nav-secondary">Notifications</Link>
               <Link to="/profil" onClick={closeMenu} className="site-nav-secondary">Mon profil</Link>
               <Link to="/mes-annonces" onClick={closeMenu} className="site-nav-secondary">Mes annonces</Link>
+              <Link to="/mes-demandes" onClick={closeMenu} className="site-nav-secondary">Mes demandes</Link>
               <Link to="/favoris" onClick={closeMenu} className="site-nav-secondary">Mes favoris</Link>
               <button
                 type="button"

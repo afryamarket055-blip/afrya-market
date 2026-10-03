@@ -37,6 +37,7 @@ import Privacy from './pages/Privacy'
 import JeRecherche from './pages/JeRecherche'
 import DemandeDetails from './pages/DemandeDetails'
 import Demandes from './pages/Demandes'
+import MesDemandes from './pages/MesDemandes'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -582,6 +583,15 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <JeRecherche />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/mes-demandes"
+        element={
+          <ProtectedRoute>
+            <MesDemandes />
           </ProtectedRoute>
         }
       />
