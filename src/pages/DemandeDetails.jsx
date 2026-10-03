@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
 import PageMeta from '../components/PageMeta'
 import LoadingState from '../components/LoadingState'
@@ -18,6 +19,7 @@ function DemandeDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const toast = useToast()
 
   const [demand, setDemand] = useState(null)
   const [matches, setMatches] = useState([])
@@ -97,7 +99,7 @@ function DemandeDetails() {
       return
     }
     if (user.id === demand.user_id) {
-      alert('Vous ne pouvez pas proposer votre propre demande.')
+      toast.warning('Vous ne pouvez pas proposer votre propre demande.')
       return
     }
 
@@ -131,7 +133,7 @@ function DemandeDetails() {
 
     if (createError) {
       console.error('Erreur creation conversation :', createError)
-      alert(createError.message || "Impossible d'ouvrir la conversation.")
+      toast.error(createError.message || "Impossible d'ouvrir la conversation.")
       return
     }
 

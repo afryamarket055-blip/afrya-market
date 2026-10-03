@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
 
 const STATUS_LABELS = {
@@ -42,6 +43,7 @@ function formatDate(dateString) {
 }
 
 function AdminReports() {
+  const toast = useToast()
   const [reports, setReports] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -94,7 +96,7 @@ function AdminReports() {
 
     if (error) {
       console.error('Erreur update statut :', error)
-      alert('Erreur lors de la mise a jour.')
+      toast.error('Erreur lors de la mise a jour.')
       return
     }
 

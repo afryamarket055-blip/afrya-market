@@ -2,6 +2,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
 import ListingCard from '../ListingCard'
 import ReportModal from '../components/ReportModal'
@@ -19,6 +20,7 @@ function formatMemberSince(dateString) {
 function ListingDetails({ listings = [] }) {
   const { id } = useParams()
   const { user } = useAuth()
+  const toast = useToast()
   const navigate = useNavigate()
 
   const [galleryImages, setGalleryImages] = useState([])
@@ -119,7 +121,7 @@ function ListingDetails({ listings = [] }) {
       return
     }
     if (user.id === sellerId) {
-      alert('Vous ne pouvez pas contacter votre propre annonce.')
+      toast.warning('Vous ne pouvez pas contacter votre propre annonce.')
       return
     }
 

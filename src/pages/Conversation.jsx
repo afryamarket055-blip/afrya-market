@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
 
@@ -35,6 +36,7 @@ function formatDayLabel(dateString) {
 function Conversation() {
   const { id } = useParams()
   const { user } = useAuth()
+  const toast = useToast()
 
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
@@ -181,7 +183,7 @@ function Conversation() {
 
     if (error) {
       console.error('Erreur envoi message :', error)
-      alert("Erreur lors de l'envoi du message.")
+      toast.error("Erreur lors de l'envoi du message.")
       return
     }
 

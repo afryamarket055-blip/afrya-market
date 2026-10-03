@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
 import ListingCard from '../ListingCard'
 
 function MyListings() {
   const { user } = useAuth()
+  const toast = useToast()
   const [listings, setListings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -172,7 +174,7 @@ function MyListings() {
 
     if (error) {
       console.error('Erreur suppression :', error)
-      alert("Erreur lors de la suppression de l'annonce.")
+      toast.error("Erreur lors de la suppression de l'annonce.")
       return
     }
 
@@ -191,7 +193,7 @@ function MyListings() {
 
     if (error) {
       console.error('Erreur changement statut :', error)
-      alert('Erreur lors de la mise à jour du statut.')
+      toast.error('Erreur lors de la mise à jour du statut.')
       return
     }
 
