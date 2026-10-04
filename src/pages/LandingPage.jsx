@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import Footer from '../components/Footer'
 import PageMeta from '../components/PageMeta'
 import Icon from '../components/Icon'
 import { supabase } from '../lib/supabase'
@@ -164,42 +165,7 @@ function LandingPage() {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer-inner">
-          <div className="footer-brand">
-            <div className="logo">AFRYA <span>MARKET</span></div>
-            <p>Le marché numérique africain.</p>
-          </div>
-          <div className="footer-col">
-            <h4>AFRYA MARKET</h4>
-            <Link to="/">Accueil</Link>
-            <Link to="/annonces">Annonces</Link>
-            <Link to="/categories">Catégories</Link>
-          </div>
-          <div className="footer-col">
-            <h4>Acheter</h4>
-            <Link to="/annonces">Toutes les annonces</Link>
-            <Link to="/favoris">Mes favoris</Link>
-          </div>
-          <div className="footer-col">
-            <h4>Vendre</h4>
-            <Link to="/inscription">Créer un compte</Link>
-            <Link to="/vendre">Publier une annonce</Link>
-          </div>
-          <div className="footer-col">
-            <h4>Aide</h4>
-            <a href="#">Centre d'aide</a>
-            <a href="#">Contact</a>
-          </div>
-        </div>
-        <div className="site-footer-bottom">
-          <span>© {new Date().getFullYear()} AFRYA MARKET</span>
-          <div>
-            <a href="#">Conditions</a>
-            <a href="#">Confidentialité</a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
     </>
   )

@@ -44,6 +44,7 @@ import MesDemandes from './pages/MesDemandes'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
+import Footer from './components/Footer'
 import Icon from './components/Icon'
 import PageMeta from './components/PageMeta'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -173,50 +174,7 @@ function Home({ listings, loading, error }) {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="site-footer-inner">
-          <div className="footer-brand">
-            <div className="logo">AFRYA <span>MARKET</span></div>
-            <p>Le marché numérique africain.</p>
-          </div>
-
-          <div className="footer-col">
-            <h4>AFRYA MARKET</h4>
-            <Link to="/a-propos">À propos</Link>
-            <Link to="/comment-ca-marche">Comment ça marche</Link>
-            <Link to="/securite">Sécurité</Link>
-          </div>
-
-          <div className="footer-col">
-            <h4>Acheter</h4>
-            <Link to="/annonces">Annonces</Link>
-            <Link to="/categories">Catégories</Link>
-            <a href="#">Favoris</a>
-          </div>
-
-          <div className="footer-col">
-            <h4>Vendre</h4>
-            <Link to="/vendre">Publier une annonce</Link>
-            <Link to="/mes-annonces">Mes annonces</Link>
-            <Link to="/parametres">Vendre professionnellement</Link>
-          </div>
-
-          <div className="footer-col">
-            <h4>Aide</h4>
-            <Link to="/aide">Centre d'aide</Link>
-            <Link to="/contact">Contact</Link>
-            <Link to="/signaler">Signaler un problème</Link>
-          </div>
-        </div>
-
-        <div className="site-footer-bottom">
-          <span>© {new Date().getFullYear()} AFRYA MARKET</span>
-          <div>
-            <Link to="/conditions">Conditions</Link>
-            <Link to="/confidentialite">Confidentialité</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
