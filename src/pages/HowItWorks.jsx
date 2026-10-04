@@ -1,35 +1,36 @@
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import PageMeta from '../components/PageMeta'
 
 const BUYER_STEPS = [
   {
     num: 1,
-    icon: '🔍',
+    iconName: 'search',
     title: 'Cherchez',
     text: 'Utilisez la barre de recherche ou explorez les catégories pour trouver ce qui vous intéresse.',
   },
   {
     num: 2,
-    icon: '📦',
+    iconName: 'package',
     title: 'Consultez',
     text: 'Photos, prix, description complète, localisation, informations du vendeur.',
   },
   {
     num: 3,
-    icon: '💬',
+    iconName: 'message',
     title: 'Contactez',
     text: 'Discutez directement avec le vendeur via la messagerie sécurisée d AFRYA MARKET.',
   },
   {
     num: 4,
-    icon: '🤝',
+    iconName: 'handshake',
     title: 'Commandez',
     text: 'Formalisez la transaction : mode de réception, paiement, tout est enregistré.',
   },
   {
     num: 5,
-    icon: '✅',
+    iconName: 'check-circle',
     title: 'Recevez',
     text: 'Retrait en main propre ou livraison. Confirmez la réception et laissez un avis.',
   },
@@ -38,47 +39,47 @@ const BUYER_STEPS = [
 const SELLER_STEPS = [
   {
     num: 1,
-    icon: '👤',
+    iconName: 'user',
     title: 'Créez un compte',
     text: 'Inscription gratuite en 30 secondes. Complétez votre profil pour inspirer confiance.',
   },
   {
     num: 2,
-    icon: '📸',
+    iconName: 'camera',
     title: 'Publiez',
     text: 'Ajoutez des photos, un titre clair, une description honnête et un prix juste.',
   },
   {
     num: 3,
-    icon: '🔔',
+    iconName: 'bell',
     title: 'Recevez des demandes',
     text: 'Les acheteurs intéressés vous contactent directement. Vous recevez une notification.',
   },
   {
     num: 4,
-    icon: '💬',
+    iconName: 'message',
     title: 'Discutez',
     text: 'Négociez le prix, précisez les détails, répondez aux questions.',
   },
   {
     num: 5,
-    icon: '💰',
+    iconName: 'wallet',
     title: 'Vendez',
     text: 'Confirmez la commande, expédiez ou remettez en main propre, encaissez.',
   },
   {
     num: 6,
-    icon: '🚀',
+    iconName: 'rocket',
     title: 'Boostez (optionnel)',
     text: 'Gagnez en visibilité avec un boost payant. Votre annonce apparaît en priorité.',
   },
 ]
 
 const TRUST_ITEMS = [
-  { icon: '✓', text: 'Vendeurs vérifiés' },
-  { icon: '✓', text: 'Avis authentiques' },
-  { icon: '✓', text: 'Système de signalement' },
-  { icon: '✓', text: 'Messagerie sécurisée' },
+  { iconName: 'check', text: 'Vendeurs vérifiés' },
+  { iconName: 'check', text: 'Avis authentiques' },
+  { iconName: 'check', text: 'Système de signalement' },
+  { iconName: 'check', text: 'Messagerie sécurisée' },
 ]
 
 function HowItWorks() {
@@ -98,7 +99,7 @@ function HowItWorks() {
         {/* ACHETEURS */}
         <section className="how-section">
           <div className="how-section-header">
-            <div className="how-section-icon how-section-icon-buyer">🛒</div>
+            <div className="how-section-icon how-section-icon-buyer"><Icon name="shopping-cart" size={32} /></div>
             <div>
               <h2>Comment acheter</h2>
               <p>Vous cherchez un article ? Voici comment procéder.</p>
@@ -109,7 +110,7 @@ function HowItWorks() {
             {BUYER_STEPS.map((step) => (
               <div key={step.num} className="how-step">
                 <div className="how-step-num">{step.num}</div>
-                <div className="how-step-icon">{step.icon}</div>
+                <div className="how-step-icon"><Icon name={step.iconName} size={32} /></div>
                 <h3>{step.title}</h3>
                 <p>{step.text}</p>
               </div>
@@ -120,7 +121,7 @@ function HowItWorks() {
         {/* VENDEURS */}
         <section className="how-section how-section-alt">
           <div className="how-section-header">
-            <div className="how-section-icon how-section-icon-seller">🏪</div>
+            <div className="how-section-icon how-section-icon-seller"><Icon name="store" size={32} /></div>
             <div>
               <h2>Comment vendre</h2>
               <p>Vous avez quelque chose à vendre ? Lancez-vous.</p>
@@ -131,7 +132,7 @@ function HowItWorks() {
             {SELLER_STEPS.map((step) => (
               <div key={step.num} className="how-step">
                 <div className="how-step-num">{step.num}</div>
-                <div className="how-step-icon">{step.icon}</div>
+                <div className="how-step-icon"><Icon name={step.iconName} size={32} /></div>
                 <h3>{step.title}</h3>
                 <p>{step.text}</p>
               </div>
@@ -148,7 +149,7 @@ function HowItWorks() {
           <div className="how-trust-grid">
             {TRUST_ITEMS.map((item, i) => (
               <div key={i} className="how-trust-item">
-                <span className="how-trust-check">{item.icon}</span>
+                <span className="how-trust-check"><Icon name={item.iconName} size={16} /></span>
                 <span>{item.text}</span>
               </div>
             ))}

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 const TYPES = [
   'Annonce suspecte',
@@ -14,22 +15,22 @@ const EMAIL = 'afryaone@gmail.com'
 
 const INFO_CARDS = [
   {
-    icon: '⚠️',
+    iconName: 'alert-triangle',
     title: 'Annonce suspecte',
     text: 'Prix trop bas, photos volees, description douteuse.',
   },
   {
-    icon: '🚫',
+    iconName: 'ban',
     title: 'Utilisateur suspect',
     text: 'Comportement abusif, tentative d arnaque, harcelement.',
   },
   {
-    icon: '🐛',
+    iconName: 'bug',
     title: 'Bug technique',
     text: 'Un bouton ne marche pas, une page affiche une erreur.',
   },
   {
-    icon: '💬',
+    iconName: 'message',
     title: 'Autre chose',
     text: 'Tout autre probleme que vous rencontrez.',
   },
@@ -85,7 +86,7 @@ function Report() {
           <div className="report-info-grid">
             {INFO_CARDS.map((card, i) => (
               <div key={i} className="report-info-card">
-                <div className="report-info-icon">{card.icon}</div>
+                <div className="report-info-icon"><Icon name={card.iconName} size={32} /></div>
                 <h3>{card.title}</h3>
                 <p>{card.text}</p>
               </div>

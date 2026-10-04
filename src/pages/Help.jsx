@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import PageMeta from '../components/PageMeta'
 
 const CATEGORIES = [
-  { key: 'all', label: 'Tout', icon: '📋' },
-  { key: 'compte', label: 'Compte', icon: '👤' },
-  { key: 'annonces', label: 'Annonces', icon: '📦' },
-  { key: 'achats', label: 'Achats', icon: '🛒' },
-  { key: 'ventes', label: 'Ventes', icon: '🏪' },
-  { key: 'paiement', label: 'Paiement', icon: '💰' },
-  { key: 'securite', label: 'Sécurité', icon: '🛡️' },
+  { key: 'all', label: 'Tout', iconName: 'clipboard-list' },
+  { key: 'compte', label: 'Compte', iconName: 'user' },
+  { key: 'annonces', label: 'Annonces', iconName: 'package' },
+  { key: 'achats', label: 'Achats', iconName: 'shopping-cart' },
+  { key: 'ventes', label: 'Ventes', iconName: 'store' },
+  { key: 'paiement', label: 'Paiement', iconName: 'wallet' },
+  { key: 'securite', label: 'Sécurité', iconName: 'shield' },
 ]
 
 const FAQ = [
@@ -121,7 +122,7 @@ function Help() {
             Trouvez rapidement des réponses à vos questions.
           </p>
           <div className="help-search">
-            <span className="help-search-icon">🔍</span>
+            <span className="help-search-icon"><Icon name="search" size={18} /></span>
             <input
               type="text"
               placeholder="Rechercher une question..."
@@ -139,7 +140,7 @@ function Help() {
               className={'help-cat' + (activeCat === cat.key ? ' is-active' : '')}
               onClick={() => setActiveCat(cat.key)}
             >
-              <span>{cat.icon}</span>
+              <Icon name={cat.iconName} size={16} />
               {cat.label}
             </button>
           ))}
@@ -147,7 +148,7 @@ function Help() {
 
         {filtered.length === 0 ? (
           <div className="help-empty">
-            <div className="help-empty-icon">🔍</div>
+            <div className="help-empty-icon"><Icon name="search" size={40} /></div>
             <p>Aucune question ne correspond à votre recherche.</p>
           </div>
         ) : (

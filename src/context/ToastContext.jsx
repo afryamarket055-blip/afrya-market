@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react'
+import Icon from '../components/Icon'
 
 const ToastContext = createContext(null)
 
@@ -37,11 +38,11 @@ export function ToastProvider({ children }) {
     info: (msg, duration) => addToast('info', msg, duration),
   }
 
-  const ICONS = {
-    success: '✓',
-    error: '✕',
-    warning: '⚠',
-    info: 'ℹ',
+  const ICON_NAMES = {
+    success: 'check',
+    error: 'x',
+    warning: 'alert-triangle',
+    info: 'info',
   }
 
   return (
@@ -55,7 +56,7 @@ export function ToastProvider({ children }) {
             role="alert"
             onClick={() => removeToast(t.id)}
           >
-            <span className="toast-icon">{ICONS[t.type] || '•'}</span>
+            <span className="toast-icon"><Icon name={ICON_NAMES[t.type] || 'info'} size={16} /></span>
             <span className="toast-message">{t.message}</span>
           </div>
         ))}

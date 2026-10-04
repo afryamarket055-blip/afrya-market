@@ -12,7 +12,7 @@ import {
   ChevronDown, LogIn, UserPlus, HelpCircle, Shield,
   FileText, Mail, Send, Loader2, Trash2, Pencil, PlusCircle,
   CheckCircle2, XCircle, AlertCircle, Info, Filter, SlidersHorizontal,
-  Handshake, Target,
+  Handshake, Target, ClipboardList, ShoppingCart, Ban, Bug,
 } from 'lucide-react'
 
 const ICONS = {
@@ -68,6 +68,10 @@ const ICONS = {
   shield: Shield,
   'file-text': FileText,
   mail: Mail,
+  'clipboard-list': ClipboardList,
+  'shopping-cart': ShoppingCart,
+  ban: Ban,
+  bug: Bug,
   handshake: Handshake,
   target: Target,
   'chevron-right': ChevronRight,
