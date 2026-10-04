@@ -401,8 +401,7 @@ function DemandeDetails() {
                     <img
                       src={listing.image}
                       alt={listing.title}
-                      style={{ width: '100%', height: '140px', objectFit: 'cover' }}
-                    />
+                      style={{ width: '100%', height: '140px', objectFit: 'cover' }} loading="lazy" decoding="async" />
                     <div style={{ padding: '10px' }}>
                       {isMine && (
                         <span

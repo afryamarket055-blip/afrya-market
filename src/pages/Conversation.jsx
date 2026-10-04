@@ -247,8 +247,7 @@ function Conversation() {
             <img
               src={otherProfile.avatar_url}
               alt={otherProfile.full_name || 'Utilisateur'}
-              className="conversation-avatar"
-            />
+              className="conversation-avatar" loading="lazy" decoding="async" />
           ) : (
             <div className="conversation-avatar conversation-avatar-placeholder">
               <Icon name="user" size={32} />
@@ -276,8 +275,7 @@ function Conversation() {
             <img
               src={listingInfo.image}
               alt={listingInfo.title}
-              className="conversation-header-listing"
-            />
+              className="conversation-header-listing" loading="lazy" decoding="async" />
           )}
         </header>
 

@@ -241,8 +241,7 @@ function EditListing() {
               <img
                 src={imageUrl}
                 alt="Aperçu"
-                style={{ width: '150px', display: 'block', marginBottom: '10px' }}
-              />
+                style={{ width: '150px', display: 'block', marginBottom: '10px' }} loading="lazy" decoding="async" />
             )}
             <input
               type="file"

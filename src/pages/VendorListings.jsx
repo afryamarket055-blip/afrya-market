@@ -143,8 +143,7 @@ function VendorListings() {
               <img
                 src={vendor.shop_logo || vendor.avatar_url}
                 alt={displayName}
-                className="vendor-listings-avatar"
-              />
+                className="vendor-listings-avatar" loading="lazy" decoding="async" />
             ) : (
               <div className="vendor-listings-avatar vendor-listings-avatar-placeholder"><Icon name="user" size={32} /></div>
             )}

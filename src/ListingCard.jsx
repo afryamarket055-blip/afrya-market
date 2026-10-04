@@ -89,7 +89,7 @@ function ListingCard({ id, title, price, location, condition, category, image, s
   return (
     <article className="listing-card card">
       <div className="listing-image">
-        <img src={image} alt={title} loading="lazy" />
+        <img src={image} alt={title} loading="lazy" decoding="async" width={400} height={300} />
         {status === 'vendu' ? (
           <span className="badge badge-sold listing-badge">VENDU</span>
         ) : isBoosted ? (

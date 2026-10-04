@@ -345,8 +345,7 @@ function Settings() {
                         <img
                           src={b.profile.avatar_url}
                           alt=""
-                          style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
-                        />
+                          style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} loading="lazy" decoding="async" />
                       ) : (
                         <div
                           style={{
@@ -476,7 +475,7 @@ function Settings() {
                     <label>Logo de la boutique</label>
                     <div className="shop-upload-block">
                       {shopLogo ? (
-                        <img src={shopLogo} alt="Logo" className="shop-logo-preview" />
+                        <img src={shopLogo} alt="Logo" className="shop-logo-preview" loading="lazy" decoding="async" />
                       ) : (
                         <div className="shop-logo-preview shop-logo-placeholder">
                           Logo
@@ -501,7 +500,7 @@ function Settings() {
                     <label>Banniere de la boutique</label>
                     <div className="shop-upload-block shop-upload-block-banner">
                       {shopBanner ? (
-                        <img src={shopBanner} alt="Banniere" className="shop-banner-preview" />
+                        <img src={shopBanner} alt="Banniere" className="shop-banner-preview" loading="lazy" decoding="async" />
                       ) : (
                         <div className="shop-banner-preview shop-banner-placeholder">
                           Banniere

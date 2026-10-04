@@ -281,7 +281,7 @@ function OrderDetails() {
           <div className="order-listing-card">
             <Link to={'/annonce/' + listing.id} className="order-listing-link">
               {listing.image && (
-                <img src={listing.image} alt="" className="order-listing-img" />
+                <img src={listing.image} alt="" className="order-listing-img" loading="lazy" decoding="async" />
               )}
               <div className="order-listing-info">
                 <strong>{listing.title}</strong>

@@ -175,8 +175,7 @@ function MyOrders() {
                     <img
                       src={order.listing.image}
                       alt=""
-                      className="my-order-img"
-                    />
+                      className="my-order-img" loading="lazy" decoding="async" />
                   ) : (
                     <div className="my-order-img my-order-img-placeholder"><Icon name="package" size={28} /></div>
                   )}

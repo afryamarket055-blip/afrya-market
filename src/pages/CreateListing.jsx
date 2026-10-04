@@ -359,8 +359,7 @@ async function handleSubmit(event) {
                   >
                     <img
                       src={image.url}
-                      alt={`Aperçu ${index + 1}`}
-                    />
+                      alt={`Aperçu ${index + 1}`} loading="lazy" decoding="async" />
                   </div>
                 ))}
               </div>
