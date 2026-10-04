@@ -9002,3 +9002,24 @@ img {
     padding: var(--space-xl) var(--space-md);
   }
 }
+
+/* ============================================================
+   PHASE 3d — CTA note (petit lien sous les boutons)
+   ============================================================ */
+
+.landing-cta-note {
+  margin-top: var(--space-md);
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.landing-cta-note a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.landing-cta-note a:hover {
+  text-decoration-thickness: 2px;
+}

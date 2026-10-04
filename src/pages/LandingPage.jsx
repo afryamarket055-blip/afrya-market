@@ -16,10 +16,9 @@ const FEATURES = [
 ]
 
 const STEPS = [
-  { num: 1, iconName: 'search', title: 'Recherchez', text: 'Trouvez ce dont vous avez besoin près de chez vous.' },
-  { num: 2, iconName: 'package', title: 'Consultez', text: 'Voyez les détails, photos et prix du vendeur.' },
-  { num: 3, iconName: 'message', title: 'Contactez', text: 'Échangez et négociez directement.' },
-  { num: 4, iconName: 'handshake', title: 'Concluez', text: 'Achetez ou vendez en toute simplicité.' },
+  { num: 1, iconName: 'search', title: 'Recherchez', text: 'Trouvez le produit qui vous intéresse près de chez vous.' },
+  { num: 2, iconName: 'message', title: 'Contactez', text: 'Échangez directement avec le vendeur, sans intermédiaire.' },
+  { num: 3, iconName: 'handshake', title: 'Concluez', text: 'Rencontrez-vous, vérifiez et finalisez en confiance.' },
 ]
 
 const CATEGORIES = [
@@ -233,7 +232,7 @@ function LandingPage() {
           <div className="landing-container">
             <div className="landing-section-heading">
               <span>COMMENT ÇA MARCHE</span>
-              <h2>4 étapes simples</h2>
+              <h2>3 étapes simples</h2>
             </div>
             <div className="landing-steps">
               {STEPS.map((s) => (
@@ -273,16 +272,20 @@ function LandingPage() {
 
         <section className="landing-cta">
           <div className="landing-cta-inner">
-            <h2>Prêt à commencer ?</h2>
-            <p>Rejoignez AFRYA MARKET et donnez une seconde vie à vos objets.</p>
+            <h2>Prêt à rejoindre le marché ?</h2>
+            <p>Vendez ce qui dort chez vous, ou trouvez l'article qu'il vous faut.</p>
             <div className="landing-cta-actions">
-              <Link to="/inscription" className="btn btn-primary btn-lg">
-                Créer mon compte
+              <Link to="/vendre" className="btn btn-primary btn-lg">
+                + Vendre un article
               </Link>
-              <Link to="/annonces" className="btn btn-secondary btn-lg">
-                Voir les annonces
+              <Link to="/je-recherche" className="btn btn-secondary btn-lg">
+                <Icon name="search" size={18} />
+                <span>Je recherche un article</span>
               </Link>
             </div>
+            <p className="landing-cta-note">
+              Pas encore de compte ? <Link to="/inscription">Créer un compte gratuit</Link>
+            </p>
           </div>
         </section>
       </main>
