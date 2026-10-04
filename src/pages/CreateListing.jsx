@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 function CreateListing({ onCreateListing }) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -195,33 +196,19 @@ async function handleSubmit(event) {
                     Choisir une catégorie
                   </option>
 
-                  <option value="Téléphones">
-                    📱 Téléphones
-                  </option>
+                  <option value="Téléphones">Téléphones</option>
 
-                  <option value="Informatique">
-                    💻 Informatique
-                  </option>
+                  <option value="Informatique">Informatique</option>
 
-                  <option value="Électroménager">
-                    📺 Électroménager
-                  </option>
+                  <option value="Électroménager">Électroménager</option>
 
-                  <option value="Mode">
-                    👕 Mode
-                  </option>
+                  <option value="Mode">Mode</option>
 
-                  <option value="Maison">
-                    🛋️ Maison
-                  </option>
+                  <option value="Maison">Maison</option>
 
-                  <option value="Véhicules">
-                    🏍️ Véhicules
-                  </option>
+                  <option value="Véhicules">Véhicules</option>
 
-                  <option value="Autres">
-                    📦 Autres
-                  </option>
+                  <option value="Autres">Autres</option>
                 </select>
               </div>
 
@@ -338,7 +325,7 @@ async function handleSubmit(event) {
                 className="upload-box"
               >
                 <div className="upload-icon">
-                  📷
+                  <Icon name="camera" size={32} />
                 </div>
 
                 <strong>

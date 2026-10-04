@@ -126,13 +126,13 @@ function JeRecherche() {
                 required
               >
                 <option value="">Choisir une categorie</option>
-                <option value="Téléphones">📱 Téléphones</option>
-                <option value="Informatique">💻 Informatique</option>
-                <option value="Électroménager">📺 Électroménager</option>
-                <option value="Mode">👕 Mode</option>
-                <option value="Maison">🛋 Maison</option>
-                <option value="Véhicules">🏍 Véhicules</option>
-                <option value="Autres">📦 Autres</option>
+                <option value="Téléphones">Téléphones</option>
+                <option value="Informatique">Informatique</option>
+                <option value="Électroménager">Électroménager</option>
+                <option value="Mode">Mode</option>
+                <option value="Maison">Maison</option>
+                <option value="Véhicules">Véhicules</option>
+                <option value="Autres">Autres</option>
               </select>
             </div>
 

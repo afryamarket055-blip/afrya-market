@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import ConfirmDialog from '../components/ConfirmDialog'
 import ListingCard from '../ListingCard'
 
@@ -230,7 +231,7 @@ function MyListings() {
 
             {!loading && !error && pendingOrdersCount > 0 && (
               <div className="vendor-alert">
-                <div className="vendor-alert-icon">⚠️</div>
+                <div className="vendor-alert-icon"><Icon name="alert-triangle" size={20} /></div>
                 <div className="vendor-alert-body">
                   <strong>
                     {pendingOrdersCount} commande{pendingOrdersCount > 1 ? 's' : ''} à traiter
@@ -250,17 +251,17 @@ function MyListings() {
               <section className="stats-dashboard">
                 <div className="stats-grid">
                   <div className="stat-card">
-                    <div className="stat-icon">👁</div>
+                    <div className="stat-icon"><Icon name="eye" size={18} /></div>
                     <div className="stat-value">{stats.views}</div>
                     <div className="stat-label">Vues</div>
                   </div>
                   <div className="stat-card">
-                    <div className="stat-icon">❤</div>
+                    <div className="stat-icon"><Icon name="heart" size={18} /></div>
                     <div className="stat-value">{stats.likes}</div>
                     <div className="stat-label">Likes</div>
                   </div>
                   <div className="stat-card">
-                    <div className="stat-icon">🔖</div>
+                    <div className="stat-icon"><Icon name="bookmark" size={18} /></div>
                     <div className="stat-value">{stats.favorites}</div>
                     <div className="stat-label">Favoris</div>
                   </div>
@@ -323,7 +324,7 @@ function MyListings() {
             </div>
           ) : listings.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📦</div>
+              <div className="empty-icon"><Icon name="package" size={40} /></div>
               <p>Vous n'avez encore publié aucune annonce.</p>
               <Link to="/vendre" className="btn btn-primary" style={{ marginTop: '12px' }}>
                 Publier ma première annonce

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import ListingCard from '../ListingCard'
 import Button from '../components/Button'
 import EmptyState from '../components/EmptyState'
@@ -62,7 +63,7 @@ function Favorites() {
             </div>
           ) : listings.length === 0 ? (
             <EmptyState
-              icon="🔖"
+              icon={<Icon name="bookmark" size={40} />}
               message="Vous n'avez encore enregistré aucune annonce."
               action={
                 <Link to="/annonces" className="btn btn-primary">
