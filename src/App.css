@@ -8175,3 +8175,53 @@ img {
     width: 100%;
   }
 }
+
+/* ============================================================
+   DESIGN SYSTEM v2 — Variables courtes (Phase 1)
+   Ces variables coexistent avec les anciennes (--color-*).
+   Aucune règle existante n'est modifiée.
+   ============================================================ */
+
+:root {
+  /* Couleurs de marque (nouvelles) */
+  --primary: #1d4ed8;
+  --accent: #ea580c;
+  --accent-dark: #c2410c;
+
+  /* Fonds & surfaces */
+  --bg: #ffffff;
+  --surface: #f9fafb;
+
+  /* Texte */
+  --text: #111827;
+  --text-muted: #4b5563;
+  --text-faint: #9ca3af;
+
+  /* Contours */
+  --border: #e5e7eb;
+
+  /* Etats */
+  --danger: #dc2626;
+  --success: #16a34a;
+  --warning: #d97706;
+
+  /* Echelle d'espacement */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 16px;
+  --s-4: 24px;
+  --s-5: 32px;
+
+  /* Rayons */
+  --r-input: 8px;
+  --r-card: 16px;
+  --r-pill: 999px;
+
+  /* Ombres (2 niveaux) */
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --sh-2: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Transitions */
+  --t-fast: 0.15s ease;
+  --t-normal: 0.2s ease;
+}
