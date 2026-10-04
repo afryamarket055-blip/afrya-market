@@ -3,15 +3,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import ConfirmDialog from '../components/ConfirmDialog'
 import LoadingState from '../components/LoadingState'
 import EmptyState from '../components/EmptyState'
 
 const STATUS_LABELS = {
-  active: { label: '🟢 Active', bg: '#e7f5ed', color: '#0a7a3a' },
-  found: { label: '✅ Trouvée', bg: '#e7eaf5', color: '#2c3e9e' },
-  expired: { label: '⏰ Expirée', bg: '#f5eae7', color: '#9e4a2c' },
-  cancelled: { label: '❌ Annulée', bg: '#f5e7e7', color: '#9e2c2c' },
+  active: { label: 'Active', icon: 'check-circle', bg: '#e7f5ed', color: '#0a7a3a' },
+  found: { label: 'Trouvée', icon: 'check', bg: '#e7eaf5', color: '#2c3e9e' },
+  expired: { label: 'Expirée', icon: 'clock', bg: '#f5eae7', color: '#9e4a2c' },
+  cancelled: { label: 'Annulée', icon: 'x', bg: '#f5e7e7', color: '#9e2c2c' },
 }
 
 const FILTERS = [
@@ -150,10 +151,10 @@ function MesDemandes() {
         {loading ? (
           <LoadingState message="Chargement de vos demandes..." />
         ) : error ? (
-          <EmptyState icon="⚠" title="Erreur" message={error} />
+          <EmptyState icon={<Icon name="alert-triangle" size={40} />} title="Erreur" message={error} />
         ) : filtered.length === 0 ? (
           <EmptyState
-            icon="🔍"
+            icon={<Icon name="search" size={40} />}
             title={
               demands.length === 0
                 ? 'Aucune demande pour le moment'
@@ -203,13 +204,13 @@ function MesDemandes() {
                           marginBottom: '6px',
                         }}
                       >
-                        {s.label}
+                        <Icon name={s.icon} size={12} /> {s.label}
                       </span>
                       <h3 style={{ margin: '4px 0 6px', fontSize: '17px' }}>
                         {demand.title}
                       </h3>
                       <p style={{ margin: 0, color: '#666', fontSize: '13px' }}>
-                        📍 {demand.city} · {demand.category}
+                        <Icon name="map-pin" size={12} /> {demand.city} · {demand.category}
                         {demand.budget_max && (
                           <>
                             {' · '}
@@ -242,7 +243,7 @@ function MesDemandes() {
                         disabled={busy}
                         onClick={() => updateStatus(demand.id, 'found')}
                       >
-                        ✅ J'ai trouvé
+                        <Icon name="check" size={14} /> J'ai trouvé
                       </button>
                     )}
                     {isActive && (
@@ -253,7 +254,7 @@ function MesDemandes() {
                         disabled={busy}
                         onClick={() => updateStatus(demand.id, 'cancelled')}
                       >
-                        ❌ Annuler
+                        <Icon name="x" size={14} /> Annuler
                       </button>
                     )}
                     <button
@@ -268,7 +269,7 @@ function MesDemandes() {
                       disabled={busy}
                       onClick={() => handleDelete(demand.id)}
                     >
-                      🗑 Supprimer
+                      <Icon name="trash" size={14} /> Supprimer
                     </button>
                   </div>
                 </div>

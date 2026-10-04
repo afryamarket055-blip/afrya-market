@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import PageMeta from '../components/PageMeta'
 import LoadingState from '../components/LoadingState'
 import EmptyState from '../components/EmptyState'
@@ -179,7 +180,7 @@ function DemandeDetails() {
       <div className="app">
         <Nav />
         <EmptyState
-          icon="❌"
+          icon={<Icon name="x-circle" size={40} />}
           title="Demande introuvable"
           message="Cette demande n'existe plus ou a ete supprimee."
         />
@@ -227,10 +228,10 @@ function DemandeDetails() {
               marginBottom: '12px',
             }}
           >
-            {demand.status === 'active' && '🟢 Active'}
-            {demand.status === 'found' && '✅ Trouvée'}
-            {demand.status === 'expired' && '⏰ Expirée'}
-            {demand.status === 'cancelled' && '❌ Annulée'}
+            {demand.status === 'active' && 'Active'}
+            {demand.status === 'found' && 'Trouvée'}
+            {demand.status === 'expired' && 'Expirée'}
+            {demand.status === 'cancelled' && 'Annulée'}
           </span>
           {isRecent(demand.created_at) && (
             <span
@@ -246,7 +247,7 @@ function DemandeDetails() {
                 marginBottom: '12px',
               }}
             >
-              🆕 Nouveau
+              <Icon name="sparkles" size={11} /> Nouveau
             </span>
           )}
 
@@ -299,7 +300,7 @@ function DemandeDetails() {
             {demand.delivery && (
               <div>
                 <small style={{ color: '#666', display: 'block' }}>Livraison</small>
-                <strong>🛵 Souhaitée</strong>
+                <strong style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Icon name="truck" size={14} /> Souhaitée</strong>
               </div>
             )}
 
@@ -322,7 +323,7 @@ function DemandeDetails() {
                   onClick={() => updateStatus('found')}
                   disabled={updating}
                 >
-                  ✅ J'ai trouvé
+                  <Icon name="check" size={16} /> J'ai trouvé
                 </button>
                 <button
                   type="button"
@@ -350,7 +351,7 @@ function DemandeDetails() {
                 gap: '8px',
               }}
             >
-              <span style={{ fontSize: '18px' }}>📱</span> Partager sur WhatsApp
+              <Icon name="message" size={18} /> Partager sur WhatsApp
             </button>
           </div>
         </div>
@@ -426,7 +427,7 @@ function DemandeDetails() {
                         {Number(listing.price).toLocaleString('fr-FR')} FCFA
                       </p>
                       <p style={{ margin: '4px 0 0', color: '#666', fontSize: '12px' }}>
-                        📍 {listing.location}
+                        <Icon name="map-pin" size={12} /> {listing.location}
                       </p>
                     </div>
                   </Link>

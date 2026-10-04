@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import LoadingState from '../components/LoadingState'
 import SkeletonList from '../components/SkeletonList'
 import EmptyState from '../components/EmptyState'
@@ -137,10 +138,10 @@ function Demandes() {
         {loading ? (
           <SkeletonList count={6} />
         ) : error ? (
-          <EmptyState icon="⚠" title="Erreur" message={error} />
+          <EmptyState icon={<Icon name="alert-triangle" size={40} />} title="Erreur" message={error} />
         ) : demands.length === 0 ? (
           <EmptyState
-            icon="🔍"
+            icon={<Icon name="search" size={40} />}
             title="Aucune demande pour le moment"
             message={
               activeCategory !== 'Toutes' || activeCity
@@ -171,7 +172,7 @@ function Demandes() {
                       <h3 style={{ margin: '0 0 6px', fontSize: '17px' }}>
                         {isRecent(demand.created_at) && (
                           <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '10px', background: '#fff4d6', color: '#8a6800', fontSize: '11px', fontWeight: 'bold', marginRight: '6px', verticalAlign: 'middle' }}>
-                            🆕 Nouveau
+                            <Icon name="sparkles" size={11} /> Nouveau
                           </span>
                         )}
                         {demand.title}
@@ -182,7 +183,7 @@ function Demandes() {
                         )}
                       </h3>
                       <p style={{ margin: 0, color: '#666', fontSize: '13px' }}>
-                        📍 {demand.city} · {demand.category}
+                        <Icon name="map-pin" size={12} /> {demand.city} · {demand.category}
                         {demand.budget_max && (
                           <>
                             {' · '}

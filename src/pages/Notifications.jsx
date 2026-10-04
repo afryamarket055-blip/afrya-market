@@ -3,21 +3,22 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
-const ICONS = {
-  message: '💬',
-  like: '❤',
-  favorite: '🔖',
-  review: '⭐',
-  boost_activated: '🚀',
-  shop_verified: '🏪',
-  order_update: '📦',
-  demand_match: '🎯',
-  system: '🔔',
+const ICON_NAMES = {
+  message: 'message',
+  like: 'heart',
+  favorite: 'bookmark',
+  review: 'star',
+  boost_activated: 'rocket',
+  shop_verified: 'store',
+  order_update: 'package',
+  demand_match: 'target',
+  system: 'bell',
 }
 
-function getIcon(type) {
-  return ICONS[type] || '🔔'
+function getIconName(type) {
+  return ICON_NAMES[type] || 'bell'
 }
 
 function formatRelativeDate(dateString) {
@@ -183,12 +184,12 @@ function Notifications() {
           </div>
         ) : error ? (
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>Impossible de charger vos notifications.</p>
           </div>
         ) : notifications.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">🔔</div>
+            <div className="empty-icon"><Icon name="bell" size={40} /></div>
             <p>Vous n'avez aucune notification pour l'instant.</p>
           </div>
         ) : (
@@ -211,7 +212,7 @@ function Notifications() {
                   onClick={() => handleClick(n)}
                 >
                   <div className="notification-icon">
-                    {getIcon(n.type)}
+                    <Icon name={getIconName(n.type)} size={20} />
                   </div>
                   <div className="notification-body">
                     <p className="notification-content">{n.content}</p>
