@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import PageMeta from '../components/PageMeta'
 
 const SUBJECTS = [
@@ -66,7 +67,7 @@ ${message}`
             </a>
 
             <a href={`tel:${PHONE.replace(/\s/g, '')}`} className="contact-info-card">
-              <div className="contact-info-icon">📞</div>
+              <div className="contact-info-icon"><Icon name="phone" size={24} /></div>
               <div>
                 <strong>Téléphone</strong>
                 <span>{PHONE}</span>

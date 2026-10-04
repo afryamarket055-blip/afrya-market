@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 const STATUS_LABELS = {
   pending: 'En attente',
@@ -161,7 +162,7 @@ function AdminReports() {
           </div>
         ) : error ? (
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>{error}</p>
           </div>
         ) : filtered.length === 0 ? (

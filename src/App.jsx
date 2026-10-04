@@ -44,6 +44,7 @@ import MesDemandes from './pages/MesDemandes'
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
+import Icon from './components/Icon'
 import PageMeta from './components/PageMeta'
 import ProtectedRoute from './components/ProtectedRoute'
 import ScrollToTop from './components/ScrollToTop'
@@ -93,7 +94,7 @@ function Home({ listings, loading, error }) {
               />
               <input
                 type="text"
-                placeholder="📍 Où ?"
+                placeholder="Où ?"
                 value={searchLocation}
                 onChange={(e) => setSearchLocation(e.target.value)}
               />
@@ -349,7 +350,7 @@ function AllListings({ listings, loading, error }) {
 
           <div className="all-listings-toolbar">
             <div className="all-listings-search">
-              <span className="search-icon">🔍</span>
+              <span className="search-icon"><Icon name="search" size={18} /></span>
               <input
                 type="text"
                 placeholder="Rechercher une annonce..."
@@ -373,7 +374,7 @@ function AllListings({ listings, loading, error }) {
               className="toolbar-btn"
               onClick={handleGetLocation}
             >
-              📍 {userCity ? userCity : 'Localisation'}
+              <Icon name="map-pin" size={14} /> {userCity ? userCity : 'Localisation'}
             </button>
 
             <button type="button" className="toolbar-btn" disabled>
@@ -401,7 +402,7 @@ function AllListings({ listings, loading, error }) {
               )}
               {showNearby && userCity && (
                 <div className="filter-chip">
-                  📍 Pres de <strong>{userCity}</strong>
+                  <Icon name="map-pin" size={14} /> Pres de <strong>{userCity}</strong>
                   <button
                     type="button"
                     onClick={() => setShowNearby(false)}
@@ -423,7 +424,7 @@ function AllListings({ listings, loading, error }) {
               className="nearby-toggle"
               onClick={() => setShowNearby(true)}
             >
-              📍 Voir les annonces pres de {userCity}
+              <Icon name="map-pin" size={14} /> Voir les annonces pres de {userCity}
             </button>
           )}
 
@@ -433,12 +434,12 @@ function AllListings({ listings, loading, error }) {
             </div>
           ) : error ? (
             <div className="empty-state">
-              <div className="empty-icon">⚠</div>
+              <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
               <p>Impossible de charger les annonces. Reessayez plus tard.</p>
             </div>
           ) : filteredListings.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">🔍</div>
+              <div className="empty-icon"><Icon name="search" size={40} /></div>
               <p>Aucune annonce ne correspond a votre recherche.</p>
               {hasActiveFilter && (
                 <button

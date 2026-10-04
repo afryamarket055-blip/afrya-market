@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 const PACKS = [
   {
@@ -139,7 +140,7 @@ function Booster() {
         <Nav />
         <main className="booster-page">
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>{error || 'Annonce introuvable.'}</p>
             <Link to="/mes-annonces" className="btn btn-secondary" style={{ marginTop: '12px' }}>
               Retour a mes annonces
@@ -169,7 +170,7 @@ function Booster() {
 
           {isActive ? (
             <div className="booster-status booster-status-active">
-              <div className="booster-status-icon">🚀</div>
+              <div className="booster-status-icon"><Icon name="rocket" size={32} /></div>
               <h2>Votre annonce est boostee</h2>
               <p>
                 Boost actif jusqu au <strong>{expiresAt}</strong>.

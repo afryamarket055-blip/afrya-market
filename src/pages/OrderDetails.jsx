@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 const STATUS_LABELS = {
   pending: 'En attente du vendeur',
@@ -107,7 +108,7 @@ function OrderDetails() {
         <Nav />
         <main className="order-page">
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>{error || 'Commande introuvable.'}</p>
             <Link to="/" className="btn btn-secondary" style={{ marginTop: '12px' }}>
               Retour a l accueil

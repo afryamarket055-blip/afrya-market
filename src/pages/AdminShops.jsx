@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 const FILTERS = [
   { value: 'all', label: 'Toutes' },
@@ -135,12 +136,12 @@ function AdminShops() {
           </div>
         ) : error ? (
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>{error}</p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">🏪</div>
+            <div className="empty-icon"><Icon name="store" size={40} /></div>
             <p>Aucune boutique dans cette categorie.</p>
           </div>
         ) : (
@@ -162,7 +163,7 @@ function AdminShops() {
                   {shop.shop_logo ? (
                     <img src={shop.shop_logo} alt="" className="admin-shop-logo" />
                   ) : (
-                    <div className="admin-shop-logo admin-shop-logo-placeholder">🏪</div>
+                    <div className="admin-shop-logo admin-shop-logo-placeholder"><Icon name="store" size={24} /></div>
                   )}
 
                   <div className="admin-shop-info">

@@ -114,7 +114,7 @@ function ResetPassword() {
             </div>
           ) : !hasSession ? (
             <div className="auth-success">
-              <div className="auth-success-icon">⚠</div>
+              <div className="auth-success-icon"><Icon name="alert-triangle" size={32} /></div>
               <h2>Lien invalide ou expire</h2>
               <p>
                 Ce lien de reinitialisation n est plus valide. Vous devez

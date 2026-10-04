@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 const STATUS_LABELS = {
   pending: 'En attente',
@@ -135,12 +136,12 @@ function MyOrders() {
           </div>
         ) : error ? (
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>{error}</p>
           </div>
         ) : list.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">📦</div>
+            <div className="empty-icon"><Icon name="package" size={40} /></div>
             <p>
               {tab === 'purchases'
                 ? 'Vous n avez passe aucune commande.'
@@ -177,7 +178,7 @@ function MyOrders() {
                       className="my-order-img"
                     />
                   ) : (
-                    <div className="my-order-img my-order-img-placeholder">📦</div>
+                    <div className="my-order-img my-order-img-placeholder"><Icon name="package" size={28} /></div>
                   )}
 
                   <div className="my-order-body">

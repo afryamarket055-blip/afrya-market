@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import PageMeta from '../components/PageMeta'
 
 function About() {
@@ -37,7 +38,7 @@ function About() {
                 surtout <strong>adapté aux réalités locales</strong>.
               </p>
             </div>
-            <div className="about-section-icon">🎯</div>
+            <div className="about-section-icon"><Icon name="target" size={32} /></div>
           </div>
         </section>
 
@@ -88,7 +89,7 @@ function About() {
               </p>
             </div>
             <div className="about-value-card">
-              <div className="about-value-icon">🚀</div>
+              <div className="about-value-icon"><Icon name="rocket" size={28} /></div>
               <h3>Innovation</h3>
               <p>
                 Un produit qui évolue constamment pour servir mieux nos
@@ -117,7 +118,7 @@ function About() {
               <span>afryaone@gmail.com</span>
             </a>
             <a href="tel:+2290140349817" className="about-contact-card">
-              <div className="about-contact-icon">📞</div>
+              <div className="about-contact-icon"><Icon name="phone" size={24} /></div>
               <strong>Téléphone</strong>
               <span>+229 01 40 34 98 17</span>
             </a>

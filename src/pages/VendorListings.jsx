@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import PageMeta from '../components/PageMeta'
 import ListingCard from '../ListingCard'
 import SkeletonList from '../components/SkeletonList'
@@ -112,7 +113,7 @@ function VendorListings() {
         <Nav />
         <main className="vendor-listings-page">
           <EmptyState
-            icon="❌"
+            icon={<Icon name="x-circle" size={40} />}
             title="Vendeur introuvable"
             message={error || "Ce vendeur n'existe plus."}
           />
@@ -145,14 +146,12 @@ function VendorListings() {
                 className="vendor-listings-avatar"
               />
             ) : (
-              <div className="vendor-listings-avatar vendor-listings-avatar-placeholder">
-                👤
-              </div>
+              <div className="vendor-listings-avatar vendor-listings-avatar-placeholder"><Icon name="user" size={32} /></div>
             )}
             <div>
               <h1>{displayName}</h1>
               {location && (
-                <p className="vendor-listings-location">📍 {location}</p>
+                <p className="vendor-listings-location"><Icon name="map-pin" size={14} /> {location}</p>
               )}
               <p className="vendor-listings-count">
                 {listings.length} annonce{listings.length > 1 ? 's' : ''} active{listings.length > 1 ? 's' : ''}
@@ -191,7 +190,7 @@ function VendorListings() {
 
         {listings.length === 0 ? (
           <EmptyState
-            icon="📦"
+            icon={<Icon name="package" size={40} />}
             title="Aucune annonce"
             message={
               activeCategory !== 'Toutes'
