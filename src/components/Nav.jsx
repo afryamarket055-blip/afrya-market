@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
+import Icon from './Icon'
 
 function Nav() {
   const { user, signOut } = useAuth()
@@ -165,7 +166,7 @@ function Nav() {
                 aria-label="Notifications"
                 onClick={closeMenu}
               >
-                🔔
+                <Icon name="bell" size={20} />
                 {unreadCount > 0 && (
                   <span className="nav-badge">{unreadCount}</span>
                 )}
@@ -179,11 +180,12 @@ function Nav() {
                   aria-haspopup="true"
                   aria-expanded={userMenuOpen}
                 >
-                  👤 Mon compte
+                  <Icon name="user" size={16} />
+                  <span>Mon compte</span>
                   {ordersCount > 0 && (
                     <span className="nav-orders-badge">{ordersCount}</span>
                   )}
-                  <span className="user-menu-chevron">▾</span>
+                  <Icon name="chevron-down" size={14} className="user-menu-chevron" />
                 </button>
 
                 {userMenuOpen && (
@@ -238,7 +240,7 @@ function Nav() {
             aria-label="Ouvrir le menu"
             onClick={() => setMenuOpen((open) => !open)}
           >
-            {menuOpen ? '✕' : '☰'}
+            {menuOpen ? <Icon name="x" size={22} /> : <Icon name="menu" size={22} />}
           </button>
         </div>
       </div>
