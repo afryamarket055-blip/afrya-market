@@ -4,6 +4,8 @@ import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import PageMeta from '../components/PageMeta'
 import Icon from '../components/Icon'
+import SkeletonList from '../components/SkeletonList'
+import ListingCard from '../ListingCard'
 import { supabase } from '../lib/supabase'
 
 const FEATURES = [
@@ -34,6 +36,8 @@ function LandingPage() {
   const [counts, setCounts] = useState({ listings: null, demands: null })
   const [searchText, setSearchText] = useState('')
   const [searchLocation, setSearchLocation] = useState('')
+  const [recentListings, setRecentListings] = useState([])
+  const [listingsLoading, setListingsLoading] = useState(true)
 
   function handleSearch(event) {
     event.preventDefault()
@@ -62,6 +66,28 @@ function LandingPage() {
       })
     }
     loadCounts()
+  }, [])
+
+  useEffect(() => {
+    async function loadRecentListings() {
+      setListingsLoading(true)
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('status', 'disponible')
+        .order('boosted_until', { ascending: false, nullsFirst: false })
+        .order('created_at', { ascending: false })
+        .limit(8)
+
+      if (error) {
+        console.error('Erreur chargement annonces recentes :', error)
+        setListingsLoading(false)
+        return
+      }
+      setRecentListings(data || [])
+      setListingsLoading(false)
+    }
+    loadRecentListings()
   }, [])
 
   return (
@@ -149,6 +175,57 @@ function LandingPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="landing-recent">
+          <div className="landing-container">
+            <div className="landing-section-heading landing-section-heading-row">
+              <div>
+                <span>RÉCEMMENT AJOUTÉS</span>
+                <h2>Les dernières annonces</h2>
+              </div>
+              <Link to="/annonces" className="landing-see-all">
+                Voir tout
+                <Icon name="chevron-right" size={16} />
+              </Link>
+            </div>
+
+            {listingsLoading ? (
+              <SkeletonList count={8} />
+            ) : recentListings.length === 0 ? (
+              <div className="landing-empty">
+                <div className="landing-empty-icon">
+                  <Icon name="package" size={40} />
+                </div>
+                <p>Les premières annonces arrivent bientôt.</p>
+                <Link to="/vendre" className="btn btn-primary">
+                  Publier la première annonce
+                </Link>
+              </div>
+            ) : (
+              <div className="listing-grid">
+                {recentListings.map((listing) => (
+                  <Link
+                    key={listing.id}
+                    to={'/annonce/' + listing.id}
+                    className="listing-link"
+                  >
+                    <ListingCard
+                      id={listing.id}
+                      title={listing.title}
+                      price={listing.price}
+                      location={listing.location}
+                      condition={listing.condition}
+                      category={listing.category}
+                      image={listing.image}
+                      status={listing.status}
+                      boostedUntil={listing.boosted_until}
+                    />
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
