@@ -8225,3 +8225,220 @@ img {
   --t-fast: 0.15s ease;
   --t-normal: 0.2s ease;
 }
+
+/* ============================================================
+   PHASE 4 — NAV DRAWER MOBILE
+   Le wrapper .site-nav-desktop-only contient les liens desktop.
+   Le wrapper .site-nav-mobile-only contient le nouveau drawer.
+   ============================================================ */
+
+/* ---- ETAT PAR DEFAUT (desktop) ---- */
+.site-nav-mobile-only {
+  display: none;
+}
+
+.site-nav-desktop-only {
+  display: contents;
+}
+
+/* ---- MOBILE ---- */
+@media (max-width: 640px) {
+
+  /* Cacher la version desktop */
+  .site-nav-desktop-only {
+    display: none;
+  }
+
+  /* Le drawer remplace le menu actuel */
+  .site-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-bg);
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+    gap: 0;
+    z-index: 1002;
+    box-shadow: none;
+    overflow-y: auto;
+    animation: nav-slide-in 0.2s ease-out;
+  }
+
+  .site-nav.is-open {
+    display: flex;
+  }
+
+  @keyframes nav-slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .site-nav-mobile-only {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: var(--space-md) 0 var(--space-xl);
+  }
+
+  /* En-tete : avatar + nom + bouton fermer */
+  .site-nav-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-md);
+  }
+
+  .site-nav-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    min-width: 0;
+  }
+
+  .site-nav-user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+
+  .site-nav-user-info {
+    min-width: 0;
+  }
+
+  .site-nav-user-info strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .site-nav-user-sub {
+    display: block;
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+  }
+
+  .site-nav-close {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text);
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+
+  .site-nav-close:hover {
+    background: var(--color-bg-subtle);
+  }
+
+  /* Groupes */
+  .site-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-sm);
+  }
+
+  .site-nav-group-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--color-text-faint);
+    font-weight: 700;
+    padding: var(--space-sm) var(--space-md) var(--space-xs);
+  }
+
+  /* Liens dans le drawer (override du .site-nav a par defaut) */
+  .site-nav-group a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 12px var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text);
+    background: transparent;
+    min-height: 44px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .site-nav-group a:hover {
+    background: var(--color-bg-subtle);
+    color: var(--color-primary);
+  }
+
+  /* Section connexion / inscription */
+  .site-nav-auth {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    margin-top: auto;
+  }
+
+  .site-nav-auth .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Bouton deconnexion */
+  .site-nav-signout {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin: var(--space-md) var(--space-lg);
+    padding: 12px var(--space-md);
+    border-radius: var(--radius-md);
+    background: #fef2f2;
+    color: var(--color-danger);
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 44px;
+    text-align: left;
+    width: calc(100% - var(--space-lg) * 2);
+    transition: background 0.15s ease;
+  }
+
+  .site-nav-signout:hover {
+    background: #fee2e2;
+  }
+
+  /* Cacher l'ancien bouton signout du drawer desktop (au cas ou) */
+  .site-nav-secondary {
+    display: none !important;
+  }
+}

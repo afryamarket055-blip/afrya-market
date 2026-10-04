@@ -12,7 +12,7 @@ import {
   ChevronDown, LogIn, UserPlus, HelpCircle, Shield,
   FileText, Mail, Send, Loader2, Trash2, Pencil, PlusCircle,
   CheckCircle2, XCircle, AlertCircle, Info, Filter, SlidersHorizontal,
-  Handshake, Target, ClipboardList, ShoppingCart, Ban, Bug,
+  Handshake, Target, ClipboardList, ShoppingCart, Ban, Bug, Tag,
 } from 'lucide-react'
 
 const ICONS = {
@@ -72,6 +72,7 @@ const ICONS = {
   'shopping-cart': ShoppingCart,
   ban: Ban,
   bug: Bug,
+  tag: Tag,
   handshake: Handshake,
   target: Target,
   'chevron-right': ChevronRight,

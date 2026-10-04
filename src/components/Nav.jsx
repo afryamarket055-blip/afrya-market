@@ -120,6 +120,11 @@ function Nav() {
     setUserMenuOpen(false)
   }
 
+  const displayName =
+    user?.user_metadata?.full_name ||
+    user?.email?.split('@')[0] ||
+    'Mon compte'
+
   return (
     <header className="site-header">
       <div className="site-header-inner">
@@ -128,33 +133,135 @@ function Nav() {
         </Link>
 
         <nav className={`site-nav ${menuOpen ? 'is-open' : ''}`}>
-          <Link to="/" onClick={closeMenu}>Accueil</Link>
-          <Link to="/annonces" onClick={closeMenu}>Annonces</Link>
-          <Link to="/categories" onClick={closeMenu}>Catégories</Link>
-          <Link to="/je-recherche" onClick={closeMenu}>Je recherche</Link>
-          <Link to="/demandes" onClick={closeMenu}>Demandes</Link>
-
-          {user && (
-            <>
-              <Link to="/messages" onClick={closeMenu} className="site-nav-secondary">Messages</Link>
-              <Link to="/notifications" onClick={closeMenu} className="site-nav-secondary">Notifications</Link>
-              <Link to="/profil" onClick={closeMenu} className="site-nav-secondary">Mon profil</Link>
-              <Link to="/mes-annonces" onClick={closeMenu} className="site-nav-secondary">Mes annonces</Link>
-              <Link to="/mes-demandes" onClick={closeMenu} className="site-nav-secondary">Mes demandes</Link>
-              <Link to="/favoris" onClick={closeMenu} className="site-nav-secondary">Mes favoris</Link>
+          {/* ============ MOBILE DRAWER ============ */}
+          <div className="site-nav-mobile-only">
+            <div className="site-nav-mobile-header">
+              <div className="site-nav-user">
+                <div className="site-nav-user-avatar">
+                  <Icon name="user" size={22} />
+                </div>
+                <div className="site-nav-user-info">
+                  <strong>{user ? displayName : 'Bienvenue'}</strong>
+                  <span className="site-nav-user-sub">
+                    {user ? 'Mon compte' : 'Connectez-vous'}
+                  </span>
+                </div>
+              </div>
               <button
                 type="button"
-                className="btn btn-secondary nav-signout site-nav-secondary"
+                className="site-nav-close"
+                onClick={closeMenu}
+                aria-label="Fermer le menu"
+              >
+                <Icon name="x" size={22} />
+              </button>
+            </div>
+
+            <div className="site-nav-group">
+              <span className="site-nav-group-title">Explorer</span>
+              <Link to="/" onClick={closeMenu}>
+                <Icon name="home" size={18} />
+                <span>Accueil</span>
+              </Link>
+              <Link to="/annonces" onClick={closeMenu}>
+                <Icon name="package" size={18} />
+                <span>Annonces</span>
+              </Link>
+              <Link to="/categories" onClick={closeMenu}>
+                <Icon name="tag" size={18} />
+                <span>Catégories</span>
+              </Link>
+              <Link to="/je-recherche" onClick={closeMenu}>
+                <Icon name="search" size={18} />
+                <span>Je recherche</span>
+              </Link>
+              <Link to="/demandes" onClick={closeMenu}>
+                <Icon name="target" size={18} />
+                <span>Demandes</span>
+              </Link>
+            </div>
+
+            {user && (
+              <div className="site-nav-group">
+                <span className="site-nav-group-title">Mon compte</span>
+                <Link to="/profil" onClick={closeMenu}>
+                  <Icon name="user" size={18} />
+                  <span>Mon profil</span>
+                </Link>
+                <Link to="/mes-annonces" onClick={closeMenu}>
+                  <Icon name="package" size={18} />
+                  <span>Mes annonces</span>
+                </Link>
+                <Link to="/mes-demandes" onClick={closeMenu}>
+                  <Icon name="target" size={18} />
+                  <span>Mes demandes</span>
+                </Link>
+                <Link to="/favoris" onClick={closeMenu}>
+                  <Icon name="heart" size={18} />
+                  <span>Mes favoris</span>
+                </Link>
+                <Link to="/notifications" onClick={closeMenu}>
+                  <Icon name="bell" size={18} />
+                  <span>Notifications</span>
+                </Link>
+              </div>
+            )}
+
+            {!user && (
+              <div className="site-nav-auth">
+                <Link to="/connexion" onClick={closeMenu} className="btn btn-secondary">
+                  <Icon name="log-in" size={16} />
+                  <span>Connexion</span>
+                </Link>
+                <Link to="/inscription" onClick={closeMenu} className="btn btn-primary">
+                  <Icon name="user-plus" size={16} />
+                  <span>Créer un compte</span>
+                </Link>
+              </div>
+            )}
+
+            {user && (
+              <button
+                type="button"
+                className="site-nav-signout"
                 onClick={handleSignOut}
               >
-                Déconnexion
+                <Icon name="log-out" size={18} />
+                <span>Déconnexion</span>
               </button>
-            </>
-          )}
+            )}
+          </div>
 
-          {!user && (
-            <Link to="/connexion" onClick={closeMenu}>Connexion</Link>
-          )}
+          {/* ============ DESKTOP ============ */}
+          <div className="site-nav-desktop-only">
+            <Link to="/" onClick={closeMenu}>Accueil</Link>
+            <Link to="/annonces" onClick={closeMenu}>Annonces</Link>
+            <Link to="/categories" onClick={closeMenu}>Catégories</Link>
+            <Link to="/je-recherche" onClick={closeMenu}>Je recherche</Link>
+            <Link to="/demandes" onClick={closeMenu}>Demandes</Link>
+
+            {user && (
+              <>
+                <Link to="/messages" onClick={closeMenu} className="site-nav-secondary">Messages</Link>
+                <Link to="/notifications" onClick={closeMenu} className="site-nav-secondary">Notifications</Link>
+                <Link to="/profil" onClick={closeMenu} className="site-nav-secondary">Mon profil</Link>
+                <Link to="/mes-annonces" onClick={closeMenu} className="site-nav-secondary">Mes annonces</Link>
+                <Link to="/mes-demandes" onClick={closeMenu} className="site-nav-secondary">Mes demandes</Link>
+                <Link to="/favoris" onClick={closeMenu} className="site-nav-secondary">Mes favoris</Link>
+                <button
+                  type="button"
+                  className="btn btn-secondary nav-signout site-nav-secondary"
+                  onClick={handleSignOut}
+                >
+                  Déconnexion
+                </button>
+              </>
+            )}
+
+            {!user && (
+              <Link to="/connexion" onClick={closeMenu}>Connexion</Link>
+            )}
+          </div>
         </nav>
 
         <div className="site-header-actions">
