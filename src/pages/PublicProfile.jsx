@@ -327,13 +327,6 @@ function PublicProfile() {
         <main className="loading-state">
           <p>Chargement du profil...</p>
         </main>
-
-      {confirmDialog && (
-        <ConfirmDialog
-          {...confirmDialog}
-          onCancel={() => setConfirmDialog(null)}
-        />
-      )}
       </div>
     )
   }
@@ -578,6 +571,13 @@ function PublicProfile() {
           targetType="profile"
           targetId={id}
           onClose={() => setReportModalOpen(false)}
+        />
+      )}
+
+      {confirmDialog && (
+        <ConfirmDialog
+          {...confirmDialog}
+          onCancel={() => setConfirmDialog(null)}
         />
       )}
 
