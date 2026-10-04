@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import PageMeta from '../components/PageMeta'
@@ -30,7 +30,19 @@ const CATEGORIES = [
 ]
 
 function LandingPage() {
+  const navigate = useNavigate()
   const [counts, setCounts] = useState({ listings: null, demands: null })
+  const [searchText, setSearchText] = useState('')
+  const [searchLocation, setSearchLocation] = useState('')
+
+  function handleSearch(event) {
+    event.preventDefault()
+    const params = new URLSearchParams()
+    if (searchText.trim()) params.set('q', searchText.trim())
+    if (searchLocation.trim()) params.set('loc', searchLocation.trim())
+    const qs = params.toString()
+    navigate('/annonces' + (qs ? '?' + qs : ''))
+  }
 
   useEffect(() => {
     async function loadCounts() {
@@ -63,7 +75,7 @@ function LandingPage() {
       <main>
         <section className="landing-hero">
           <div className="landing-hero-inner">
-            <span className="hero-badge">🇧🇯 Le marché numérique africain</span>
+            <span className="hero-badge"><span className="hero-badge-dot" />Marketplace Bénin · Afrique de l&apos;Ouest</span>
             <h1>
               Achetez. Vendez.
               <br />
@@ -80,6 +92,33 @@ function LandingPage() {
                 </span>
               </p>
             )}
+            <form className="landing-hero-search" onSubmit={handleSearch}>
+              <div className="landing-hero-search-field">
+                <Icon name="search" size={18} />
+                <input
+                  type="text"
+                  placeholder="Que recherchez-vous ?"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  aria-label="Mot-clé"
+                />
+              </div>
+              <div className="landing-hero-search-field">
+                <Icon name="map-pin" size={18} />
+                <input
+                  type="text"
+                  placeholder="Où ?"
+                  value={searchLocation}
+                  onChange={(e) => setSearchLocation(e.target.value)}
+                  aria-label="Ville"
+                />
+              </div>
+              <button type="submit" className="landing-hero-search-btn">
+                <Icon name="search" size={18} />
+                <span>Rechercher</span>
+              </button>
+            </form>
+
             <p className="landing-hero-subtitle">
               AFRYA MARKET connecte acheteurs et vendeurs partout au Bénin —
               simplement, rapidement et en toute confiance.
