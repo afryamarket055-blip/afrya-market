@@ -6,6 +6,7 @@ import PageMeta from '../components/PageMeta'
 import Icon from '../components/Icon'
 import SkeletonList from '../components/SkeletonList'
 import ListingCard from '../ListingCard'
+import useVerifiedSellers from '../hooks/useVerifiedSellers'
 import { supabase } from '../lib/supabase'
 
 const FEATURES = [
@@ -37,6 +38,7 @@ function LandingPage() {
   const [searchLocation, setSearchLocation] = useState('')
   const [recentListings, setRecentListings] = useState([])
   const [listingsLoading, setListingsLoading] = useState(true)
+  const verifiedIds = useVerifiedSellers(recentListings)
 
   function handleSearch(event) {
     event.preventDefault()
@@ -220,6 +222,7 @@ function LandingPage() {
                       image={listing.image}
                       status={listing.status}
                       boostedUntil={listing.boosted_until}
+                      sellerVerified={verifiedIds.has(listing.user_id)}
                     />
                   </Link>
                 ))}

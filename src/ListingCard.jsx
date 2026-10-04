@@ -4,7 +4,7 @@ import { useAuth } from './context/AuthContext'
 import { supabase } from './lib/supabase'
 import Icon from './components/Icon'
 
-function ListingCard({ id, title, price, location, condition, category, image, status, boostedUntil }) {
+function ListingCard({ id, title, price, location, condition, category, image, status, boostedUntil, sellerVerified }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [liked, setLiked] = useState(false)
@@ -112,7 +112,15 @@ function ListingCard({ id, title, price, location, condition, category, image, s
         )}
       </div>
       <div className="listing-content">
-        <span className="listing-category">{category}</span>
+        <div className="listing-card-topline">
+          <span className="listing-category">{category}</span>
+          {sellerVerified && (
+            <span className="listing-verified" title="Vendeur vérifié">
+              <Icon name="shield" size={11} />
+              <span>Vérifié</span>
+            </span>
+          )}
+        </div>
         <h4>{title}</h4>
         <strong className="listing-price">{price} FCFA</strong>
         <p className="listing-location"><Icon name="map-pin" size={14} /> {location}</p>

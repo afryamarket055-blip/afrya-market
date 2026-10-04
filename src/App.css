@@ -9023,3 +9023,34 @@ img {
 .landing-cta-note a:hover {
   text-decoration-thickness: 2px;
 }
+
+/* ============================================================
+   PHASE 7a — Badge Vendeur verifie (sur les cartes)
+   ============================================================ */
+
+.listing-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.listing-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+  letter-spacing: 0.2px;
+}
+
+.listing-verified svg {
+  flex-shrink: 0;
+}

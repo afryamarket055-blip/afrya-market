@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Link, useNavigate, useSearchParams } from
 import './App.css'
 import ListingCard from './ListingCard'
 import SkeletonList from './components/SkeletonList'
+import useVerifiedSellers from './hooks/useVerifiedSellers'
 import VendorListings from './pages/VendorListings'
 import ListingDetails from './pages/ListingDetails'
 import CreateListing from './pages/CreateListing'
@@ -55,6 +56,7 @@ function Home({ listings, loading, error }) {
   const navigate = useNavigate()
   const [searchText, setSearchText] = useState('')
   const [searchLocation, setSearchLocation] = useState('')
+  const verifiedIds = useVerifiedSellers(listings)
 
   function handleSearch(event) {
     event.preventDefault()
@@ -174,6 +176,7 @@ function Home({ listings, loading, error }) {
                     image={listing.image}
                     status={listing.status}
                     boostedUntil={listing.boosted_until}
+                    sellerVerified={verifiedIds.has(listing.user_id)}
                   />
                 </Link>
               ))}
@@ -215,6 +218,7 @@ function SimplePage({ title }) {
 
 function AllListings({ listings, loading, error }) {
   const [userLocation, setUserLocation] = useState(null)
+  const verifiedIdsAll = useVerifiedSellers(listings)
   const [locationMessage, setLocationMessage] = useState("")
   const [userCity, setUserCity] = useState(null)
   const [showNearby, setShowNearby] = useState(false)
@@ -436,6 +440,7 @@ function AllListings({ listings, loading, error }) {
                     image={listing.image}
                     status={listing.status}
                     boostedUntil={listing.boosted_until}
+                    sellerVerified={verifiedIdsAll.has(listing.user_id)}
                   />
                 </Link>
               ))}
