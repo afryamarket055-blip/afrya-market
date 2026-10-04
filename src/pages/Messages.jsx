@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 function formatRelativeDate(dateString) {
   if (!dateString) return ''
@@ -103,12 +104,12 @@ function Messages() {
           </div>
         ) : error ? (
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>Impossible de charger vos conversations.</p>
           </div>
         ) : conversations.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">💬</div>
+            <div className="empty-icon"><Icon name="message" size={40} /></div>
             <p>Vous n'avez aucune conversation pour l'instant.</p>
             <Link
               to="/annonces"
@@ -144,7 +145,7 @@ function Messages() {
                     />
                   ) : (
                     <div className="conversation-avatar conversation-avatar-placeholder">
-                      👤
+                      <Icon name="user" size={28} />
                     </div>
                   )}
 

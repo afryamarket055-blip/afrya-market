@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import ConfirmDialog from '../components/ConfirmDialog'
 
 const SHOP_CATEGORIES = [
@@ -359,7 +360,7 @@ function Settings() {
                             fontSize: '18px',
                           }}
                         >
-                          👤
+                          <Icon name="user" size={28} />
                         </div>
                       )}
                       <div style={{ minWidth: 0, flex: 1 }}>

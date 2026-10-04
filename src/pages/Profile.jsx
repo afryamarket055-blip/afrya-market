@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 function Profile() {
   const { user } = useAuth()
@@ -138,7 +139,7 @@ function Profile() {
             {avatarUrl ? (
               <img src={avatarUrl} alt="Photo de profil" className="profile-avatar" />
             ) : (
-              <div className="profile-avatar profile-avatar-placeholder">👤</div>
+              <div className="profile-avatar profile-avatar-placeholder"><Icon name="user" size={40} /></div>
             )}
             <label htmlFor="avatar" className="btn btn-secondary profile-avatar-btn">
               Changer la photo

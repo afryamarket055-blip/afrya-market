@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 
 function formatTime(dateString) {
   const date = new Date(dateString)
@@ -197,7 +198,7 @@ function Conversation() {
         <Nav />
         <main className="conversation-page">
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>Impossible de charger la conversation.</p>
             <Link to="/messages" className="btn btn-secondary" style={{ marginTop: '12px' }}>
               Retour aux messages
@@ -250,7 +251,7 @@ function Conversation() {
             />
           ) : (
             <div className="conversation-avatar conversation-avatar-placeholder">
-              👤
+              <Icon name="user" size={32} />
             </div>
           )}
 
@@ -325,7 +326,7 @@ function Conversation() {
             }}
           >
             <p style={{ margin: 0, fontWeight: 'bold', fontSize: '15px' }}>
-              🚫 Conversation bloquee
+              Conversation bloquee
             </p>
             <p style={{ margin: '8px 0 0', fontSize: '13px' }}>
               Cette conversation est bloquee. Vous ne pouvez plus echanger de

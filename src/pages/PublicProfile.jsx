@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
+import Icon from '../components/Icon'
 import ReportModal from '../components/ReportModal'
 import ConfirmDialog from '../components/ConfirmDialog'
 import PageMeta from '../components/PageMeta'
@@ -344,7 +345,7 @@ function PublicProfile() {
         <Nav />
         <main className="public-profile-page">
           <div className="empty-state">
-            <div className="empty-icon">⚠</div>
+            <div className="empty-icon"><Icon name="alert-triangle" size={40} /></div>
             <p>{error || 'Profil introuvable.'}</p>
             <Link to="/annonces" className="btn btn-secondary" style={{ marginTop: '12px' }}>
               Voir les annonces
@@ -432,7 +433,7 @@ function PublicProfile() {
           ) : profile.avatar_url ? (
             <img src={profile.avatar_url} alt={name} className="public-profile-avatar" />
           ) : (
-            <div className="public-profile-avatar public-profile-avatar-placeholder">👤</div>
+            <div className="public-profile-avatar public-profile-avatar-placeholder"><Icon name="user" size={40} /></div>
           )}
 
           <div className="public-profile-name-row">
@@ -449,7 +450,7 @@ function PublicProfile() {
             )}
           </div>
 
-          {location && <p className="public-profile-location">📍 {location}</p>}
+          {location && <p className="public-profile-location"><Icon name="map-pin" size={14} /> {location}</p>}
 
           {reviews.length > 0 && (
             <div className="public-profile-rating">
@@ -476,7 +477,7 @@ function PublicProfile() {
 
           {showPhone && (
             <div className="public-profile-phone">
-              📞 <a href={'tel:' + profile.phone}>{profile.phone}</a>
+              <Icon name="phone" size={14} /> <a href={'tel:' + profile.phone}>{profile.phone}</a>
             </div>
           )}
         </header>
@@ -525,7 +526,7 @@ function PublicProfile() {
                         className="review-avatar"
                       />
                     ) : (
-                      <div className="review-avatar review-avatar-placeholder">👤</div>
+                      <div className="review-avatar review-avatar-placeholder"><Icon name="user" size={24} /></div>
                     )}
                     <div className="review-meta">
                       <strong>{review.reviewer?.full_name || 'Utilisateur'}</strong>
@@ -559,14 +560,14 @@ function PublicProfile() {
                 ? 'Traitement...'
                 : isBlocked
                   ? '✓ Débloquer cet utilisateur'
-                  : '🚫 Bloquer cet utilisateur'}
+                  : 'Bloquer cet utilisateur'}
             </button>
             <button
               type="button"
               className="report-link"
               onClick={() => setReportModalOpen(true)}
             >
-              ⚠ Signaler ce profil
+              <Icon name="alert-triangle" size={14} /> Signaler ce profil
             </button>
           </div>
         )}
