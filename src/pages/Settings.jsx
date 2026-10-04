@@ -270,13 +270,6 @@ function Settings() {
         <main className="loading-state">
           <p>Chargement des parametres...</p>
         </main>
-
-      {confirmDialog && (
-        <ConfirmDialog
-          {...confirmDialog}
-          onCancel={() => setConfirmDialog(null)}
-        />
-      )}
       </div>
     )
   }
@@ -589,6 +582,13 @@ function Settings() {
             {errorMsg && <p className="form-error">{errorMsg}</p>}
           </>
         )}
+      
+      {confirmDialog && (
+        <ConfirmDialog
+          {...confirmDialog}
+          onCancel={() => setConfirmDialog(null)}
+        />
+      )}
       </main>
     </div>
   )
