@@ -1884,7 +1884,7 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.landing-category-grid {
+.category-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: var(--space-md);
@@ -1913,7 +1913,7 @@
   color: var(--color-primary);
 }
 
-.landing-category-icon {
+.category-icon {
   font-size: 32px;
 }
 
@@ -1976,7 +1976,7 @@
   .landing-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .landing-category-grid {
+  .category-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
@@ -1988,7 +1988,7 @@
   .landing-steps {
     grid-template-columns: 1fr;
   }
-  .landing-category-grid {
+  .category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .landing-hero h1 {
@@ -8786,7 +8786,7 @@ img {
    PHASE 3b — CATEGORIES SCROLLABLES (pastilles)
    ============================================================ */
 
-.landing-category-scroll {
+.category-scroll {
   display: flex;
   gap: 10px;
   overflow-x: auto;
@@ -8799,11 +8799,11 @@ img {
   scroll-padding-left: 4px;
 }
 
-.landing-category-scroll::-webkit-scrollbar {
+.category-scroll::-webkit-scrollbar {
   display: none;
 }
 
-.landing-category-pill {
+.category-pill {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -8823,17 +8823,17 @@ img {
   min-height: 44px;
 }
 
-.landing-category-pill:hover {
+.category-pill:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
   background: var(--color-primary-light);
 }
 
-.landing-category-pill:active {
+.category-pill:active {
   transform: scale(0.97);
 }
 
-.landing-category-pill-icon {
+.category-pill-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -8846,17 +8846,90 @@ img {
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.landing-category-pill:hover .landing-category-pill-icon {
+.category-pill:hover .category-pill-icon {
   background: var(--color-primary);
   color: white;
 }
 
-.landing-category-pill-label {
+.category-pill-label {
   display: inline-block;
   line-height: 1;
 }
 
 /* Cacher l'ancien grid (au cas ou il serait encore la) */
-.landing-category-grid {
+.category-grid {
   display: none;
+}
+
+/* ============================================================
+   PHASE 3-Connectee — Home search + categories pills
+   ============================================================ */
+
+.home-search-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  color: var(--color-text-muted);
+}
+
+.home-search-field input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+}
+
+.home-search-field input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.home-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.home-search-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+@media (max-width: 640px) {
+  .home-search {
+    flex-direction: column;
+    border-radius: 16px;
+    padding: 8px;
+    gap: 6px;
+  }
+  .home-search-field {
+    padding: 10px 12px;
+    background: var(--color-bg-subtle);
+    border-radius: 10px;
+    width: 100%;
+  }
+  .home-search-btn {
+    justify-content: center;
+    width: 100%;
+    padding: 14px;
+  }
 }

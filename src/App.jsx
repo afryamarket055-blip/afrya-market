@@ -66,12 +66,12 @@ function Home({ listings, loading, error }) {
   }
 
   const CATEGORIES = [
-    { icon: '📱', name: 'Téléphones', desc: 'Smartphones & accessoires' },
-    { icon: '💻', name: 'Informatique', desc: 'PC, laptops & accessoires' },
-    { icon: '📺', name: 'Électroménager', desc: 'TV, frigos & appareils' },
-    { icon: '👕', name: 'Mode', desc: 'Vêtements & chaussures' },
-    { icon: '🛋', name: 'Maison', desc: 'Meubles & décoration' },
-    { icon: '🏍', name: 'Véhicules', desc: 'Motos, voitures & pièces' },
+    { iconName: 'smartphone', name: 'Téléphones' },
+    { iconName: 'laptop', name: 'Informatique' },
+    { iconName: 'tv', name: 'Électroménager' },
+    { iconName: 'shirt', name: 'Mode' },
+    { iconName: 'sofa', name: 'Maison' },
+    { iconName: 'bike', name: 'Véhicules' },
   ]
 
   return (
@@ -80,27 +80,34 @@ function Home({ listings, loading, error }) {
       <main>
         <section className="home-hero">
           <div className="home-hero-inner">
-            <span className="home-hero-greeting">Bonjour 👋</span>
+            <span className="home-hero-greeting">Bonjour</span>
             <h1>Que cherchez-vous aujourd'hui ?</h1>
             <p className="home-hero-subtitle">
               Des milliers d'annonces près de chez vous.
             </p>
 
             <form className="home-search" onSubmit={handleSearch}>
-              <input
-                type="text"
-                placeholder="Que recherchez-vous ?"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Où ?"
-                value={searchLocation}
-                onChange={(e) => setSearchLocation(e.target.value)}
-              />
-              <button type="submit" className="btn btn-primary">
-                Rechercher
+              <div className="home-search-field">
+                <Icon name="search" size={18} />
+                <input
+                  type="text"
+                  placeholder="Que recherchez-vous ?"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+              </div>
+              <div className="home-search-field">
+                <Icon name="map-pin" size={18} />
+                <input
+                  type="text"
+                  placeholder="Où ?"
+                  value={searchLocation}
+                  onChange={(e) => setSearchLocation(e.target.value)}
+                />
+              </div>
+              <button type="submit" className="home-search-btn">
+                <Icon name="search" size={18} />
+                <span>Rechercher</span>
               </button>
             </form>
           </div>
@@ -114,16 +121,17 @@ function Home({ listings, loading, error }) {
             </div>
           </div>
 
-          <div className="category-grid">
+          <div className="category-scroll">
             {CATEGORIES.map((cat) => (
               <Link
                 key={cat.name}
                 to={'/annonces?category=' + encodeURIComponent(cat.name)}
-                className="category-card"
+                className="category-pill"
               >
-                <div className="category-icon">{cat.icon}</div>
-                <h3>{cat.name}</h3>
-                <p>{cat.desc}</p>
+                <span className="category-pill-icon">
+                  <Icon name={cat.iconName} size={20} />
+                </span>
+                <span className="category-pill-label">{cat.name}</span>
               </Link>
             ))}
           </div>
