@@ -177,11 +177,17 @@ function LandingPage() {
               <span>EXPLORER</span>
               <h2>Catégories populaires</h2>
             </div>
-            <div className="landing-category-grid">
+            <div className="landing-category-scroll">
               {CATEGORIES.map((c) => (
-                <Link key={c.name} to="/annonces" className="landing-category">
-                  <div className="landing-category-icon"><Icon name={c.iconName} size={32} /></div>
-                  <span>{c.name}</span>
+                <Link
+                  key={c.name}
+                  to={'/annonces?category=' + encodeURIComponent(c.name)}
+                  className="landing-category-pill"
+                >
+                  <span className="landing-category-pill-icon">
+                    <Icon name={c.iconName} size={20} />
+                  </span>
+                  <span className="landing-category-pill-label">{c.name}</span>
                 </Link>
               ))}
             </div>
