@@ -2,29 +2,30 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Nav from '../components/Nav'
 import PageMeta from '../components/PageMeta'
+import Icon from '../components/Icon'
 import { supabase } from '../lib/supabase'
 
 const FEATURES = [
-  { icon: '🚀', title: 'Gratuit', text: 'Publiez vos annonces en 30 secondes.' },
-  { icon: '📍', title: 'Près de vous', text: 'Trouvez ce qui se vend dans votre ville.' },
-  { icon: '💬', title: 'Direct', text: 'Discutez avec les vendeurs, sans intermédiaire.' },
-  { icon: '🔒', title: 'Sécurisé', text: 'Profils vérifiés, transactions en confiance.' },
+  { iconName: 'rocket', title: 'Gratuit', text: 'Publiez vos annonces en 30 secondes.' },
+  { iconName: 'map-pin', title: 'Près de vous', text: 'Trouvez ce qui se vend dans votre ville.' },
+  { iconName: 'message', title: 'Direct', text: 'Discutez avec les vendeurs, sans intermédiaire.' },
+  { iconName: 'shield', title: 'Sécurisé', text: 'Profils vérifiés, transactions en confiance.' },
 ]
 
 const STEPS = [
-  { num: 1, icon: '🔍', title: 'Recherchez', text: 'Trouvez ce dont vous avez besoin près de chez vous.' },
-  { num: 2, icon: '📦', title: 'Consultez', text: 'Voyez les détails, photos et prix du vendeur.' },
-  { num: 3, icon: '💬', title: 'Contactez', text: 'Échangez et négociez directement.' },
-  { num: 4, icon: '🤝', title: 'Concluez', text: 'Achetez ou vendez en toute simplicité.' },
+  { num: 1, iconName: 'search', title: 'Recherchez', text: 'Trouvez ce dont vous avez besoin près de chez vous.' },
+  { num: 2, iconName: 'package', title: 'Consultez', text: 'Voyez les détails, photos et prix du vendeur.' },
+  { num: 3, iconName: 'message', title: 'Contactez', text: 'Échangez et négociez directement.' },
+  { num: 4, iconName: 'handshake', title: 'Concluez', text: 'Achetez ou vendez en toute simplicité.' },
 ]
 
 const CATEGORIES = [
-  { icon: '📱', name: 'Téléphones' },
-  { icon: '💻', name: 'Informatique' },
-  { icon: '📺', name: 'Électroménager' },
-  { icon: '👕', name: 'Mode' },
-  { icon: '🛋', name: 'Maison' },
-  { icon: '🏍', name: 'Véhicules' },
+  { iconName: 'smartphone', name: 'Téléphones' },
+  { iconName: 'laptop', name: 'Informatique' },
+  { iconName: 'tv', name: 'Électroménager' },
+  { iconName: 'shirt', name: 'Mode' },
+  { iconName: 'sofa', name: 'Maison' },
+  { iconName: 'bike', name: 'Véhicules' },
 ]
 
 function LandingPage() {
@@ -87,7 +88,8 @@ function LandingPage() {
                 + Vendre un article
               </Link>
               <Link to="/je-recherche" className="btn btn-secondary btn-lg">
-                🔍 Je recherche un article
+                <Icon name="search" size={18} />
+                <span>Je recherche un article</span>
               </Link>
             </div>
             <p className="landing-hero-secondary-cta">
@@ -101,7 +103,7 @@ function LandingPage() {
             <div className="landing-features-grid">
               {FEATURES.map((f) => (
                 <div key={f.title} className="landing-feature">
-                  <div className="landing-feature-icon">{f.icon}</div>
+                  <div className="landing-feature-icon"><Icon name={f.iconName} size={28} /></div>
                   <h3>{f.title}</h3>
                   <p>{f.text}</p>
                 </div>
@@ -120,7 +122,7 @@ function LandingPage() {
               {STEPS.map((s) => (
                 <div key={s.num} className="landing-step">
                   <div className="landing-step-num">{s.num}</div>
-                  <div className="landing-step-icon">{s.icon}</div>
+                  <div className="landing-step-icon"><Icon name={s.iconName} size={32} /></div>
                   <h3>{s.title}</h3>
                   <p>{s.text}</p>
                 </div>
@@ -138,7 +140,7 @@ function LandingPage() {
             <div className="landing-category-grid">
               {CATEGORIES.map((c) => (
                 <Link key={c.name} to="/annonces" className="landing-category">
-                  <div className="landing-category-icon">{c.icon}</div>
+                  <div className="landing-category-icon"><Icon name={c.iconName} size={32} /></div>
                   <span>{c.name}</span>
                 </Link>
               ))}

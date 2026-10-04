@@ -12,6 +12,7 @@ import {
   ChevronDown, LogIn, UserPlus, HelpCircle, Shield,
   FileText, Mail, Send, Loader2, Trash2, Pencil, PlusCircle,
   CheckCircle2, XCircle, AlertCircle, Info, Filter, SlidersHorizontal,
+  Handshake, Target,
 } from 'lucide-react'
 
 const ICONS = {
@@ -67,6 +68,8 @@ const ICONS = {
   shield: Shield,
   'file-text': FileText,
   mail: Mail,
+  handshake: Handshake,
+  target: Target,
   'chevron-right': ChevronRight,
   'chevron-down': ChevronDown,
 }
