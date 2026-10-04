@@ -11,7 +11,7 @@
   /* Couleurs neutres */
   --color-text: #111827;
   --color-text-muted: #6b7280;
-  --color-text-faint: #9ca3af;
+  --color-text-faint: #71717a;
   --color-border: #e5e7eb;
   --color-bg: #ffffff;
   --color-bg-subtle: #f9fafb;
@@ -8263,7 +8263,7 @@ img {
   /* Texte */
   --text: #111827;
   --text-muted: #4b5563;
-  --text-faint: #9ca3af;
+  --text-faint: #71717a;
 
   /* Contours */
   --border: #e5e7eb;
