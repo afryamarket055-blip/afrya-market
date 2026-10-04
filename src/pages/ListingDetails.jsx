@@ -8,6 +8,7 @@ import ListingCard from '../ListingCard'
 import ReportModal from '../components/ReportModal'
 import OrderModal from '../components/OrderModal'
 import PageMeta from '../components/PageMeta'
+import Icon from '../components/Icon'
 
 function formatMemberSince(dateString) {
   if (!dateString) return null
@@ -369,10 +370,10 @@ function ListingDetails({ listings = [] }) {
             <strong className="details-price">{listing.price} FCFA</strong>
 
             <div className="details-meta">
-              <p className="details-location">📍 {listing.location}</p>
+              <p className="details-location"><Icon name="map-pin" size={14} /> {listing.location}</p>
               <span className="condition">{listing.condition}</span>
               {viewsCount > 0 && (
-                <span className="details-views">👁 {viewsCount} vue{viewsCount > 1 ? 's' : ''}</span>
+                <span className="details-views"><Icon name="eye" size={14} /> {viewsCount} vue{viewsCount > 1 ? 's' : ''}</span>
               )}
             </div>
 
@@ -415,7 +416,7 @@ function ListingDetails({ listings = [] }) {
                   className="btn btn-secondary btn-lg"
                   onClick={() => handleContactSeller(listing.user_id, listing.id)}
                 >
-                  💬 Contacter
+                  <Icon name="message" size={18} /> <span>Contacter</span>
                 </button>
               )}
 
@@ -427,7 +428,7 @@ function ListingDetails({ listings = [] }) {
                 aria-label={favorited ? 'Retirer des favoris' : 'Ajouter aux favoris'}
                 title={favorited ? 'Retirer des favoris' : 'Ajouter aux favoris'}
               >
-                {favorited ? '🔖' : '📑'}
+                {favorited ? <Icon name="bookmark" size={20} fill="currentColor" /> : <Icon name="bookmark" size={20} />}
               </button>
 
               <button
@@ -482,7 +483,7 @@ function ListingDetails({ listings = [] }) {
               className="report-link"
               onClick={() => setReportModalOpen(true)}
             >
-              ⚠ Signaler cette annonce
+              <Icon name="alert-triangle" size={16} /> <span>Signaler cette annonce</span>
             </button>
           </div>
         </div>

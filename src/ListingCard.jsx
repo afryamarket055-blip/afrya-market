@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { supabase } from './lib/supabase'
+import Icon from './components/Icon'
 
 function ListingCard({ id, title, price, location, condition, category, image, status, boostedUntil }) {
   const { user } = useAuth()
@@ -101,20 +102,20 @@ function ListingCard({ id, title, price, location, condition, category, image, s
           onClick={handleToggleLike}
           disabled={pending}
         >
-          {liked ? '❤' : '🤍'}
+          {liked ? <Icon name="heart" size={18} fill="currentColor" /> : <Icon name="heart" size={18} />}
         </button>
         {viewsCount > 0 && (
-            <span className="listing-view-count">👁 {viewsCount}</span>
+            <span className="listing-view-count"><Icon name="eye" size={14} /> {viewsCount}</span>
           )}
           {likesCount > 0 && (
-          <span className="listing-like-count">❤ {likesCount}</span>
+          <span className="listing-like-count"><Icon name="heart" size={14} /> {likesCount}</span>
         )}
       </div>
       <div className="listing-content">
         <span className="listing-category">{category}</span>
         <h4>{title}</h4>
         <strong className="listing-price">{price} FCFA</strong>
-        <p className="listing-location">📍 {location}</p>
+        <p className="listing-location"><Icon name="map-pin" size={14} /> {location}</p>
         <div className="listing-footer">
           <span className="condition">{condition}</span>
         </div>
