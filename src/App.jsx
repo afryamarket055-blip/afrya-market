@@ -17,6 +17,7 @@ import ResetPassword from './pages/ResetPassword'
 import Profile from './pages/Profile'
 import MyListings from './pages/MyListings'
 import LandingPage from './pages/LandingPage'
+import NotFound from './pages/NotFound'
 import EditListing from './pages/EditListing'
 import Conversation from './pages/Conversation'
 import Messages from './pages/Messages'
@@ -782,6 +783,7 @@ function AppContent() {
           </AdminRoute>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
