@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
+import Icon from '../components/Icon'
 
 function ResetPassword() {
   const { updatePassword } = useAuth()
