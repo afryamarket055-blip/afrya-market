@@ -12,10 +12,18 @@ function Register() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [honeypot, setHoneypot] = useState('')
 
   async function handleSubmit(event) {
     event.preventDefault()
     setError('')
+
+    // Anti-bot : honeypot
+    if (honeypot.trim() !== '') {
+      // Bot detecte : simuler un succes sans creer le compte
+      setSuccess(true)
+      return
+    }
 
     if (password.length < 6) {
       setError('Le mot de passe doit contenir au moins 6 caracteres.')
@@ -144,6 +152,30 @@ function Register() {
                 </div>
 
                 {error && <p className="form-error">{error}</p>}
+
+                {/* Honeypot anti-bot : invisible pour les humains */}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    left: '-9999px',
+                    top: '-9999px',
+                    width: '1px',
+                    height: '1px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <label htmlFor="website">Ne pas remplir ce champ</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                  />
+                </div>
 
                 <button
                   type="submit"
