@@ -39,7 +39,7 @@ function NotFound() {
             opacity: 0.7,
           }}
         >
-          Le lien est peut-etre errone, ou la page a ete deplacee.
+          Le lien est peut-être erroné, ou la page a été déplacée.
         </p>
 
         <div
@@ -62,7 +62,7 @@ function NotFound() {
               fontWeight: 600,
             }}
           >
-            {'\u2190'} Retour a l'accueil
+            ← Retour à l'accueil
           </Link>
 
           <Link

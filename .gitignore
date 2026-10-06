@@ -45,3 +45,8 @@ audit-screenshots/
 .backup-*/
 apply_a1.py
 fix_handleimages.py
+
+# Scripts Python one-shot (patches temporaires)
+apply_*.py
+inspect_*.py
+fix_*.py
