@@ -40,3 +40,8 @@ dist-ssr
 
 # Playwright audit screenshots (generated locally)
 audit-screenshots/
+
+# Backups locaux et scripts one-shot
+.backup-*/
+apply_a1.py
+fix_handleimages.py
