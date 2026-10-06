@@ -60,6 +60,8 @@ function PublicProfile() {
 
   const [profile, setProfile] = useState(null)
   const [listingsCount, setListingsCount] = useState(0)
+  const [lastActivityDate, setLastActivityDate] = useState(null)
+  const [salesCount, setSalesCount] = useState(0)
   const [reviews, setReviews] = useState([])
   const [myReview, setMyReview] = useState(null)
   const [canReview, setCanReview] = useState(false)
@@ -125,6 +127,29 @@ function PublicProfile() {
         .neq('status', 'vendu')
 
       setListingsCount(count || 0)
+
+      // Derniere activite : date de la derniere annonce publiee
+      const { data: lastListing } = await supabase
+        .from('listings')
+        .select('created_at')
+        .eq('user_id', id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (lastListing?.created_at) {
+        setLastActivityDate(lastListing.created_at)
+      }
+
+      // Ventes reussies : commandes avec completed_at non null
+      const { count: sales } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('seller_id', id)
+        .not('completed_at', 'is', null)
+
+      setSalesCount(sales || 0)
+
       setLoading(false)
     }
 
@@ -466,6 +491,24 @@ function PublicProfile() {
                 annonce{listingsCount > 1 ? 's' : ''} active{listingsCount > 1 ? 's' : ''}
               </span>
             </div>
+
+            {salesCount > 0 && (
+              <div className="public-stat">
+                <span className="public-stat-value">{salesCount}</span>
+                <span className="public-stat-label">
+                  vente{salesCount > 1 ? 's' : ''} reussie{salesCount > 1 ? 's' : ''}
+                </span>
+              </div>
+            )}
+
+            {lastActivityDate && (
+              <div className="public-stat">
+                <span className="public-stat-value" style={{ fontSize: '14px' }}>
+                  {formatRelativeDate(lastActivityDate)}
+                </span>
+                <span className="public-stat-label">derniere activite</span>
+              </div>
+            )}
           </div>
 
           {showPhone && (
