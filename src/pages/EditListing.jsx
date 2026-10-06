@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
+import { validateImageFile } from '../lib/imageValidation'
 
 function EditListing() {
   const { id } = useParams()
@@ -62,10 +63,18 @@ function EditListing() {
 
   function handleImageChange(event) {
     const file = event.target.files[0]
-    if (file) {
-      setNewImageFile(file)
-      setImageUrl(URL.createObjectURL(file))
+    if (!file) return
+
+    const check = validateImageFile(file)
+    if (!check.valid) {
+      setMessage(check.reason)
+      event.target.value = ''
+      return
     }
+
+    setMessage('')
+    setNewImageFile(file)
+    setImageUrl(URL.createObjectURL(file))
   }
 
   async function handleSubmit(event) {
@@ -81,7 +90,11 @@ function EditListing() {
 
       const { error: uploadError } = await supabase.storage
         .from('listing-images')
-        .upload(filePath, newImageFile)
+        .upload(filePath, newImageFile, {
+          contentType: newImageFile.type,
+          upsert: false,
+          cacheControl: '3600',
+        })
 
       if (uploadError) {
         console.error('Erreur upload image :', uploadError)

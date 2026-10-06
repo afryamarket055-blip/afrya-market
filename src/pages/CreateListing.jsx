@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Icon from '../components/Icon'
+import { validateImageFile, MAX_IMAGES_PER_LISTING } from '../lib/imageValidation'
 function CreateListing({ onCreateListing }) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -32,11 +33,31 @@ function CreateListing({ onCreateListing }) {
   function handleImages(event) {
     const selectedFiles = Array.from(event.target.files)
 
+    if (selectedFiles.length === 0) return
+
+    if (selectedFiles.length > MAX_IMAGES_PER_LISTING) {
+      setMessage('Maximum ' + MAX_IMAGES_PER_LISTING + ' photos par annonce.')
+      event.target.value = ''
+      return
+    }
+
+    for (const file of selectedFiles) {
+      const check = validateImageFile(file)
+      if (!check.valid) {
+        setMessage(check.reason)
+        event.target.value = ''
+        return
+      }
+    }
+
+    images.forEach((img) => URL.revokeObjectURL(img.url))
+
     const previews = selectedFiles.map((file) => ({
       file,
       url: URL.createObjectURL(file),
     }))
 
+    setMessage('')
     setImages(previews)
   }
 async function handleSubmit(event) {
@@ -51,7 +72,11 @@ async function handleSubmit(event) {
       const filePath = `${Date.now()}-${safeFileName}`
       const { error: uploadError } = await supabase.storage
         .from('listing-images')
-        .upload(filePath, imageFile)
+        .upload(filePath, imageFile, {
+          contentType: imageFile.type,
+          upsert: false,
+          cacheControl: '3600',
+        })
       if (uploadError) {
         console.error('Erreur upload image :', uploadError)
         setMessage("Erreur lors de l'envoi d'une photo.")
