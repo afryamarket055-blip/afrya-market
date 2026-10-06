@@ -1,48 +1,48 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { supabase } from './lib/supabase'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import './App.css'
 import ListingCard from './ListingCard'
 import SkeletonList from './components/SkeletonList'
 import useVerifiedSellers from './hooks/useVerifiedSellers'
-import VendorListings from './pages/VendorListings'
+const VendorListings = lazy(() => import('./pages/VendorListings'))
 import ListingDetails from './pages/ListingDetails'
-import CreateListing from './pages/CreateListing'
+const CreateListing = lazy(() => import('./pages/CreateListing'))
 import { AuthProvider } from './context/AuthContext'
 import { ToastProvider } from './context/ToastContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
-import Profile from './pages/Profile'
-import MyListings from './pages/MyListings'
+const Profile = lazy(() => import('./pages/Profile'))
+const MyListings = lazy(() => import('./pages/MyListings'))
 import LandingPage from './pages/LandingPage'
 import NotFound from './pages/NotFound'
-import EditListing from './pages/EditListing'
-import Conversation from './pages/Conversation'
-import Messages from './pages/Messages'
-import PublicProfile from './pages/PublicProfile'
-import Notifications from './pages/Notifications'
-import Favorites from './pages/Favorites'
-import Settings from './pages/Settings'
-import AdminReports from './pages/AdminReports'
-import AdminBoosts from './pages/AdminBoosts'
-import AdminShops from './pages/AdminShops'
-import Booster from './pages/Booster'
-import OrderDetails from './pages/OrderDetails'
-import MyOrders from './pages/MyOrders'
-import About from './pages/About'
-import HowItWorks from './pages/HowItWorks'
-import Help from './pages/Help'
-import Security from './pages/Security'
-import Contact from './pages/Contact'
-import Report from './pages/Report'
-import Terms from './pages/Terms'
-import Privacy from './pages/Privacy'
-import JeRecherche from './pages/JeRecherche'
-import DemandeDetails from './pages/DemandeDetails'
-import Demandes from './pages/Demandes'
-import MesDemandes from './pages/MesDemandes'
+const EditListing = lazy(() => import('./pages/EditListing'))
+const Conversation = lazy(() => import('./pages/Conversation'))
+const Messages = lazy(() => import('./pages/Messages'))
+const PublicProfile = lazy(() => import('./pages/PublicProfile'))
+const Notifications = lazy(() => import('./pages/Notifications'))
+const Favorites = lazy(() => import('./pages/Favorites'))
+const Settings = lazy(() => import('./pages/Settings'))
+const AdminReports = lazy(() => import('./pages/AdminReports'))
+const AdminBoosts = lazy(() => import('./pages/AdminBoosts'))
+const AdminShops = lazy(() => import('./pages/AdminShops'))
+const Booster = lazy(() => import('./pages/Booster'))
+const OrderDetails = lazy(() => import('./pages/OrderDetails'))
+const MyOrders = lazy(() => import('./pages/MyOrders'))
+const About = lazy(() => import('./pages/About'))
+const HowItWorks = lazy(() => import('./pages/HowItWorks'))
+const Help = lazy(() => import('./pages/Help'))
+const Security = lazy(() => import('./pages/Security'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Report = lazy(() => import('./pages/Report'))
+const Terms = lazy(() => import('./pages/Terms'))
+const Privacy = lazy(() => import('./pages/Privacy'))
+const JeRecherche = lazy(() => import('./pages/JeRecherche'))
+const DemandeDetails = lazy(() => import('./pages/DemandeDetails'))
+const Demandes = lazy(() => import('./pages/Demandes'))
+const MesDemandes = lazy(() => import('./pages/MesDemandes'))
 import AdminRoute from './components/AdminRoute'
 import { useAuth } from './context/AuthContext'
 import Nav from './components/Nav'
@@ -467,6 +467,14 @@ function HomeRouter({ listings, loading, error }) {
   return <Home listings={listings} loading={loading} error={error} />
 }
 
+function PageLoader() {
+  return (
+    <div style={{ padding: '80px 20px', textAlign: 'center' }}>
+      <p style={{ opacity: 0.6 }}>Chargement...</p>
+    </div>
+  )
+}
+
 function AppContent() {
   const [listings, setListings] = useState([])
   const [loading, setLoading] = useState(true)
@@ -520,7 +528,8 @@ function AppContent() {
   }
 
   return (
-    <Routes>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
       <Route
         path="/"
         element={<HomeRouter listings={listings} loading={loading} error={error} />}
@@ -784,7 +793,8 @@ function AppContent() {
         }
       />
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   )
 }
 
