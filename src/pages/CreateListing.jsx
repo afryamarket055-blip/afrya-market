@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Icon from '../components/Icon'
 import { validateImageFile, MAX_IMAGES_PER_LISTING } from '../lib/imageValidation'
+import { compressAndRename } from '../lib/imageCompression'
 function CreateListing({ onCreateListing }) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -67,8 +68,9 @@ async function handleSubmit(event) {
   const uploadedImageUrls = []
   if (images.length > 0) {
     for (const image of images) {
-      const imageFile = image.file
-      const safeFileName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '-')
+      const originalFile = image.file
+      const imageFile = await compressAndRename(originalFile)
+      const safeFileName = imageFile.name
       const filePath = `${Date.now()}-${safeFileName}`
       const { error: uploadError } = await supabase.storage
         .from('listing-images')

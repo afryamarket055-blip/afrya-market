@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
 import { validateImageFile } from '../lib/imageValidation'
+import { compressAndRename } from '../lib/imageCompression'
 
 function EditListing() {
   const { id } = useParams()
@@ -85,13 +86,14 @@ function EditListing() {
     let finalImageUrl = imageUrl
 
     if (newImageFile) {
-      const safeFileName = newImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '-')
+      const compressedFile = await compressAndRename(newImageFile)
+      const safeFileName = compressedFile.name
       const filePath = `${Date.now()}-${safeFileName}`
 
       const { error: uploadError } = await supabase.storage
         .from('listing-images')
-        .upload(filePath, newImageFile, {
-          contentType: newImageFile.type,
+        .upload(filePath, compressedFile, {
+          contentType: compressedFile.type,
           upsert: false,
           cacheControl: '3600',
         })
