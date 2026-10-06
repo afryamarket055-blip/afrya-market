@@ -31,6 +31,7 @@ const AdminShops = lazy(() => import('./pages/AdminShops'))
 const Booster = lazy(() => import('./pages/Booster'))
 const OrderDetails = lazy(() => import('./pages/OrderDetails'))
 const MyOrders = lazy(() => import('./pages/MyOrders'))
+const Categories = lazy(() => import('./pages/Categories'))
 const About = lazy(() => import('./pages/About'))
 const HowItWorks = lazy(() => import('./pages/HowItWorks'))
 const Help = lazy(() => import('./pages/Help'))
@@ -550,9 +551,7 @@ function AppContent() {
 
       <Route
         path="/categories"
-        element={
-          <SimplePage title="Catégories" />
-        }
+        element={<Categories />}
       />
 
       <Route
