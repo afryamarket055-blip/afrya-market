@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
-import { validateImageFile } from '../lib/imageValidation'
+import Icon from '../components/Icon'
+import { validateImageFile, MAX_IMAGES_PER_LISTING } from '../lib/imageValidation'
 import { compressAndRename } from '../lib/imageCompression'
 
 function EditListing() {
@@ -19,14 +20,27 @@ function EditListing() {
     condition: '',
     description: '',
   })
-  const [imageUrl, setImageUrl] = useState('')
-  const [newImageFile, setNewImageFile] = useState(null)
+
+  // Image de couverture actuelle (listings.image)
+  const [coverImage, setCoverImage] = useState('')
+
+  // Images existantes (listing_images) : [{ id, image_url, position }]
+  const [existingImages, setExistingImages] = useState([])
+
+  // Nouvelles images a uploader : [{ file, previewUrl }]
+  const [newFiles, setNewFiles] = useState([])
+
+  // IDs d'images existantes a supprimer au submit
+  const [removedIds, setRemovedIds] = useState([])
+
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
 
   useEffect(() => {
     async function loadListing() {
+      // 1. Charger l'annonce
       const { data, error } = await supabase
         .from('listings')
         .select('*')
@@ -35,6 +49,7 @@ function EditListing() {
 
       if (error) {
         console.error('Erreur chargement annonce :', error)
+        setError('Impossible de charger cette annonce.')
         setLoading(false)
         return
       }
@@ -47,7 +62,20 @@ function EditListing() {
         condition: data.condition || '',
         description: data.description || '',
       })
-      setImageUrl(data.image || '')
+      setCoverImage(data.image || '')
+
+      // 2. Charger les images additionnelles
+      const { data: imgs, error: imgErr } = await supabase
+        .from('listing_images')
+        .select('id, image_url, position')
+        .eq('listing_id', id)
+        .order('position', { ascending: true })
+
+      if (imgErr) {
+        console.error('Erreur chargement images :', imgErr)
+      }
+
+      setExistingImages(imgs || [])
       setLoading(false)
     }
 
@@ -62,35 +90,86 @@ function EditListing() {
     }))
   }
 
-  function handleImageChange(event) {
-    const file = event.target.files[0]
-    if (!file) return
+  // Total images actuellement affichees
+  const visibleExisting = existingImages.filter((i) => !removedIds.includes(i.id))
+  const totalVisible = visibleExisting.length + newFiles.length
 
-    const check = validateImageFile(file)
-    if (!check.valid) {
-      setMessage(check.reason)
+  function handleAddFiles(event) {
+    const selected = Array.from(event.target.files || [])
+    if (selected.length === 0) return
+
+    // Verifier la limite
+    if (totalVisible + selected.length > MAX_IMAGES_PER_LISTING) {
+      setMessage('Maximum ' + MAX_IMAGES_PER_LISTING + ' photos au total.')
       event.target.value = ''
       return
     }
 
+    // Valider chaque fichier
+    for (const file of selected) {
+      const check = validateImageFile(file)
+      if (!check.valid) {
+        setMessage(check.reason)
+        event.target.value = ''
+        return
+      }
+    }
+
+    const additions = selected.map((file) => ({
+      file,
+      previewUrl: URL.createObjectURL(file),
+    }))
+
+    setNewFiles((prev) => [...prev, ...additions])
     setMessage('')
-    setNewImageFile(file)
-    setImageUrl(URL.createObjectURL(file))
+    event.target.value = ''
+  }
+
+  function handleRemoveExisting(imageId) {
+    // Marquer pour suppression (on ne supprime en DB qu'au submit)
+    setRemovedIds((prev) => [...prev, imageId])
+
+    // Reverrouiller la preview locale si c'etait la cover
+    const removed = existingImages.find((i) => i.id === imageId)
+    if (removed && removed.image_url === coverImage) {
+      setCoverImage('')
+    }
+  }
+
+  function handleRestoreExisting(imageId) {
+    setRemovedIds((prev) => prev.filter((rid) => rid !== imageId))
+  }
+
+  function handleRemoveNew(index) {
+    setNewFiles((prev) => {
+      const copy = [...prev]
+      const [removed] = copy.splice(index, 1)
+      if (removed?.previewUrl) URL.revokeObjectURL(removed.previewUrl)
+      return copy
+    })
   }
 
   async function handleSubmit(event) {
     event.preventDefault()
     setSaving(true)
     setMessage('')
+    setError('')
 
-    let finalImageUrl = imageUrl
+    if (totalVisible === 0) {
+      setError('Ajoutez au moins une photo.')
+      setSaving(false)
+      return
+    }
 
-    if (newImageFile) {
-      const compressedFile = await compressAndRename(newImageFile)
+    // ---- 1. Uploader les nouvelles images ----
+    const uploadedUrls = []
+
+    for (const item of newFiles) {
+      const compressedFile = await compressAndRename(item.file)
       const safeFileName = compressedFile.name
-      const filePath = `${Date.now()}-${safeFileName}`
+      const filePath = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safeFileName}`
 
-      const { error: uploadError } = await supabase.storage
+      const { error: upErr } = await supabase.storage
         .from('listing-images')
         .upload(filePath, compressedFile, {
           contentType: compressedFile.type,
@@ -98,21 +177,75 @@ function EditListing() {
           cacheControl: '3600',
         })
 
-      if (uploadError) {
-        console.error('Erreur upload image :', uploadError)
-        setMessage("Erreur lors de l'envoi de la photo.")
+      if (upErr) {
+        console.error('Erreur upload :', upErr)
+        setError("Erreur lors de l'envoi d'une photo.")
         setSaving(false)
         return
       }
 
-      const { data: publicUrlData } = supabase.storage
+      const { data: urlData } = supabase.storage
         .from('listing-images')
         .getPublicUrl(filePath)
 
-      finalImageUrl = publicUrlData.publicUrl
+      uploadedUrls.push(urlData.publicUrl)
     }
 
-    const { error } = await supabase
+    // ---- 2. Supprimer les images marquees ----
+    if (removedIds.length > 0) {
+      const { error: delErr } = await supabase
+        .from('listing_images')
+        .delete()
+        .in('id', removedIds)
+
+      if (delErr) {
+        console.error('Erreur suppression images :', delErr)
+        setError('Erreur lors de la suppression des photos.')
+        setSaving(false)
+        return
+      }
+    }
+
+    // ---- 3. Determiner la position maximale existante ----
+    const remaining = existingImages.filter((i) => !removedIds.includes(i.id))
+    let maxPosition = -1
+    for (const img of remaining) {
+      const p = Number(img.position)
+      if (!Number.isNaN(p) && p > maxPosition) maxPosition = p
+    }
+
+    // ---- 4. Inserer les nouvelles images a max+1, max+2, ... ----
+    if (uploadedUrls.length > 0) {
+      const rows = uploadedUrls.map((url, idx) => ({
+        listing_id: id,
+        image_url: url,
+        position: maxPosition + 1 + idx,
+      }))
+
+      const { error: insErr } = await supabase
+        .from('listing_images')
+        .insert(rows)
+
+      if (insErr) {
+        console.error('Erreur insert nouvelles images :', insErr)
+        setError("Erreur lors de l'enregistrement des nouvelles photos.")
+        setSaving(false)
+        return
+      }
+    }
+
+    // ---- 5. Definir l'image de couverture ----
+    // Priorite : image restante la moins positionnee, sinon 1ere nouvelle
+    let finalCover = coverImage
+    if (remaining.length > 0) {
+      const sorted = [...remaining].sort((a, b) => Number(a.position) - Number(b.position))
+      finalCover = sorted[0].image_url
+    } else if (uploadedUrls.length > 0) {
+      finalCover = uploadedUrls[0]
+    }
+
+    // ---- 6. Mettre a jour l'annonce ----
+    const { error: upListingErr } = await supabase
       .from('listings')
       .update({
         title: formData.title,
@@ -120,20 +253,20 @@ function EditListing() {
         location: formData.location,
         condition: formData.condition,
         category: formData.category,
-        image: finalImageUrl,
+        image: finalCover,
         description: formData.description,
       })
       .eq('id', id)
 
     setSaving(false)
 
-    if (error) {
-      console.error('Erreur mise à jour :', error)
-      setMessage("Erreur lors de la mise à jour de l'annonce.")
+    if (upListingErr) {
+      console.error('Erreur mise a jour :', upListingErr)
+      setError("Erreur lors de la mise a jour de l'annonce.")
       return
     }
 
-    setMessage('✓ Annonce mise à jour avec succès !')
+    setMessage('Annonce mise a jour avec succes !')
     setTimeout(() => {
       navigate('/mes-annonces')
     }, 1000)
@@ -144,11 +277,13 @@ function EditListing() {
       <div className="app">
         <Nav />
         <main style={{ padding: '80px 20px', textAlign: 'center' }}>
-          <p>Chargement de l'annonce...</p>
+          <p>Chargement de l annonce...</p>
         </main>
       </div>
     )
   }
+
+  const canAddMore = totalVisible < MAX_IMAGES_PER_LISTING
 
   return (
     <div className="app">
@@ -156,11 +291,11 @@ function EditListing() {
       <main
         style={{
           padding: '80px 20px',
-          maxWidth: '500px',
+          maxWidth: '600px',
           margin: '0 auto',
         }}
       >
-        <h1>Modifier l'annonce</h1>
+        <h1>Modifier l annonce</h1>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -176,7 +311,7 @@ function EditListing() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="category">Catégorie</label>
+            <label htmlFor="category">Categorie</label>
             <select
               id="category"
               name="category"
@@ -184,19 +319,19 @@ function EditListing() {
               onChange={handleChange}
               required
             >
-              <option value="">Choisir une catégorie</option>
-              <option value="Téléphones">Téléphones</option>
+              <option value="">Choisir une categorie</option>
+              <option value="Telephones">Telephones</option>
               <option value="Informatique">Informatique</option>
-              <option value="Électroménager">Électroménager</option>
+              <option value="Electromenager">Electromenager</option>
               <option value="Mode">Mode</option>
               <option value="Maison">Maison</option>
-              <option value="Véhicules">Véhicules</option>
+              <option value="Vehicules">Vehicules</option>
               <option value="Autres">Autres</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label htmlFor="condition">État</label>
+            <label htmlFor="condition">Etat</label>
             <select
               id="condition"
               name="condition"
@@ -204,12 +339,12 @@ function EditListing() {
               onChange={handleChange}
               required
             >
-              <option value="">Choisir l'état</option>
+              <option value="">Choisir l etat</option>
               <option value="Neuf">Neuf</option>
               <option value="Comme neuf">Comme neuf</option>
-              <option value="Très bon état">Très bon état</option>
-              <option value="Bon état">Bon état</option>
-              <option value="État correct">État correct</option>
+              <option value="Tres bon etat">Tres bon etat</option>
+              <option value="Bon etat">Bon etat</option>
+              <option value="Etat correct">Etat correct</option>
             </select>
           </div>
 
@@ -251,23 +386,148 @@ function EditListing() {
           </div>
 
           <div className="form-group">
-            <label>Photo actuelle</label>
-            {imageUrl && (
-              <img
-                src={imageUrl}
-                alt="Aperçu"
-                style={{ width: '150px', display: 'block', marginBottom: '10px' }} loading="lazy" decoding="async" />
+            <label>
+              Photos ({totalVisible} / {MAX_IMAGES_PER_LISTING})
+            </label>
+            <p style={{ fontSize: '13px', opacity: 0.7, marginTop: '-6px', marginBottom: '10px' }}>
+              La premiere photo sert de couverture.
+            </p>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
+                gap: '10px',
+                marginBottom: '12px',
+              }}
+            >
+              {/* Images existantes */}
+              {existingImages.map((img) => {
+                const isRemoved = removedIds.includes(img.id)
+                return (
+                  <div
+                    key={img.id}
+                    style={{
+                      position: 'relative',
+                      aspectRatio: '1',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                      border: '1px solid #e5e7eb',
+                      opacity: isRemoved ? 0.35 : 1,
+                    }}
+                  >
+                    <img
+                      src={img.image_url}
+                      alt=""
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => (isRemoved ? handleRestoreExisting(img.id) : handleRemoveExisting(img.id))}
+                      aria-label={isRemoved ? 'Restaurer' : 'Retirer'}
+                      style={{
+                        position: 'absolute',
+                        top: '4px',
+                        right: '4px',
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        border: 'none',
+                        background: isRemoved ? '#10b981' : '#ef4444',
+                        color: '#fff',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        lineHeight: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {isRemoved ? '↺' : '×'}
+                    </button>
+                  </div>
+                )
+              })}
+
+              {/* Nouvelles images (preview) */}
+              {newFiles.map((item, idx) => (
+                <div
+                  key={'new-' + idx}
+                  style={{
+                    position: 'relative',
+                    aspectRatio: '1',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    border: '2px dashed #2563eb',
+                  }}
+                >
+                  <img
+                    src={item.previewUrl}
+                    alt=""
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveNew(idx)}
+                    aria-label="Retirer"
+                    style={{
+                      position: 'absolute',
+                      top: '4px',
+                      right: '4px',
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      border: 'none',
+                      background: '#ef4444',
+                      color: '#fff',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      lineHeight: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {canAddMore ? (
+              <>
+                <input
+                  id="new-images"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  multiple
+                  onChange={handleAddFiles}
+                  style={{ display: 'none' }}
+                />
+                <label
+                  htmlFor="new-images"
+                  className="btn btn-secondary"
+                  style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <Icon name="plus" size={16} />
+                  Ajouter des photos
+                </label>
+              </>
+            ) : (
+              <p style={{ fontSize: '13px', opacity: 0.6 }}>
+                Maximum atteint ({MAX_IMAGES_PER_LISTING} photos).
+              </p>
             )}
-            <input
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={handleImageChange}
-            />
           </div>
 
-          {message && <p>{message}</p>}
+          {message && <p style={{ color: '#047857' }}>{message}</p>}
+          {error && <p className="form-error">{error}</p>}
 
-          <button type="submit" disabled={saving}>
+          <button type="submit" disabled={saving} className="btn btn-primary" style={{ width: '100%' }}>
             {saving ? 'Enregistrement...' : 'Enregistrer les modifications'}
           </button>
         </form>
