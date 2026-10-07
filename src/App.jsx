@@ -33,6 +33,7 @@ const OrderDetails = lazy(() => import('./pages/OrderDetails'))
 const MyOrders = lazy(() => import('./pages/MyOrders'))
 const Categories = lazy(() => import('./pages/Categories'))
 const Verification = lazy(() => import('./pages/Verification'))
+const TopSellers = lazy(() => import('./pages/TopSellers'))
 const AdminVerifications = lazy(() => import('./pages/AdminVerifications'))
 const About = lazy(() => import('./pages/About'))
 const HowItWorks = lazy(() => import('./pages/HowItWorks'))
@@ -809,6 +810,11 @@ function AppContent() {
             <AdminVerifications />
           </AdminRoute>
         }
+      />
+
+      <Route
+        path="/vendeurs-verifies"
+        element={<TopSellers />}
       />
 
       <Route path="*" element={<NotFound />} />

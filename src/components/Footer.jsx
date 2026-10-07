@@ -28,6 +28,7 @@ const SECTIONS = [
     links: [
       { to: '/annonces', label: 'Toutes les annonces' },
       { to: '/categories', label: 'Catégories' },
+      { to: '/vendeurs-verifies', label: 'Vendeurs vérifiés' },
       { to: '/demandes', label: 'Demandes' },
       { to: '/favoris', label: 'Mes favoris' },
     ],
