@@ -7,6 +7,7 @@ import Icon from '../components/Icon'
 import ReportModal from '../components/ReportModal'
 import ConfirmDialog from '../components/ConfirmDialog'
 import PageMeta from '../components/PageMeta'
+import { useSellerResponseTime, formatResponseTime } from '../hooks/useSellerResponseTime'
 
 function formatMemberSince(dateString) {
   if (!dateString) return null
@@ -62,6 +63,7 @@ function PublicProfile() {
   const [listingsCount, setListingsCount] = useState(0)
   const [lastActivityDate, setLastActivityDate] = useState(null)
   const [salesCount, setSalesCount] = useState(0)
+  const { data: responseTime } = useSellerResponseTime(id)
   const [reviews, setReviews] = useState([])
   const [myReview, setMyReview] = useState(null)
   const [canReview, setCanReview] = useState(false)
@@ -510,6 +512,27 @@ function PublicProfile() {
               </div>
             )}
           </div>
+
+          {responseTime && (
+            <p
+              className="public-profile-response-time"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 12px',
+                marginTop: '12px',
+                background: '#ecfdf5',
+                color: '#047857',
+                borderRadius: '999px',
+                fontSize: '13px',
+                fontWeight: 500,
+              }}
+            >
+              <Icon name="clock" size={14} />
+              Repond en ~{formatResponseTime(responseTime.avg_minutes)}
+            </p>
+          )}
 
           {showPhone && (
             <div className="public-profile-phone">
