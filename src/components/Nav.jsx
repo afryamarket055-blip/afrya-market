@@ -312,7 +312,10 @@ function Nav() {
                         <Link to="/admin/boosts" onClick={closeMenu}>
                           Admin - Boosts
                         </Link>
-                        <Link to="/admin/boutiques" onClick={closeMenu}>
+                        <Link to="/admin/verifications" onClick={closeMenu}>
+                          Admin - Vérifications
+                        </Link>
+                                                <Link to="/admin/boutiques" onClick={closeMenu}>
                           Admin - Boutiques
                         </Link>
                       </>

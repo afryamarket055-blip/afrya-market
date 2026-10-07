@@ -32,6 +32,8 @@ const Booster = lazy(() => import('./pages/Booster'))
 const OrderDetails = lazy(() => import('./pages/OrderDetails'))
 const MyOrders = lazy(() => import('./pages/MyOrders'))
 const Categories = lazy(() => import('./pages/Categories'))
+const Verification = lazy(() => import('./pages/Verification'))
+const AdminVerifications = lazy(() => import('./pages/AdminVerifications'))
 const About = lazy(() => import('./pages/About'))
 const HowItWorks = lazy(() => import('./pages/HowItWorks'))
 const Help = lazy(() => import('./pages/Help'))
@@ -791,6 +793,24 @@ function AppContent() {
           </AdminRoute>
         }
       />
+      <Route
+        path="/verification"
+        element={
+          <ProtectedRoute>
+            <Verification />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/verifications"
+        element={
+          <AdminRoute>
+            <AdminVerifications />
+          </AdminRoute>
+        }
+      />
+
       <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
