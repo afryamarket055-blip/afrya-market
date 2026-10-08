@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
 import Icon from '../components/Icon'
+import SmartListingModal from '../components/SmartListingModal'
 import { validateImageFile, MAX_IMAGES_PER_LISTING } from '../lib/imageValidation'
 import { compressAndRename } from '../lib/imageCompression'
 
@@ -37,6 +38,7 @@ function EditListing() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const [smartModalOpen, setSmartModalOpen] = useState(false)
 
   useEffect(() => {
     async function loadListing() {
@@ -81,6 +83,16 @@ function EditListing() {
 
     loadListing()
   }, [id])
+
+  function handleSmartApply({ title, description, category }) {
+    setFormData((previous) => ({
+      ...previous,
+      title: title || previous.title,
+      description: description || previous.description,
+      category: category || previous.category,
+    }))
+    setError('')
+  }
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -296,6 +308,52 @@ function EditListing() {
         }}
       >
         <h1>Modifier l annonce</h1>
+
+        <div
+          style={{
+            marginBottom: '24px',
+            padding: '18px 20px',
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+            border: '1px solid #bfdbfe',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '44px',
+              height: '44px',
+              borderRadius: '10px',
+              background: '#fff',
+              color: '#2563eb',
+              flexShrink: 0,
+            }}
+          >
+            <Icon name="sparkles" size={22} />
+          </div>
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <div style={{ fontWeight: 600, marginBottom: '2px' }}>
+              Ameliorer avec l'IA
+            </div>
+            <div style={{ fontSize: '14px', opacity: 0.75 }}>
+              Decris ton article, l'IA redige une meilleure annonce.
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSmartModalOpen(true)}
+            className="btn btn-primary"
+            style={{ flexShrink: 0 }}
+          >
+            Essayer
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -532,6 +590,13 @@ function EditListing() {
           </button>
         </form>
       </main>
+
+      {smartModalOpen && (
+        <SmartListingModal
+          onClose={() => setSmartModalOpen(false)}
+          onApply={handleSmartApply}
+        />
+      )}
     </div>
   )
 }

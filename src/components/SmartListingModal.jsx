@@ -7,8 +7,9 @@ function SmartListingModal({ onClose, onApply }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [result, setResult] = useState(null)
+  const [lastVariant, setLastVariant] = useState(null)
 
-  async function handleGenerate() {
+  async function callGenerate(variant) {
     const clean = hint.trim()
     if (clean.length < 3) {
       setError('Decris ton article en au moins 3 caracteres.')
@@ -17,11 +18,11 @@ function SmartListingModal({ onClose, onApply }) {
 
     setLoading(true)
     setError('')
-    setResult(null)
+    setLastVariant(variant)
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke('smart-listing', {
-        body: { hint: clean },
+        body: { hint: clean, variant: variant },
       })
 
       if (fnError) {
@@ -51,9 +52,15 @@ function SmartListingModal({ onClose, onApply }) {
     onClose()
   }
 
-  function handleRetry() {
+  function handleNewVariant(variant) {
+    if (!result) return
+    callGenerate(variant)
+  }
+
+  function handleReset() {
     setResult(null)
     setError('')
+    setLastVariant(null)
   }
 
   return (
@@ -136,7 +143,7 @@ function SmartListingModal({ onClose, onApply }) {
               </button>
               <button
                 type="button"
-                onClick={handleGenerate}
+                onClick={() => callGenerate('default')}
                 disabled={loading}
                 className="btn btn-primary"
                 style={{ flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
@@ -184,22 +191,64 @@ function SmartListingModal({ onClose, onApply }) {
               </div>
             </div>
 
-            <p style={{ fontSize: '13px', opacity: 0.6, marginBottom: '16px' }}>
-              Tu pourras tout modifier apres.
+            <p style={{ fontSize: '13px', opacity: 0.7, marginBottom: '8px', fontWeight: 600 }}>
+              Pas satisfait ? Essaie une autre version :
             </p>
+
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+              <button
+                type="button"
+                onClick={() => handleNewVariant('shorter')}
+                disabled={loading}
+                className="btn btn-secondary btn-sm"
+              >
+                Plus courte
+              </button>
+              <button
+                type="button"
+                onClick={() => handleNewVariant('detailed')}
+                disabled={loading}
+                className="btn btn-secondary btn-sm"
+              >
+                Plus detaillee
+              </button>
+              <button
+                type="button"
+                onClick={() => handleNewVariant('attractive')}
+                disabled={loading}
+                className="btn btn-secondary btn-sm"
+              >
+                Plus vendeuse
+              </button>
+            </div>
+
+            {loading && (
+              <p style={{ fontSize: '13px', opacity: 0.7, margin: '8px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Icon name="loader" size={14} />
+                Regeneration...
+              </p>
+            )}
+
+            {error && (
+              <p style={{ color: '#dc2626', fontSize: '14px', margin: '8px 0' }}>
+                {error}
+              </p>
+            )}
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button
                 type="button"
-                onClick={handleRetry}
+                onClick={handleReset}
+                disabled={loading}
                 className="btn btn-secondary"
                 style={{ flex: 1 }}
               >
-                Reessayer
+                Recommencer
               </button>
               <button
                 type="button"
                 onClick={handleApply}
+                disabled={loading}
                 className="btn btn-primary"
                 style={{ flex: 2 }}
               >
