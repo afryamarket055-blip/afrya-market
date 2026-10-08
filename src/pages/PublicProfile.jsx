@@ -432,6 +432,13 @@ function PublicProfile() {
   const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0)
   const avgRating = reviews.length > 0 ? totalRating / reviews.length : 0
 
+  const MIN_REVIEWS_FOR_BADGE = 3
+  const positiveReviews = reviews.filter((r) => r.rating >= 4).length
+  const positivePercent =
+    reviews.length >= MIN_REVIEWS_FOR_BADGE
+      ? Math.round((positiveReviews / reviews.length) * 100)
+      : null
+
   return (
     <div className="app public-profile-v2">
       <PageMeta title={(profile.shop_name || profile.full_name || 'Vendeur') + ' — AFRYA MARKET'} />
@@ -480,6 +487,27 @@ function PublicProfile() {
                 ({reviews.length} avis)
               </span>
             </div>
+          )}
+
+          {positivePercent !== null && (
+            <p
+              className="public-profile-positive-reviews"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 12px',
+                marginTop: '8px',
+                background: '#ecfdf5',
+                color: '#047857',
+                borderRadius: '999px',
+                fontSize: '13px',
+                fontWeight: 500,
+              }}
+            >
+              <Icon name="star" size={14} />
+              {positivePercent}% d'avis positifs
+            </p>
           )}
 
           {memberSince && (
