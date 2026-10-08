@@ -29,6 +29,7 @@ function MyListings() {
     nullCount: 0,
     total: 0,
   })
+  const [perListingStats, setPerListingStats] = useState({})
 
   useEffect(() => {
     async function loadMyListings() {
@@ -91,6 +92,39 @@ function MyListings() {
     }
 
     loadStats()
+  }, [user, listings])
+
+  useEffect(() => {
+    async function loadPerListingStats() {
+      if (!user || listings.length === 0) {
+        setPerListingStats({})
+        return
+      }
+
+      const ids = listings.map((l) => l.id)
+
+      const [viewsRes, favRes, convRes] = await Promise.all([
+        supabase.from('listing_views').select('listing_id').in('listing_id', ids),
+        supabase.from('listing_favorites').select('listing_id').in('listing_id', ids),
+        supabase.from('conversations').select('listing_id').in('listing_id', ids),
+      ])
+
+      const map = {}
+      for (const id of ids) map[id] = { views: 0, favorites: 0, contacts: 0 }
+
+      for (const v of viewsRes.data || []) {
+        if (map[v.listing_id]) map[v.listing_id].views++
+      }
+      for (const f of favRes.data || []) {
+        if (map[f.listing_id]) map[f.listing_id].favorites++
+      }
+      for (const c of convRes.data || []) {
+        if (map[c.listing_id]) map[c.listing_id].contacts++
+      }
+
+      setPerListingStats(map)
+    }
+    loadPerListingStats()
   }, [user, listings])
 
   useEffect(() => {
@@ -355,6 +389,31 @@ function MyListings() {
                       <span className="status-dot status-dot-active">🟢 Active</span>
                     )}
                   </div>
+
+                  {perListingStats[listing.id] && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '14px',
+                        padding: '6px 12px',
+                        fontSize: '13px',
+                        color: '#6b7280',
+                      }}
+                    >
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Icon name="eye" size={14} />
+                        {perListingStats[listing.id].views}
+                      </span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Icon name="bookmark" size={14} />
+                        {perListingStats[listing.id].favorites}
+                      </span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Icon name="message" size={14} />
+                        {perListingStats[listing.id].contacts}
+                      </span>
+                    </div>
+                  )}
 
                   <div className="my-listing-actions">
                     <Link to={`/modifier/${listing.id}`} className="btn btn-secondary">
