@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import Nav from '../components/Nav'
 import Icon from '../components/Icon'
+import SmartListingModal from '../components/SmartListingModal'
 import { validateImageFile, MAX_IMAGES_PER_LISTING } from '../lib/imageValidation'
 import { compressAndRename } from '../lib/imageCompression'
 function CreateListing({ onCreateListing }) {
@@ -20,7 +21,18 @@ function CreateListing({ onCreateListing }) {
   })
 
   const [images, setImages] = useState([])
+  const [smartModalOpen, setSmartModalOpen] = useState(false)
   const [message, setMessage] = useState('')
+
+  function handleSmartApply({ title, description, category }) {
+    setFormData((previous) => ({
+      ...previous,
+      title: title || previous.title,
+      description: description || previous.description,
+      category: category || previous.category,
+    }))
+    setMessage('')
+  }
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -172,6 +184,52 @@ async function handleSubmit(event) {
           <p>
             Publiez votre annonce et trouvez rapidement un acheteur.
           </p>
+        </div>
+
+        <div
+          style={{
+            marginBottom: '24px',
+            padding: '18px 20px',
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+            border: '1px solid #bfdbfe',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '44px',
+              height: '44px',
+              borderRadius: '10px',
+              background: '#fff',
+              color: '#2563eb',
+              flexShrink: 0,
+            }}
+          >
+            <Icon name="sparkles" size={22} />
+          </div>
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <div style={{ fontWeight: 600, marginBottom: '2px' }}>
+              Creer mon annonce avec l'IA
+            </div>
+            <div style={{ fontSize: '14px', opacity: 0.75 }}>
+              Decris en 1 phrase, on fait le reste.
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSmartModalOpen(true)}
+            className="btn btn-primary"
+            style={{ flexShrink: 0 }}
+          >
+            Essayer
+          </button>
         </div>
 
         <form
@@ -432,6 +490,13 @@ async function handleSubmit(event) {
           </section>
         </form>
       </main>
+
+      {smartModalOpen && (
+        <SmartListingModal
+          onClose={() => setSmartModalOpen(false)}
+          onApply={handleSmartApply}
+        />
+      )}
 
       <footer className="footer">
         <div className="logo">
