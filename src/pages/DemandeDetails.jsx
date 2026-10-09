@@ -254,7 +254,7 @@ function DemandeDetails() {
           <h1 style={{ marginBottom: '8px' }}>{demand.title}</h1>
 
           <p style={{ color: '#666', marginBottom: '20px' }}>
-            Recherché à <strong>{demand.city}</strong> · {demand.category}
+            Recherché à <strong>{demand.city}</strong> · {demand.category}{demand.subcategory ? " · " + demand.subcategory : ""}
           </p>
 
           {demand.description && (

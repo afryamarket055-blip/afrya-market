@@ -363,7 +363,7 @@ function ListingDetails({ listings = [] }) {
           </div>
 
           <div className="details-info">
-            <span className="listing-category">{listing.category}</span>
+            <span className="listing-category">{listing.category}{listing.subcategory ? " · " + listing.subcategory : ""}</span>
 
             <h1 className="details-title">{listing.title}</h1>
 
