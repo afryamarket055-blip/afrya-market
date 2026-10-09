@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { CATEGORIES_WITH_ALL } from '../constants/categories'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
@@ -8,16 +9,7 @@ import LoadingState from '../components/LoadingState'
 import SkeletonList from '../components/SkeletonList'
 import EmptyState from '../components/EmptyState'
 
-const CATEGORIES = [
-  'Toutes',
-  'Téléphones',
-  'Informatique',
-  'Électroménager',
-  'Mode',
-  'Maison',
-  'Véhicules',
-  'Autres',
-]
+const CATEGORIES = CATEGORIES_WITH_ALL
 
 
 function isRecent(dateString) {

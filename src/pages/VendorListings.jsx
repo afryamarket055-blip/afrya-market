@@ -6,18 +6,10 @@ import Icon from '../components/Icon'
 import PageMeta from '../components/PageMeta'
 import ListingCard from '../ListingCard'
 import SkeletonList from '../components/SkeletonList'
+import { CATEGORIES_WITH_ALL } from '../constants/categories'
 import EmptyState from '../components/EmptyState'
 
-const CATEGORIES = [
-  'Toutes',
-  'Téléphones',
-  'Informatique',
-  'Électroménager',
-  'Mode',
-  'Maison',
-  'Véhicules',
-  'Autres',
-]
+const CATEGORIES = CATEGORIES_WITH_ALL
 
 function VendorListings() {
   const { id } = useParams()

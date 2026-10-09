@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { CATEGORIES, getSubcategories } from '../constants/categories'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import Nav from '../components/Nav'
@@ -11,6 +12,7 @@ function JeRecherche() {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
+    subcategory: '',
     description: '',
     budget_min: '',
     budget_max: '',
@@ -28,6 +30,7 @@ function JeRecherche() {
     setFormData((previous) => ({
       ...previous,
       [name]: type === 'checkbox' ? checked : value,
+      ...(name === 'category' ? { subcategory: '' } : {}),
     }))
   }
 
@@ -47,6 +50,7 @@ function JeRecherche() {
       user_id: user.id,
       title: formData.title.trim(),
       category: formData.category,
+      subcategory: formData.subcategory || null,
       description: formData.description.trim() || null,
       budget_min: formData.budget_min ? Number(formData.budget_min) : null,
       budget_max: formData.budget_max ? Number(formData.budget_max) : null,
@@ -126,14 +130,27 @@ function JeRecherche() {
                 required
               >
                 <option value="">Choisir une categorie</option>
-                <option value="Téléphones">Téléphones</option>
-                <option value="Informatique">Informatique</option>
-                <option value="Électroménager">Électroménager</option>
-                <option value="Mode">Mode</option>
-                <option value="Maison">Maison</option>
-                <option value="Véhicules">Véhicules</option>
-                <option value="Autres">Autres</option>
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.key} value={cat.key}>{cat.key}</option>
+                ))}
               </select>
+
+              {formData.category && getSubcategories(formData.category).length > 0 && (
+                <div className="form-group" style={{ marginTop: '12px' }}>
+                  <label htmlFor="subcategory">Sous-categorie (optionnel)</label>
+                  <select
+                    id="subcategory"
+                    name="subcategory"
+                    value={formData.subcategory || ''}
+                    onChange={handleChange}
+                  >
+                    <option value="">Choisir une sous-categorie</option>
+                    {getSubcategories(formData.category).map((sub) => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             <div className="form-group">

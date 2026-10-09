@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
+import { CATEGORIES, getSubcategories } from '../constants/categories'
 import Nav from '../components/Nav'
 import Icon from '../components/Icon'
 import SmartListingModal from '../components/SmartListingModal'
@@ -14,6 +15,7 @@ function CreateListing({ onCreateListing }) {
   const [formData, setFormData] = useState({
     title: '',
     category: '',
+    subcategory: '',
     price: '',
     location: '',
     condition: '',
@@ -40,6 +42,7 @@ function CreateListing({ onCreateListing }) {
     setFormData((previous) => ({
       ...previous,
       [name]: value,
+      ...(name === 'category' ? { subcategory: '' } : {}),
     }))
   }
 
@@ -114,6 +117,7 @@ async function handleSubmit(event) {
         location: formData.location,
         condition: formData.condition,
         category: formData.category,
+        subcategory: formData.subcategory || null,
         image: imageUrl,
         description: formData.description,
       },
@@ -277,24 +281,28 @@ async function handleSubmit(event) {
                   onChange={handleChange}
                   required
                 >
-                  <option value="">
-                    Choisir une catégorie
-                  </option>
-
-                  <option value="Téléphones">Téléphones</option>
-
-                  <option value="Informatique">Informatique</option>
-
-                  <option value="Électroménager">Électroménager</option>
-
-                  <option value="Mode">Mode</option>
-
-                  <option value="Maison">Maison</option>
-
-                  <option value="Véhicules">Véhicules</option>
-
-                  <option value="Autres">Autres</option>
+                  <option value="">Choisir une categorie</option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat.key} value={cat.key}>{cat.key}</option>
+                  ))}
                 </select>
+
+                {formData.category && getSubcategories(formData.category).length > 0 && (
+                  <div className="form-group" style={{ marginTop: '12px' }}>
+                    <label htmlFor="subcategory">Sous-categorie (optionnel)</label>
+                    <select
+                      id="subcategory"
+                      name="subcategory"
+                      value={formData.subcategory || ''}
+                      onChange={handleChange}
+                    >
+                      <option value="">Choisir une sous-categorie</option>
+                      {getSubcategories(formData.category).map((sub) => (
+                        <option key={sub} value={sub}>{sub}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
 
               <div className="form-group">

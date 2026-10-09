@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { FEATURED_CATEGORIES_RENDER } from '../constants/categories'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import PageMeta from '../components/PageMeta'
@@ -22,14 +23,7 @@ const STEPS = [
   { num: 3, iconName: 'handshake', title: 'Concluez', text: 'Rencontrez-vous, vérifiez et finalisez en confiance.' },
 ]
 
-const CATEGORIES = [
-  { iconName: 'smartphone', name: 'Téléphones' },
-  { iconName: 'laptop', name: 'Informatique' },
-  { iconName: 'tv', name: 'Électroménager' },
-  { iconName: 'shirt', name: 'Mode' },
-  { iconName: 'sofa', name: 'Maison' },
-  { iconName: 'bike', name: 'Véhicules' },
-]
+const CATEGORIES = FEATURED_CATEGORIES_RENDER
 
 function LandingPage() {
   const navigate = useNavigate()

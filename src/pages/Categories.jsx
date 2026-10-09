@@ -4,16 +4,9 @@ import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
 import PageMeta from '../components/PageMeta'
 import Icon from '../components/Icon'
+import { CATEGORIES } from '../constants/categories'
 
-const CATEGORIES = [
-  { key: 'Téléphones', icon: 'smartphone' },
-  { key: 'Informatique', icon: 'laptop' },
-  { key: 'Électroménager', icon: 'tv' },
-  { key: 'Mode', icon: 'shirt' },
-  { key: 'Maison', icon: 'sofa' },
-  { key: 'Véhicules', icon: 'bike' },
-  { key: 'Autres', icon: 'package' },
-]
+// CATEGORIES importe depuis constants/categories.js
 
 function Categories() {
   const [counts, setCounts] = useState({})

@@ -1,6 +1,7 @@
 import { useEffect, useState, lazy, Suspense } from 'react'
 import { supabase } from './lib/supabase'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { FEATURED_CATEGORIES_RENDER } from './constants/categories'
 import './App.css'
 import ListingCard from './ListingCard'
 import SkeletonList from './components/SkeletonList'
@@ -72,14 +73,7 @@ function Home({ listings, loading, error }) {
     navigate('/annonces' + (qs ? '?' + qs : ''))
   }
 
-  const CATEGORIES = [
-    { iconName: 'smartphone', name: 'Téléphones' },
-    { iconName: 'laptop', name: 'Informatique' },
-    { iconName: 'tv', name: 'Électroménager' },
-    { iconName: 'shirt', name: 'Mode' },
-    { iconName: 'sofa', name: 'Maison' },
-    { iconName: 'bike', name: 'Véhicules' },
-  ]
+  const CATEGORIES = FEATURED_CATEGORIES_RENDER
 
   return (
     <div className="app">
