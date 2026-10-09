@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import Nav from '../components/Nav'
@@ -129,10 +130,18 @@ function Profile() {
     <div className="app profile-v2">
       <Nav />
       <main className="profile-page">
-        <h1>Mon profil</h1>
-        <p className="profile-subtitle">
-          Ces informations apparaissent sur votre profil public.
-        </p>
+        <div className="profile-page-header">
+          <div className="profile-page-header-text">
+            <h1>Mon profil</h1>
+            <p className="profile-subtitle">
+              Ces informations apparaissent sur votre profil public.
+            </p>
+          </div>
+          <Link to="/parametres" className="profile-settings-link" aria-label="Parametres du compte">
+            <Icon name="settings" size={18} />
+            <span>Parametres</span>
+          </Link>
+        </div>
 
         <form onSubmit={handleSubmit} className="profile-form card">
           <div className="profile-avatar-block">

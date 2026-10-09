@@ -9054,3 +9054,64 @@ img {
 .listing-verified svg {
   flex-shrink: 0;
 }
+
+/* ============================================================
+   M2 — En-tete du profil avec lien Parametres
+   ============================================================ */
+
+.profile-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.profile-page-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-page-header-text h1 {
+  margin-bottom: 4px;
+}
+
+.profile-page-header-text .profile-subtitle {
+  margin-top: 0;
+}
+
+.profile-settings-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.profile-settings-link:hover {
+  border-color: #2563eb;
+  background: #f9fafb;
+}
+
+.profile-settings-link svg {
+  flex-shrink: 0;
+}
+
+/* Mobile : le bouton passe sous le titre, en pleine largeur */
+@media (max-width: 480px) {
+  .profile-settings-link {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 14px;
+  }
+}
