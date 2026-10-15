@@ -10,14 +10,14 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'og-image.png', 'robots.txt', 'sitemap.xml'],
       manifest: {
+        id: '/?source=pwa',
         name: 'AFRYA MARKET - Marketplace Benin',
         short_name: 'Afrya',
         description: "Marketplace beninoise de produits d'occasion. Achetez, vendez, echangez en toute confiance.",
         lang: 'fr',
-        start_url: '/',
+        start_url: '/?source=pwa',
         scope: '/',
         display: 'standalone',
-        orientation: 'portrait',
         theme_color: '#1d4ed8',
         background_color: '#ffffff',
         categories: ['shopping', 'business'],
@@ -30,6 +30,11 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,webp}'],
         navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api/, /^\/auth/, /\.[a-z0-9]+$/i],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/v1\/object\/public\/.*/i,
