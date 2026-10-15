@@ -51,7 +51,36 @@
     <!-- Meta Android -->
     <meta name="mobile-web-app-capable" content="yes" />
 
-  </head>
+      <script>
+      // DEBUG TEMPORAIRE — Affiche les erreurs a l ecran
+      (function () {
+        function showFatalError(msg, detail) {
+          var el = document.getElementById('debug-panel');
+          if (!el) {
+            el = document.createElement('div');
+            el.id = 'debug-panel';
+            el.style.cssText = 'position:fixed;inset:0;background:#fff;color:#991b1b;padding:20px;font-family:monospace;font-size:13px;z-index:99999;overflow:auto;';
+            document.body.appendChild(el);
+          }
+          el.innerHTML = '<h2 style="margin:0 0 12px;color:#1d4ed8">AFRYA — Erreur</h2>' +
+            '<p style="margin:0 0 12px;font-weight:bold">' + msg + '</p>' +
+            '<pre style="background:#f3f4f6;padding:12px;border-radius:6px;white-space:pre-wrap;word-break:break-word">' +
+            (detail || 'Pas de details') + '</pre>' +
+            '<button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;background:#1d4ed8;color:#fff;border:none;border-radius:6px;font-size:14px">Recharger</button>';
+        }
+
+        window.addEventListener('error', function (e) {
+          var detail = (e.error && e.error.stack) ? e.error.stack : (e.message || String(e));
+          showFatalError('Erreur JS au chargement', detail);
+        });
+
+        window.addEventListener('unhandledrejection', function (e) {
+          var detail = e.reason && e.reason.stack ? e.reason.stack : String(e.reason);
+          showFatalError('Erreur async (Promise)', detail);
+        });
+      })();
+    </script>
+</head>
   <body>
     <div id="root">
       <div style="display:flex;height:100vh;align-items:center;justify-content:center;font:700 24px system-ui,sans-serif;color:#1d4ed8;letter-spacing:2px">
