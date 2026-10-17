@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { sendEmail } from '../lib/sendEmail'
 
 function Register() {
   const { signUp } = useAuth()
@@ -43,6 +44,9 @@ function Register() {
       setError('Impossible de creer le compte. ' + error.message)
       return
     }
+
+    // Envoi email de bienvenue (non bloquant)
+    sendEmail('welcome', email.trim(), { fullName: fullName.trim() })
 
     setSuccess(true)
   }
