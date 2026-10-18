@@ -57,6 +57,7 @@ import PageMeta from './components/PageMeta'
 import ProtectedRoute from './components/ProtectedRoute'
 import ScrollToTop from './components/ScrollToTop'
 import BottomNavWrapper from './components/BottomNavWrapper'
+import InstallPWA from './components/InstallPWA'
 
 function Home({ listings, loading, error }) {
   const navigate = useNavigate()
@@ -825,6 +826,7 @@ function App() {
         <AuthProvider>
           <AppContent />
           <BottomNavWrapper />
+          <InstallPWA />
         </AuthProvider>
       </ToastProvider>
     </BrowserRouter>

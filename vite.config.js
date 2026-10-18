@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -10,14 +9,15 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'og-image.png', 'robots.txt', 'sitemap.xml'],
       manifest: {
-        id: '/?source=pwa',
+        id: '/',
         name: 'AFRYA MARKET - Marketplace Benin',
         short_name: 'Afrya',
-        description: "Marketplace beninoise de produits d'occasion. Achetez, vendez, echangez en toute confiance.",
+        description: "Marketplace beninoise de produits d'occasion.",
         lang: 'fr',
-        start_url: '/?source=pwa',
+        start_url: '/',
         scope: '/',
         display: 'standalone',
+        orientation: 'portrait',
         theme_color: '#1d4ed8',
         background_color: '#ffffff',
         categories: ['shopping', 'business'],
@@ -30,11 +30,9 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,webp}'],
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api/, /^\/auth/, /\.[a-z0-9]+$/i],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
-        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/v1\/object\/public\/.*/i,
@@ -56,7 +54,6 @@ export default defineConfig({
           },
         ],
       },
-      devOptions: { enabled: false },
     }),
   ],
 })
