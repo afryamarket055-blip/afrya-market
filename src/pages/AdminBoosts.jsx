@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { sendEmail } from '../lib/sendEmail'
 import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
 import Icon from '../components/Icon'
@@ -109,6 +110,21 @@ function AdminBoosts() {
     setBoosts((prev) =>
       prev.map((b) => (b.id === boostId ? { ...b, status: newStatus } : b))
     )
+
+    // Envoi email au vendeur (non bloquant) si le boost est activé
+    if (newStatus === 'active') {
+      const b = boosts.find((x) => x.id === boostId)
+      if (b && b.user_id) {
+        sendEmail('boost_activated', null, {
+          to_user_id: b.user_id,
+          data: {
+            sellerName: b.profile?.full_name || b.profile?.shop_name || 'Vendeur',
+            listingTitle: b.listing?.title || 'ton annonce',
+            durationDays: b.duration_days || 7
+          }
+        }).catch(() => {})
+      }
+    }
   }
 
   const filtered =

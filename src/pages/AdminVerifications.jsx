@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { sendEmail } from '../lib/sendEmail'
 import { useToast } from '../context/ToastContext'
 import Nav from '../components/Nav'
 import Icon from '../components/Icon'
@@ -115,6 +116,16 @@ function AdminVerifications() {
       console.error('Erreur update :', error)
       toast.error('Erreur lors de la mise a jour.')
       return
+    }
+
+    // Envoi email (non bloquant)
+    const req = requests.find((r) => r.id === requestId)
+    if (newStatus === 'approved' && req) {
+      const p = req.profiles || {}
+      sendEmail('verification_approved', null, {
+        to_user_id: req.user_id,
+        data: { fullName: p.full_name || p.shop_name || 'Vendeur' }
+      }).catch(() => {})
     }
 
     setRequests((prev) =>

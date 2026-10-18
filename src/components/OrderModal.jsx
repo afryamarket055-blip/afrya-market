@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
+import { sendEmail } from '../lib/sendEmail'
 
 function OrderModal({ listing, onClose }) {
   const { user } = useAuth()
@@ -53,6 +54,19 @@ function OrderModal({ listing, onClose }) {
         setErrorMsg('Erreur lors de la creation de la commande.')
       }
       return
+    }
+
+    // Envoi email au vendeur (non bloquant)
+    if (listing && listing.user_id) {
+      sendEmail('new_order', null, {
+        to_user_id: listing.user_id,
+        data: {
+          sellerName: 'Vendeur',
+          listingTitle: listing.title,
+          amount: listing.price,
+          buyerName: 'Un acheteur'
+        }
+      }).catch(() => {})
     }
 
     onClose()
